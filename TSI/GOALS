@@ -1,0 +1,55 @@
+#Punto1    
+rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped "header: 
+  seq: 0                                                                                                                                                                                             
+  stamp:                                                                                                                                                                                             
+    secs: 24                                                                                                                                                                                         
+    nsecs:         0                                                                                                                                                                                 
+  frame_id: "map"                                                                                                                                                                                    
+pose:                                                                                                                                                                                                
+  position:                                                                                                                                                                                          
+    x: 20.8539066315                                                                                                                                                                                 
+    y: 23.4037132263                                                                                                                                                                                 
+    z: 0.0                                                                                                                                                                                           
+  orientation:                                                                                                                                                                                       
+    x: 0.0                                                                                                                                                                                           
+    y: 0.0                                                                                                                                                                                           
+    z: 0.0                                                                                                                                                                                           
+    w: 1.0"
+    
+#Punto2 (mapa 10cm)
+rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped "header: 
+  seq: 0
+  stamp: 
+    secs: 11
+    nsecs: 500000000
+  frame_id: "map"
+pose: 
+  position: 
+    x: 47.4943313599
+    y: 41.6638870239
+    z: 0.0
+  orientation: 
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0"
+
+#Punto3 (mapa 10cm)
+rostopic pub /move_base_simple/goal geometry_msgs/PoseStamped "header: 
+  seq: 0
+  stamp: 
+    secs: 9
+    nsecs: 900000000
+  frame_id: "map"
+pose: 
+  position: 
+    x: 13.9772024155
+    y: 22.9696788788
+    z: 0.0
+  orientation: 
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0"
+
+

@@ -6,6 +6,17 @@ from sklearn.neighbors import KNeighborsClassifier,NearestNeighbors
 import numpy as np
 from time import time
 
+def Valoracion(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
+	tot=0
+	neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
+	Y_vecinos=Y[neighbors_2]
+	for (a,b)in zip(Y,Y_vecinos):
+		if a==b:
+			tot+=1
+			
+	tasa_clas=tot/X.shape[0]		
+	tasa_red=(X.shape[1]-np.count_nonzero(w))/X.shape[1]
+	return (porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red),tasa_clas,tasa_red
 
 
 #Funcion para calcular la distancia con los pesos ponderados al vector w
@@ -95,7 +106,7 @@ def BL(X_train,Y_train,sigma,alpha):
 			tot+=1
 	
 	
-	tasa_red=total_red/tamaño
+	tasa_red=total_red/n_caracteristicas
 	tasa_clas=tot/tamaño
 	puntuacion_padre=(porcentaje_class*tasa_clas)+(porcentaje_red*tasa_red)
 	op=np.random.normal(loc=0,scale=sigma,size=n_caracteristicas)
@@ -120,16 +131,7 @@ def BL(X_train,Y_train,sigma,alpha):
 			total_red+=1
 			w[index]=0
 		
-		neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
-		Y_vecinos=Y_train[neighbors_2]
-		tot=0
-		for (a,b)in zip(Y_train,Y_vecinos):
-			if a==b:
-				tot+=1
-				
-		tasa_clas=tot/tamaño		
-		tasa_red=total_red/n_caracteristicas
-		puntuacion_hijo=(porcentaje_class*tasa_clas)+(porcentaje_red*tasa_red)
+		puntuacion_hijo,tasa_clas,tasa_red=Valoracion(X_train,Y_train,w,KNN,porcentaje_class,porcentaje_red)
 		
 		if puntuacion_hijo>puntuacion_padre:
 			puntuacion_padre=puntuacion_hijo

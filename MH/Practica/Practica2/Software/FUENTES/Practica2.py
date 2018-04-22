@@ -123,5 +123,30 @@ def BL(X_train,Y_train,sigma,alpha):
 
 Datos=namedtuple('Datos',['w','puntuacion'])
 
-def GN():
+def Valoracion(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
+	tot=0
+	neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
+	Y_vecinos=Y[neighbors_2]
+	for (a,b)in zip(Y,Y_vecinos):
+		if a==b:
+			tot+=1
+			
+	tasa_clas=tot/X.shape[0]		
+	tasa_red=(X.shape[1]-np.count_nonzero(w))/X.shape[1]
+	return (porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red),tasa_clas,tasa_red
+
+def GenerarPoblacionInicial(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
+	a=[]
+	for i in range (0,50):
+		w=np.random.uniform(low=0,high=1,N)
+		Y_vecinos=KNN.kneighbors(Y)
+		cw,p,q=Valoracion(X,y,w,KNN,porcentaje_clas,porcentaje_red)
+		aux=Datos(w=w,puntuacion=cw)
+		a.append(aux)
+	return a
+		
+
+def GN(X_train,Y_train,sigma,alpha):
+	
+	
 	

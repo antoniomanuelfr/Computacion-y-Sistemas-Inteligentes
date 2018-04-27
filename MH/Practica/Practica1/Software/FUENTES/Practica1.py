@@ -6,24 +6,6 @@ from sklearn.neighbors import KNeighborsClassifier,NearestNeighbors
 import numpy as np
 from time import time
 
-def Valoracion(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
-	tot=0
-	neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
-	Y_vecinos=Y[neighbors_2]
-	for (a,b)in zip(Y,Y_vecinos):
-		if a==b:
-			tot+=1
-			
-	tasa_clas=tot/X.shape[0]		
-	tasa_red=(X.shape[1]-np.count_nonzero(w))/X.shape[1]
-	return (porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red),tasa_clas,tasa_red
-
-
-#Funcion para calcular la distancia con los pesos ponderados al vector w
-
-def DistanciaPesos(x, y, **kwargs):
-	aux=(x-y)
-	return sum(kwargs["weights"]*(aux*aux))
 
 #Greedy para crear el vector de pesos w.
 def RELIEF(X,Y,w):
@@ -58,7 +40,7 @@ def Greedy(X_train,Y_train):
 	time1=time()
 	suma=0
 	
-	KNN = KNeighborsClassifier(n_neighbors=1,metric=DistanciaPesos, metric_params={"weights": w})
+	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski',p=2, metric_params={'w': w})
 	KNN.fit(X_train,Y_train)
 	w,cambios=RELIEF(X_train,Y_train,w)
 	
@@ -78,65 +60,58 @@ def BL(X_train,Y_train,sigma,alpha):
 	
 	puntuacion_hijo=-1
 	vecinos_generados=0
-	total_red=0
-	
 	n_caracteristicas=X_train.shape[1]
-	tamaño=X_train.shape[0]
-	
-	porcentaje_class=alpha*100
-	porcentaje_red=(1-alpha)*100
-	
+	tamanio=X_train.shape[0]
+	total_red=0
+	porcentaje_clas=alpha
+	porcentaje_red=(1-alpha)
 	indices=np.arange(0,n_caracteristicas-1)
 	indexes=list(indices)
 
 
 	tiempo1=time()
 	w=np.random.uniform(low=0.0,high=1.0,size=n_caracteristicas)
-	
 	w[w<0.2]=0
 	total_red=n_caracteristicas-np.count_nonzero(w)
 				
-	KNN = KNeighborsClassifier(n_neighbors=1, metric=DistanciaPesos, metric_params={"weights": w})
+	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski',p=2, metric_params={'w': w})
 	KNN.fit(X_train,Y_train)
-	neighbors=KNN.kneighbors(n_neighbors=1,return_distance=False)
-	Y_vecinos=Y_train[neighbors]
-	tot=0
-	for (a,b)in zip(Y_train,Y_vecinos):
-		if a==b:
-			tot+=1
 	
-	
-	tasa_red=total_red/n_caracteristicas
-	tasa_clas=tot/tamaño
-	puntuacion_padre=(porcentaje_class*tasa_clas)+(porcentaje_red*tasa_red)
+	neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
+	Y_vecinos=Y_train[neighbors_2]
+	tot=sum(np.reshape(Y_vecinos,tamanio)==Y_train)
+	w[w<0.2]=0
+	tasa_clas=tot/tamanio
+
+	tasa_red=(n_caracteristicas-np.count_nonzero(w))/n_caracteristicas
+	puntuacion_padre=(porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red)
 	op=np.random.normal(loc=0,scale=sigma,size=n_caracteristicas)
-	
-	tasa_clas=0
-	tasa_red=0
-	total_red=0
 	
 	for i in range(1,15000):
 		
 		index=indexes.pop()
 		w_ant=w[index]
 
-		w[index]=w[index]+op[index]
-		if w[index]>1:
-			w[index]=1
-			
+		w[index]=w[index]-op[index]
 		vecinos_generados+=1
 
 		total_ant=total_red
 		if w[index]<0.2:
 			total_red+=1
 			w[index]=0
-		
-		puntuacion_hijo,tasa_clas,tasa_red=Valoracion(X_train,Y_train,w,KNN,porcentaje_class,porcentaje_red)
+	
+		neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
+		Y_vecinos=Y_train[neighbors_2]
+		tot=sum(np.reshape(Y_vecinos,tamanio)==Y_train)
+		w[w<0.2]=0
+		tasa_clas=tot/tamanio
+	
+		tasa_red=(n_caracteristicas-np.count_nonzero(w))/n_caracteristicas
+		puntuacion_hijo=(porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red)
 		
 		if puntuacion_hijo>puntuacion_padre:
 			puntuacion_padre=puntuacion_hijo
 			vecinos_generados=0
-			
 		else:
 			w[index]=w_ant
 			total_red=total_ant
@@ -150,5 +125,6 @@ def BL(X_train,Y_train,sigma,alpha):
 			break
 	tiempo2=time()
 	tiempos=tiempo2-tiempo1
+	tasa_red=n_caracteristicas-np.count_nonzero(w)
 	
-	return tasa_clas,tasa_red,tiempos,w
+	return tasa_clas,tasa_red/n_caracteristicas,tiempos,w

@@ -6,10 +6,10 @@ Created on Sun Apr  1 13:05:10 2018
 @author: antoniomanuelfr
 """
 
-from Practica1 import GN
+from Practica2 import GN
 from sklearn.model_selection import StratifiedKFold
 import numpy as np
-np.random.seed(7)
+np.random.seed(452345)
 #Datos
 def main (): 
 	X=np.loadtxt('../DATOS/parkinsons.arff',comments='@',delimiter=',')
@@ -32,17 +32,7 @@ def main ():
 	for train_index,test_index in particiones: 
 		X_train=X[train_index]
 		Y_train=Y[train_index]
-		tasa_clas,tasa_red,tiempo,w=GN(X_train,Y_train,0.3,0.5)
-
-		
-		list_clas.append(tasa_clas)
-		list_red.append(tasa_red)
-		list_tiempos.append(tiempo)
-		list_w.append(w)
+		print (GN(X_train,Y_train,0.3,0.5,0.7,0.1))
 		break
 		
-	print ("El resultado de aplicar BL a parkinsons ha sido: ",list_clas)
-	print ("El porcentaje de reduccion es: ",list_red)
-	print ("\nEn un tiempo de: ",list_tiempos)
-	
 main()

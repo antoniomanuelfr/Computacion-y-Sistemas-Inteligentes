@@ -35,7 +35,7 @@ def main ():
 		list_red.append(tasa_red)
 		list_tiempos.append(tiempo)
 		list_w.append(w)
-		
+		break
 	print ("El resultado de aplicar BL a spec-heart ha sido: ",list_clas)
 	print ("El porcentaje de reduccion es: ",list_red)
 	print ("\nEn un tiempo de: ",list_tiempos)

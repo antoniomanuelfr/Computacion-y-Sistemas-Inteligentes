@@ -39,7 +39,7 @@ def main ():
 		list_red.append(tasa_red)
 		list_tiempos.append(tiempo)
 		list_w.append(w)
-
+		
 		
 	print ("El resultado de aplicar BL a parkinsons ha sido: ",list_clas)
 	print ("El porcentaje de reduccion es: ",list_red)

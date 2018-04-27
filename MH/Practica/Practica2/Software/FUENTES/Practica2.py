@@ -1,128 +1,40 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from sklearn.neighbors import KNeighborsClassifier,NearestNeighbors
+from sklearn.neighbors import KNeighborsClassifier
 
 import numpy as np
 from time import time
-from collection import namedtuple
+from collections import namedtuple
 
-#Funcion para calcular la distancia con los pesos ponderados al vector w
-
-def DistanciaPesos(x, y, **kwargs):
-	aux=(x-y)
-	return sum(kwargs["weights"]*(aux*aux))
-
-#Funcion para el cruce BLX-alfa
-def BLX(C1,C2,index,alpha):
-	h1=np.copy(C1)
-	h2=np.copy(C2)
-	
-	maxi=max([C1[index],C2[index]])
-	mini=min([C1[index],C2[index]])
+datos=namedtuple('Datos',['w','punt','flag'])
+#Funcion para el cruce BLX-alfa con alfa=0.3
+def BLX(C1,C2,X,Y,KNN,porcentaje_clas,porcentaje_red):
+	alpha=0.3
+	index=np.random.randint(C1.w.shape[0])
+	maxi=max([C1.w[index],C2.w[index]])
+	mini=min([C1.w[index],C2.w[index]])
 	I=maxi-mini
 	
 	r=np.random.uniform(low=(mini-(I*alpha)),high=(maxi+(I*alpha)))
-	h1[index]=r
-	h2[index]=r
+	if r<0.2:
+		r=0
 	
-	return h1,h2
+	C1.w[index]=r
+	C2.w[index]=r
+	punt1=Valoracion(X,Y,C1.w,KNN,porcentaje_clas,porcentaje_red)
+	punt2=Valoracion(X,Y,C2.w,KNN,porcentaje_clas,porcentaje_red)
+	
+	C2=C1._replace(flag=False)
+	C1=C1._replace(flag=False)
+	C1=C1._replace(punt=punt1)
+	C2=C2._replace(punt=punt2)
+	return C1,C2
 
 def OpAritmetico(C1,C2):
 	r=C1+C2
 	return r/2
 	
-#Ejecucion de la busqueda local
-def BL(X_train,Y_train,sigma,alpha):
-	
-	puntuacion_hijo=-1
-	vecinos_generados=0
-	total_red=0
-	
-	n_caracteristicas=X_train.shape[1]
-	tamaño=X_train.shape[0]
-	
-	porcentaje_class=alpha*100
-	porcentaje_red=(1-alpha)*100
-	
-	indices=np.arange(0,n_caracteristicas-1)
-	indexes=list(indices)
-
-
-	tiempo1=time()
-	w=np.random.uniform(low=0.0,high=1.0,size=n_caracteristicas)
-	
-	w[w<0.2]=0
-	total_red=n_caracteristicas-np.count_nonzero(w)
-				
-	KNN = KNeighborsClassifier(n_neighbors=1, metric=DistanciaPesos, metric_params={"weights": w})
-	KNN.fit(X_train,Y_train)
-	neighbors=KNN.kneighbors(n_neighbors=1,return_distance=False)
-	Y_vecinos=Y_train[neighbors]
-	tot=0
-	for (a,b)in zip(Y_train,Y_vecinos):
-		if a==b:
-			tot+=1
-	
-	
-	tasa_red=total_red/tamaño
-	tasa_clas=tot/tamaño
-	puntuacion_padre=(porcentaje_class*tasa_clas)+(porcentaje_red*tasa_red)
-	op=np.random.normal(loc=0,scale=sigma,size=n_caracteristicas)
-	
-	tasa_clas=0
-	tasa_red=0
-	total_red=0
-	
-	for i in range(1,15000):
-		
-		index=indexes.pop()
-		w_ant=w[index]
-
-		w[index]=w[index]+op[index]
-		if w[index]>1:
-			w[index]=1
-			
-		vecinos_generados+=1
-
-		total_ant=total_red
-		if w[index]<0.2:
-			total_red+=1
-			w[index]=0
-		
-		neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
-		Y_vecinos=Y_train[neighbors_2]
-		tot=0
-		for (a,b)in zip(Y_train,Y_vecinos):
-			if a==b:
-				tot+=1
-				
-		tasa_clas=tot/tamaño		
-		tasa_red=total_red/n_caracteristicas
-		puntuacion_hijo=(porcentaje_class*tasa_clas)+(porcentaje_red*tasa_red)
-		
-		if puntuacion_hijo>puntuacion_padre:
-			puntuacion_padre=puntuacion_hijo
-			vecinos_generados=0
-			
-		else:
-			w[index]=w_ant
-			total_red=total_ant
-
-		if not indexes:
-			op=np.random.normal(loc=0,scale=sigma,size=n_caracteristicas)
-			indexes=list(indices)
-			total_red=n_caracteristicas-np.count_nonzero(w)
-		
-		if vecinos_generados==20*n_caracteristicas:
-			break
-	tiempo2=time()
-	tiempos=tiempo2-tiempo1
-	
-	return tasa_clas,tasa_red,tiempos,w
-
-Datos=namedtuple('Datos',['w','puntuacion'])
-
 def Valoracion(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
 	tot=0
 	neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
@@ -131,22 +43,102 @@ def Valoracion(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
 		if a==b:
 			tot+=1
 			
-	tasa_clas=tot/X.shape[0]		
+	w[w<0.2]=0
+	tasa_clas=tot/X.shape[0]
+
 	tasa_red=(X.shape[1]-np.count_nonzero(w))/X.shape[1]
-	return (porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red),tasa_clas,tasa_red
+	return (porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red)
+
+def Valoracion1(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
+	neighbors_2=KNN.kneighbors(n_neighbors=1,return_distance=False)
+	Y_vecinos=Y[neighbors_2]
+	tot=sum(np.reshape(Y_vecinos,Y.shape)==Y)
+	w[w<0.2]=0
+	tasa_clas=tot/X.shape[0]
+
+	tasa_red=(X.shape[1]-np.count_nonzero(w))/X.shape[1]
+	return (porcentaje_clas*tasa_clas)+(porcentaje_red*tasa_red)
 
 def GenerarPoblacionInicial(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
 	a=[]
-	for i in range (0,50):
-		w=np.random.uniform(low=0,high=1,N)
-		Y_vecinos=KNN.kneighbors(Y)
-		cw,p,q=Valoracion(X,y,w,KNN,porcentaje_clas,porcentaje_red)
-		aux=Datos(w=w,puntuacion=cw)
+	prev_val=-1
+	prev_index=-1
+	for i in range (0,30):	
+		puntuacion=Valoracion(X,Y,w,KNN,porcentaje_clas,porcentaje_red)
+		if prev_val<puntuacion:
+			prev_val=puntuacion
+			prev_index=i
+			
+		aux=datos(w=np.copy(w),punt=puntuacion,flag=True)
 		a.append(aux)
-	return a
+		np.copyto(w,np.random.uniform(low=0.0,high=1.0,size=X.shape[1]))
+		w[w<0.2]=0
 		
+	return a,prev_index
 
-def GN(X_train,Y_train,sigma,alpha):
+def TorneoBinario (P):
+	R=[]
+	for i in range(0,len(P)):
+		i1=np.random.randint(0,len(P)-1)
+		i2=np.random.randint(0,len(P)-1)
+		w1=P[i1]
+		w2=P[i2]
+		
+		if w1.punt>w2.punt:
+			R.append(w1)
+		else:
+			R.append(w2)
+	return R
+
+def Cruce(pcruce,P,X_train,Y_train,KNN,porcentaje_clas,porcentaje_red):
+	R=[]	
+	best=-1
+	prev_val=-1
+	for i in range (0,pcruce,2):
+		c1,c2=(BLX(P[i],P[i+1],X_train,Y_train,KNN,porcentaje_clas,porcentaje_red))
+		
+		if c1.punt>c2.punt and c1.punt>prev_val:
+			prev_val=c1.punt
+			best=i
+		elif c2.punt>c1.punt and c2.punt>prev_val:
+			prev_val=c2.punt
+			best=i+1
+		R.append(c1)
+		R.append(c2)
+		
+	return R,best
+
+def GN(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 	
+	P=[]
+	n_caracteristicas=X_train.shape[1]
+
+	porcentaje_clas=alpha*100
+	porcentaje_red=(1-alpha)*100
+
+	tiempo1=time()
+	w=np.random.uniform(low=0.0,high=1.0,size=n_caracteristicas)
+	w[w<0.2]=0
+	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski',p=2, metric_params={'w': w})
+	KNN.fit(X_train,Y_train)
 	
+	P,best=GenerarPoblacionInicial(X_train,Y_train,w,KNN,porcentaje_clas,porcentaje_red)
+	a=P[best]
+
+	ind=int((len(P)*pcruce))
+	
+	for i in range(0,100):
+		
+		Psig,best2=Cruce(ind,TorneoBinario(P),X_train,Y_train,KNN,porcentaje_clas,porcentaje_red)	
+		if Psig[best2].punt>a.punt:
+			best=best2
+			del a
+			a=Psig[best]
+			
+		Psig=Psig+P[ind+1:]
+		P=Psig
+	tiempo2=time()
+	
+	print (tiempo2-tiempo1)
+	return (tiempo2-tiempo1)
 	

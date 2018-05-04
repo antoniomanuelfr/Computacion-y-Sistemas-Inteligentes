@@ -70,10 +70,8 @@ def BL(X_train,Y_train,sigma,alpha):
 
 
 	tiempo1=time()
-	w=np.random.uniform(low=0.0,high=1.0,size=n_caracteristicas)
-	w[w<0.2]=0
-	total_red=n_caracteristicas-np.count_nonzero(w)
-				
+	w=np.ones(n_caracteristicas)
+			
 	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski',p=2, metric_params={'w': w})
 	KNN.fit(X_train,Y_train)
 	
@@ -125,6 +123,9 @@ def BL(X_train,Y_train,sigma,alpha):
 			break
 	tiempo2=time()
 	tiempos=tiempo2-tiempo1
-	tasa_red=n_caracteristicas-np.count_nonzero(w)
+	tasa_red=(n_caracteristicas-np.count_nonzero(w))/n_caracteristicas
 	
-	return tasa_clas,tasa_red/n_caracteristicas,tiempos,w
+	print ("El resultado de aplicar BL a parkinsons ha sido: ",tasa_clas)
+	print ("El porcentaje de reduccion es: ",tasa_red)
+	print ("En un tiempo de: ",tiempos)
+	

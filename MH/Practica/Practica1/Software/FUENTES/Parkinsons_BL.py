@@ -11,6 +11,17 @@ from sklearn.model_selection import StratifiedKFold
 import numpy as np
 np.random.seed(7)
 #Datos
+
+from joblib import Parallel, delayed
+import multiprocessing
+
+
+
+# Obtenemos el número de nucleos de la CPU
+
+num_cores = multiprocessing.cpu_count()
+
+#Paralelizamos la ejecución de los ficheros
 def main (): 
 	X=np.loadtxt('../DATOS/parkinsons.arff',comments='@',delimiter=',')
 	Y=X[:,X.shape[1]-1]
@@ -25,24 +36,7 @@ def main ():
 	Y=Y[idx]
 	fivefold=StratifiedKFold(n_splits=5)
 	particiones=fivefold.split(X,Y)
-	list_clas=[]
-	list_red=[]
-	list_tiempos=[]
-	list_w=[]
-	for train_index,test_index in particiones: 
-		X_train=X[train_index]
-		Y_train=Y[train_index]
-		tasa_clas,tasa_red,tiempo,w=BL(X_train,Y_train,0.3,0.5)
 
-		
-		list_clas.append(tasa_clas)
-		list_red.append(tasa_red)
-		list_tiempos.append(tiempo)
-		list_w.append(w)
-		
-		
-	print ("El resultado de aplicar BL a parkinsons ha sido: ",list_clas)
-	print ("El porcentaje de reduccion es: ",list_red)
-	print ("\nEn un tiempo de: ",list_tiempos)
+	Parallel(n_jobs=num_cores)(delayed(BL)(X[index[0]],Y[index[0]],0.3,0.5)for index in particiones )
 	
 main()

@@ -21,38 +21,30 @@ X=pipe.transform(X)
 # Set the parameters by cross-validation
 tuned_parameters = [{'penalty': ['l1'],'solver':['liblinear'],'C':[0.9,0.5,0.1]},
 					 {'penalty': ['l2'],'solver':['newton-cg'],'C':[0.9,0.5,0.1]}]
-
-iteration = 1000
-tolerance = 1e-7
-
-scores = ['precision_macro','recall_macro','accuracy']
-
 X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                     stratify=y,
                                                     test_size=0.25,
                                                     random_state=seed)
 
-for score in scores:
-	print("# Tuning hyper-parameters for %s" % score)
-	#Fit_intercept lo que hace es centrar los datos con la media y la varianza.
-	#Esto esta hecho ya en la linea 20
-	clf = GridSearchCV(LogisticRegression(max_iter=1000,random_state=seed,fit_intercept=False), tuned_parameters, cv=5,
-                       scoring=score)
-	clf.fit(X_train, y_train)
+#Fit_intercept lo que hace es centrar los datos con la media y la varianza.
+#Esto esta hecho ya en la linea 20
+clf = GridSearchCV(LogisticRegression(random_state=seed,fit_intercept=False), tuned_parameters, cv=5,
+                       scoring='accuracy')
+clf.fit(X_train, y_train)
 
-	print("Best parameters set found on development set:")
-	print()
-	print(clf.best_params_)
-	print()
-	print("Grid scores on development set:")
-	print()
-	means = clf.cv_results_['mean_test_score']
-	stds = clf.cv_results_['std_test_score']
-	for mean, std, params in zip(means, stds, clf.cv_results_['params']):
-		print("%0.3f (+/-%0.03f) for %r"
+print("Best parameters set found on development set:")
+print()
+print(clf.best_params_)
+print()
+print("Grid scores on development set:")
+print()
+means = clf.cv_results_['mean_test_score']
+stds = clf.cv_results_['std_test_score']
+for mean, std, params in zip(means, stds, clf.cv_results_['params']):
+	print("%0.3f (+/-%0.03f) for %r"
               % (mean, std * 2, params))
 	
-	print("\n\n\n END OF TUNNING PARAMETERS!!!\n\n\n")
+print("\n\n\n END OF TUNNING PARAMETERS!!!\n\n\n")
 
 print ("The model is trained on the full train set and with best parameters")
 best_logistic_model=LogisticRegression(**clf.best_params_,fit_intercept=False)

@@ -7,7 +7,7 @@ from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.externals import joblib
-from sklearn.metrics import confusion_matrix,classification_report
+from sklearn.metrics import confusion_matrix,classification_report,accuracy_score
 import numpy as np
 import matplotlib.pyplot as plt
 

@@ -48,10 +48,9 @@ def plot_confusion_matrix(cm, classes,
 
 seed = 1997
 
-y_train =np.load("datos/optdigits_tra_y.npy")
 X_test=np.load("datos/optdigits_tes_X.npy")
 y_test=np.load("datos/optdigits_tes_y.npy")
-class_names=np.unique(y_train)
+class_names=np.unique(y_test)
 pipe=joblib.load('PipeLine.pkl')
 pipe.transform(X_test)
 best_logistic_model=joblib.load('LogicRegresion_model.pkl')

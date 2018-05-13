@@ -19,8 +19,8 @@ pipe=Pipeline([('Scale',preprocessing.StandardScaler()),
 pipe.fit(X)
 X=pipe.transform(X)
 # Set the parameters by cross-validation
-tuned_parameters = [{'penalty': ['l1'],'solver':['liblinear'],'C':[0.9,0.5,0.1]},
-					 {'penalty': ['l2'],'solver':['newton-cg'],'C':[0.9,0.5,0.1]}]
+tuned_parameters = [{'penalty': ['l1'],'solver':['liblinear'],'C':[0.9,0.5,0.2,0.15,0.125,0.1]},
+					 {'penalty': ['l2'],'solver':['newton-cg'],'C':[0.9,0.5,0.2,0.15,0.125,0.1]}]
 X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                     stratify=y,
                                                     test_size=0.25,

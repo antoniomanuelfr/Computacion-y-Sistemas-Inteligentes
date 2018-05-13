@@ -4,10 +4,9 @@
 from __future__ import print_function
 import itertools
 from sklearn import preprocessing
-from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.externals import joblib
-from sklearn.metrics import confusion_matrix,classification_report,accuracy_score
+from sklearn.metrics import confusion_matrix,classification_report
 import numpy as np
 import matplotlib.pyplot as plt
 

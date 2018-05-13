@@ -6,7 +6,6 @@ from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 from time import time
 from Datos import Datos
-from Practica1 import BL
 
 #Funcion de valoracion para w
 def Valoracion(X,Y,w,KNN,porcentaje_clas,porcentaje_red):
@@ -198,21 +197,20 @@ def GN_blx(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 			best=Psig[best_c]
 		del P
 		P=Psig
-		if np.random.uniform(low=0,high=1)<pmutacion:
-			for i in mutaciones:
-				w1=np.copy(Psig[i].w)
-				index=np.random.randint(low=0,high=n_caracteristicas)
-				w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
-				if w1[index]<0.2:
-					w1[index]=0
-				elif w1[index]>1:
-					w1[index]=1
-				
-		
-				val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
-				total_evaluaciones+=1
-				Psig[i].w=np.copy(w1)
-				Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
+		for i in mutaciones:
+			w1=np.copy(Psig[i].w)
+			index=np.random.randint(low=0,high=n_caracteristicas)
+			w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
+			if w1[index]<0.2:
+				w1[index]=0
+			elif w1[index]>1:
+				w1[index]=1
+			
+	
+			val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
+			total_evaluaciones+=1
+			Psig[i].w=np.copy(w1)
+			Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
 		P.pop(w_i)
 		P.append(best)
 		
@@ -281,21 +279,20 @@ def GN_arit(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 			best=Psig[best_c]
 		del P
 		P=Psig
-		if np.random.uniform(low=0,high=1)<pmutacion:
-			for i in mutaciones:
-				w1=np.copy(Psig[i].w)
-				index=np.random.randint(low=0,high=n_caracteristicas)
-				w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
-				if w1[index]<0.2:
-					w1[index]=0
-				elif w1[index]>1:
-					w1[index]=1
-				
-		
-				val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
-				total_evaluaciones+=1
-				Psig[i].w=np.copy(w1)
-				Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
+		for i in mutaciones:
+			w1=np.copy(Psig[i].w)
+			index=np.random.randint(low=0,high=n_caracteristicas)
+			w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
+			if w1[index]<0.2:
+				w1[index]=0
+			elif w1[index]>1:
+				w1[index]=1
+			
+	
+			val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
+			total_evaluaciones+=1
+			Psig[i].w=np.copy(w1)
+			Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
 		P.pop(w_i)
 		P.append(best)
 		
@@ -358,21 +355,19 @@ def GNE_blx(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 		
 		del P
 		P=Psig
-		if np.random.uniform(low=0,high=1)<pmutacion:
-			for i in mutaciones:
-				w1=np.copy(Psig[i].w)
-				index=np.random.randint(low=0,high=n_caracteristicas)
-				w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
-				if w1[index]<0.2:
-					w1[index]=0
-				elif w1[index]>1:
-					w1[index]=1
-				
+		for i in mutaciones:
+			w1=np.copy(Psig[i].w)
+			index=np.random.randint(low=0,high=w.shape[0])
+			w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
+			if w1[index]<0.2:
+				w1[index]=0
+			elif w1[index]>1:
+				w1[index]=1
 		
-				val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
-				total_evaluaciones+=1
-				Psig[i].w=np.copy(w1)
-				Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
+			val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
+			total_evaluaciones+=1
+			Psig[i].w=w=np.copy(w1)
+			Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
 			
 		P.pop(w_index)
 		P.append(best)
@@ -437,21 +432,19 @@ def GNE_arit(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 		
 		del P
 		P=Psig
-		if np.random.uniform(low=0,high=1)<pmutacion:
-			for i in mutaciones:
-				w1=np.copy(Psig[i].w)
-				index=np.random.randint(low=0,high=n_caracteristicas)
-				w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
-				if w1[index]<0.2:
-					w1[index]=0
-				elif w1[index]>1:
-					w1[index]=1
-				
+		for i in mutaciones:
+			w1=np.copy(Psig[i].w)
+			index=np.random.randint(low=0,high=w.shape[0])
+			w1[index]=(w1[index]+np.random.normal(loc=0,scale=sigma))
+			if w1[index]<0.2:
+				w1[index]=0
+			elif w1[index]>1:
+				w1[index]=1
 		
-				val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
-				total_evaluaciones+=1
-				Psig[i].w=np.copy(w1)
-				Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
+			val=Valoracion(X_train,Y_train,w1,KNN,porcentaje_clas,porcentaje_red)
+			total_evaluaciones+=1
+			Psig[i].w=w=np.copy(w1)
+			Psig[i].actualizar(punt=val[0],clas=val[1],red=val[2])
 			
 		P.pop(w_index)
 		P.append(best)
@@ -463,7 +456,7 @@ def GNE_arit(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 	print ("Tasa clas: ",best.clas, " Tasa red: ", best.red)
 	print ("En un tiempo de: ",tiempo2-tiempo1)
 	
-def Memetico(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
+def MEM(X_train,Y_train,sigma,alpha,pcruce,pmutacion,BL):
 		
 	P=[]
 	n_caracteristicas=X_train.shape[1]
@@ -504,7 +497,7 @@ def Memetico(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 	NumeroMutaciones=int((pmutacion*(30*X_train.shape[1])+0.5))
 	mutaciones=np.random.randint(low=0,high=30,size=NumeroMutaciones)
 	
-	for n_iters in range(0,15000):
+	for i in range(0,15000):
 		Psig,best_c,worst_c,evals=CruceBLX(w,2,TorneoBinario(P,30),X_train,Y_train,KNN,porcentaje_clas,porcentaje_red)	
 		total_evaluaciones+=evals
 		if Psig[best_c].punt>best.punt:
@@ -529,9 +522,7 @@ def Memetico(X_train,Y_train,sigma,alpha,pcruce,pmutacion):
 			
 		P.pop(w_index)
 		P.append(best)
-		if(n_iters%10==0):
-			n_evals,best=BL(P,best,X_train,Y_train,sigma,alpha,KNN)
-			total_evaluaciones+=n_evals
+		
 		if(total_evaluaciones>=15000):
 			break
 		

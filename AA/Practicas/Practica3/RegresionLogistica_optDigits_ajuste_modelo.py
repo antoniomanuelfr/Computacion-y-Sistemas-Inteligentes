@@ -7,21 +7,10 @@ from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 from sklearn.pipeline import Pipeline
+from sklearn.externals import joblib
 from sklearn.metrics import confusion_matrix
 import numpy as np
 import matplotlib.pyplot as plt
-
-seed = 1997
-
-X = np.load("datos/optdigits_tra_X.npy")
-y =np.load("datos/optdigits_tra_y.npy")
-X_true_test=np.load("datos/optdigits_tes_X.npy")
-y_true_test=np.load("datos/optdigits_tes_y.npy")
-class_names=range(0,y.shape[0])
-pipe=Pipeline([('Scale',preprocessing.StandardScaler()),
-			   ('Norm',preprocessing.Normalizer())])
-pipe.fit(X)
-X=pipe.transform(X)
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -57,17 +46,25 @@ def plot_confusion_matrix(cm, classes,
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
 
+seed = 1997
+
+y_train =np.load("datos/optdigits_tra_y.npy")
+X_test=np.load("datos/optdigits_tes_X.npy")
+y_test=np.load("datos/optdigits_tes_y.npy")
+class_names=np.unique(y_train)
+pipe=joblib.load('PipeLine.pkl')
+pipe.transform(X_test)
+best_logistic_model=joblib.load('LogicRegresion_model.pkl')
 print ("The model is trained on the full train set and with best parameters")
-best_logistic_model=LogisticRegression(**clf.best_params_,fit_intercept=False)
-best_logistic_model.fit(X,y)
-print()
+
 print("The scores are computed with full test set")
 
-y_true, y_pred = y_true_test, best_logistic_model.predict(X_true_test)
+y_true, y_pred = y_test, best_logistic_model.predict(X_test)
 print(classification_report(y_true, y_pred))
 print()
 
 print("Confusion Matrix")
 
-confusion_matrix(y_true,y_pred)
-plot_confusion_matrix(confusion_matrix,class_names) 
+matrix=confusion_matrix(y_true,y_pred)
+
+plot_confusion_matrix(matrix,class_names) 

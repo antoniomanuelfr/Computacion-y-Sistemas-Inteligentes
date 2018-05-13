@@ -17,13 +17,10 @@ y =np.load("datos/optdigits_tra_y.npy")
 pipe=Pipeline([('Scale',preprocessing.StandardScaler()),
 			   ('Norm',preprocessing.Normalizer())])
 pipe.fit(X)
-
-print ("Saving pipeline to PipeLine.pkl")
-joblib.dump(pipe,'PipeLine.pkl')
 X=pipe.transform(X)
 # Set the parameters by cross-validation
-tuned_parameters = [{'penalty': ['l1'], 'solver':['saga'],'C':[0.9,0.5,0.1]},
-					 {'penalty': ['l2'], 'solver':['saga'],'C':[0.9,0.5,0.1]}]
+tuned_parameters = [{'penalty': ['l1'],'solver':['liblinear'],'C':[0.9,0.5,0.1]},
+					 {'penalty': ['l2'],'solver':['newton-cg'],'C':[0.9,0.5,0.1]}]
 
 iteration = 1000
 tolerance = 1e-7

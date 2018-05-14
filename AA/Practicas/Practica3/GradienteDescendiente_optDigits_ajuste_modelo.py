@@ -69,4 +69,4 @@ print("Confusion Matrix")
 
 matrix=confusion_matrix(y_true,y_pred)
 
-plot_confusion_matrix(matrix,class_names) 
+plot_confusion_matrix(matrix,class_names,normalize=True) 

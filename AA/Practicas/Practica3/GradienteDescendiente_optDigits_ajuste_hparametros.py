@@ -19,7 +19,8 @@ pipe=Pipeline([('Scale',preprocessing.StandardScaler()),
 pipe.fit(X)
 X=pipe.transform(X)
 # Set the parameters by cross-validation
-tuned_parameters = []
+tuned_parameters = [{'loss':['hinge','log','squared_loss'],'penalty':['l1','l2'],'alpha':[0.001,0.01,0.005]}]
+
 X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                     stratify=y,
                                                     test_size=0.25,
@@ -27,7 +28,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y,
 
 #Fit_intercept lo que hace es centrar los datos con la media y la varianza.
 #Esto esta hecho ya en la linea 20
-clf = GridSearchCV(SGDClassifier(random_state=seed,fit_intercept=False), tuned_parameters, cv=5,
+clf = GridSearchCV(SGDClassifier(random_state=seed,fit_intercept=False,tol=1e-6,max_iter=1000), tuned_parameters, cv=5,
                        scoring='accuracy')
 clf.fit(X_train, y_train)
 

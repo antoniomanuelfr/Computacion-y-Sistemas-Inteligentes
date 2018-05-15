@@ -44,7 +44,7 @@
       )
     )
   )
-  
+
   (:action TURN_L
     :parameters (?plyr_or - Compass)
     :precondition (and(Orientation ?plyr_or))
@@ -66,9 +66,9 @@
   )
 
   (:action MOVE
-    :parameters (?plyr - Player ?p1 - Place ?p2 - Place - ?plyr_or - Compass )
+    :parameters (?plyr - Player ?p1 - Place ?p2 - Place ?plyr_or - Compass )
     :precondition (and (PlayerLoc ?plyr ?p1) (not (PlayerLoc ?plyr ?p2)) (NeighborPlace ?p1 ?p2 ?plyr_or) (Orientation ?plyr_or))
-    :effect (and (PlayerLoc ?plyr ?p2) (not (Player ?plyr ?p1)))
+    :effect (and (PlayerLoc ?plyr ?p2) (not (PlayerLoc ?plyr ?p1)))
   )
 
   (:action PICK_UP

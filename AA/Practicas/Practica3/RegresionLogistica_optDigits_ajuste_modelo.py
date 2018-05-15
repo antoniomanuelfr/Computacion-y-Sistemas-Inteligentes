@@ -49,11 +49,12 @@ X_train=np.load("datos/optdigits_tra_X.npy")
 X_test=np.load("datos/optdigits_tes_X.npy")
 y_test=np.load("datos/optdigits_tes_y.npy")
 class_names=np.unique(y_test)
-pipe=Pipeline([('Scale',preprocessing.StandardScaler()),
-			   ('Norm',preprocessing.Normalizer())])
-pipe.fit(X_train)
 
-X_test=pipe.transform(X_test)
+scale=preprocessing.StandardScaler().fit(X_train)
+#scale=preprocessing.Normalizer().fit (X_train)
+
+X_test=scale.transform(X_test)
+
 
 
 best_logistic_model=joblib.load('LogicRegresion_model.pkl')

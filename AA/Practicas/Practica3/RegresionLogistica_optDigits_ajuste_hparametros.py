@@ -14,10 +14,14 @@ seed = 1997
 
 X = np.load("datos/optdigits_tra_X.npy")
 y =np.load("datos/optdigits_tra_y.npy")
-pipe=Pipeline([('Scale',preprocessing.StandardScaler()),
-			   ('Norm',preprocessing.Normalizer())])
-pipe.fit(X)
-X=pipe.transform(X)
+scale=preprocessing.StandardScaler()
+scale.fit (X)
+
+#X=scale.transform(X)
+#scale=preprocessing.Normalizer().fit (X)
+scale=preprocessing.StandardScaler().fit(X)
+X=scale.transform(X)
+
 # Set the parameters by cross-validation
 tuned_parameters = [{'penalty': ['l1'],'solver':['liblinear'],'C':[0.9,0.5,0.2,0.15,0.125,0.1]},
 					 {'penalty': ['l2'],'solver':['newton-cg'],'C':[0.9,0.5,0.2,0.15,0.125,0.1]}]

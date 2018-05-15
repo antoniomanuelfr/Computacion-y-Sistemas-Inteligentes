@@ -50,8 +50,8 @@ X_test=np.load("datos/optdigits_tes_X.npy")
 y_test=np.load("datos/optdigits_tes_y.npy")
 class_names=np.unique(y_test)
 
-scale=preprocessing.StandardScaler().fit(X_train)
-#scale=preprocessing.Normalizer().fit (X_train)
+#scale=preprocessing.StandardScaler().fit(X_train)
+scale=preprocessing.Normalizer().fit (X_train)
 
 X_test=scale.transform(X_test)
 

@@ -5,7 +5,6 @@ from __future__ import print_function
 from sklearn.model_selection import GridSearchCV
 from sklearn import preprocessing
 from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split
 from sklearn.externals import 	joblib
 import numpy as np
@@ -18,8 +17,8 @@ scale=preprocessing.StandardScaler()
 scale.fit (X)
 
 #X=scale.transform(X)
-#scale=preprocessing.Normalizer().fit (X)
-scale=preprocessing.StandardScaler().fit(X)
+scale=preprocessing.Normalizer().fit (X)
+#scale=preprocessing.StandardScaler().fit(X)
 X=scale.transform(X)
 
 # Set the parameters by cross-validation
@@ -32,7 +31,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y,
 
 #Fit_intercept lo que hace es centrar los datos con la media y la varianza.
 #Esto esta hecho ya en la linea 20
-clf = GridSearchCV(LogisticRegression(random_state=seed,fit_intercept=False), tuned_parameters, cv=5,
+clf = GridSearchCV(LogisticRegression(random_state=seed), tuned_parameters, cv=5,
                        scoring='accuracy')
 clf.fit(X_train, y_train)
 
@@ -51,7 +50,7 @@ for mean, std, params in zip(means, stds, clf.cv_results_['params']):
 print("\n\n\n END OF TUNNING PARAMETERS!!!\n\n\n")
 
 print ("The model is trained on the full train set and with best parameters")
-best_logistic_model=LogisticRegression(**clf.best_params_,fit_intercept=False)
+best_logistic_model=LogisticRegression(**clf.best_params_)
 best_logistic_model.fit(X,y)
 print("The model is going to be saved in: LogicRegresion_model.pkl")
 joblib.dump(best_logistic_model,'LogicRegresion_model.pkl')

@@ -4,7 +4,6 @@
 from __future__ import print_function
 import itertools
 from sklearn import preprocessing
-from sklearn.pipeline import Pipeline
 from sklearn.externals import joblib
 from sklearn.metrics import confusion_matrix,classification_report
 import numpy as np
@@ -50,8 +49,8 @@ X_test=np.load("datos/optdigits_tes_X.npy")
 y_test=np.load("datos/optdigits_tes_y.npy")
 class_names=np.unique(y_test)
 
-#scale=preprocessing.StandardScaler().fit(X_train)
-scale=preprocessing.Normalizer().fit (X_train)
+scale=preprocessing.StandardScaler().fit(X_train)
+#scale=preprocessing.Normalizer().fit (X_train)
 
 X_test=scale.transform(X_test)
 

@@ -17,8 +17,8 @@ scale=preprocessing.StandardScaler()
 scale.fit (X)
 
 #X=scale.transform(X)
-scale=preprocessing.Normalizer().fit (X)
-#scale=preprocessing.StandardScaler().fit(X)
+#scale=preprocessing.Normalizer().fit (X)
+scale=preprocessing.StandardScaler().fit(X)
 X=scale.transform(X)
 
 # Set the parameters by cross-validation

@@ -22,6 +22,7 @@
     (NeighborPlace ?clace1 - Place ?place2 - Place ?orientation - Compass)
     (HasObject ?obj - Object)
     (DeliveredObj ?charctr - Character ?obj - Object)
+    (HandEmpty)
   )
 
   (:action TURN_R
@@ -43,6 +44,7 @@
       )
     )
   )
+  
   (:action TURN_L
     :parameters (?plyr_or - Compass)
     :precondition (and(Orientation ?plyr_or))
@@ -62,10 +64,29 @@
       )
     )
   )
-  (:action action-name
-    :parameters (?x - object)
-    :precondition (and ())
-    :effect (and ())
+
+  (:action MOVE
+    :parameters (?plyr - Player ?p1 - Place ?p2 - Place - ?plyr_or - Compass )
+    :precondition (and (PlayerLoc ?plyr ?p1) (not (PlayerLoc ?plyr ?p2)) (NeighborPlace ?p1 ?p2 ?plyr_or) (Orientation ?plyr_or))
+    :effect (and (PlayerLoc ?plyr ?p2) (not (Player ?plyr ?p1)))
   )
 
+  (:action PICK_UP
+    :parameters (?plyr - Player ?loc - Place ?obj - Object)
+    :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (HandEmpty))
+    :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty)) (HasObject ?obj) )
+  )
+
+
+  (:action DROP
+    :parameters (?plyr - Player ?loc - Place ?obj - Object)
+    :precondition (and (PlayerLoc ?plyr ?loc) (HasObject ?obj))
+    :effect (and (not (HasObject ?obj)) (ObjectLoc ?obj ?loc) (HandEmpty))
+  )
+
+  (:action GIVE
+    :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Object)
+    :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HasObject ?obj))
+    :effect (and (not (HasObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
+  )
 )

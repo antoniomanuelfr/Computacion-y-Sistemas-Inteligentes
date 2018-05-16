@@ -214,6 +214,7 @@
     (Orientation NORTH)
     (HandEmpty)
     (= (Cost) 0)
+)
 
 ; El objetivo va a ser entregar los objetos a los personajes
 (:goal

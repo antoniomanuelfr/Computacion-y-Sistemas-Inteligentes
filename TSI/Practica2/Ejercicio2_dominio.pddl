@@ -19,7 +19,7 @@
     (ObjectLoc ?obj - Object ?plc - Place)
     (CharacterLoc ?chrctr - Character ?plc - Place)
     (Orientation ?comps - Compass)
-    (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass)
+    (NeighborPlace ?clace1 - Place ?place2 - Place ?orientation - Compass)
     (HasObject ?obj - Object)
     (DeliveredObj ?charctr - Character ?obj - Object)
     (HandEmpty)

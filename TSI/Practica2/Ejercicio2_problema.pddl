@@ -208,9 +208,11 @@
     (PlayerLoc PLAYER P1)
     (Orientation NORTH)
     (HandEmpty)
+    (= (Cost) 0)
 )
 
 ; El objetivo va a ser entregar los objetos a los personajes
 (:goal
     (and (DeliveredObj DICAPRIO OSCAR) (DeliveredObj PRINCESS ROSA) (DeliveredObj WITCH APPLE) (DeliveredObj PROF ALG) (DeliveredObj PRINCIPE GOLD)))
+    (:metric minimize (Cost))
 )

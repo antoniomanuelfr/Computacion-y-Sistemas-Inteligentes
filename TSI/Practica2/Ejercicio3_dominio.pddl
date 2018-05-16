@@ -98,4 +98,17 @@
     :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HasObject ?obj))
     :effect (and (not (HasObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
   )
+
+  (:action PUSH
+    :parameters (?x - object)
+    :precondition (and ())
+    :effect (and ())
+  )
+
+  (:action POP
+    :parameters (?x - object)
+    :precondition (and ())
+    :effect (and ()))
+
+
 )

@@ -12,14 +12,20 @@
     Character
     Place
     Compass
+    Distance
     )
+
+    (:functions
+    (Cost)
+    (Distance ?Place1 ?Place2 - Place)
+)
 
   (:predicates
     (PlayerLoc ?plyr - Player ?plc - Place)
     (ObjectLoc ?obj - Object ?plc - Place)
     (CharacterLoc ?chrctr - Character ?plc - Place)
     (Orientation ?comps - Compass)
-    (NeighborPlace ?clace1 - Place ?place2 - Place ?orientation - Compass)
+    (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass ?distance - Distance)
     (HasObject ?obj - Object)
     (DeliveredObj ?charctr - Character ?obj - Object)
     (HandEmpty)

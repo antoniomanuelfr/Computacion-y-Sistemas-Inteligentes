@@ -18,7 +18,7 @@
     (:functions
     (Cost)
     (Distance ?Place1 ?Place2 - Place)
-)
+    )
 
   (:predicates
     (PlayerLoc ?plyr - Player ?plc - Place)

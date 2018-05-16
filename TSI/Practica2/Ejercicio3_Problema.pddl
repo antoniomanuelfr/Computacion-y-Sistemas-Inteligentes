@@ -208,12 +208,12 @@
     (CharacterLoc DICAPRIO P2)
     (CharacterLoc WITCH P24)
     (CharacterLoc PRINCESS P9)
-    (CharacterLoc PROF P2)
+    (CharacterLoc PROF P3)
 
     (PlayerLoc PLAYER P1)
     (Orientation NORTH)
     (HandEmpty)
-)
+    (= (Cost) 0)
 
 ; El objetivo va a ser entregar los objetos a los personajes
 (:goal

@@ -13,6 +13,7 @@
     Place
     Compass
     Distance
+    Ground
     )
 
     (:functions
@@ -25,10 +26,12 @@
     (ObjectLoc ?obj - Object ?plc - Place)
     (CharacterLoc ?chrctr - Character ?plc - Place)
     (Orientation ?comps - Compass)
-    (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass)
+    (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass ?distance - Distance)
     (HasObject ?obj - Object)
     (DeliveredObj ?charctr - Character ?obj - Object)
+    (PlaceType ?place - Place ?type - Ground)
     (HandEmpty)
+
   )
 
   (:action TURN_R

@@ -3,10 +3,10 @@
 (:domain Practica2)
 
 (:OBJECTS
-    P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18 P19 P20 P21 P22 P23 P24 P25- Place
+    P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18 P19 P20 P21 P22 P23 P24 P25 - Place
     PLAYER - Player
-    OSCAR MANZANA ROSA ALGORITMO ORO - Object
-    PRINCESA PRINCIPE BRUJA PROFESOR LEONARDO - Character
+    OSCAR APPLE ROSA ALG GOLD - Object
+    PRINCESS PRINCIPE WITCH PROF DICAPRIO - Character
     NORTH SOUTH EAST WEST - Compass
 )
 
@@ -102,24 +102,24 @@
     (NeighborPlace P25 P24 NORTH)
 
     ; Objetos en el mapa
-    (ObjectLoc ORO P4)
-    (ObjectLoc OSCAR P5)
-    (ObjectLoc MANZANA P6)
-    (ObjectLoc ROSA P7)
-    (ObjectLoc ALGORITMO P8)
+    (ObjectLoc GOLD P5)
+    (ObjectLoc OSCAR P22)
+    (ObjectLoc APPLE P4)
+    (ObjectLoc ROSA P19)
+    (ObjectLoc ALG P12)
 
-    (CharacterLoc PRINCIPE P2)
-    (CharacterLoc LEONARDO P3)
-    (CharacterLoc BRUJA P9)
-    (CharacterLoc PRINCESA P4)
-    (CharacterLoc PROFESOR P8)
+    (CharacterLoc PRINCIPE P15)
+    (CharacterLoc DICAPRIO P2)
+    (CharacterLoc WITCH P24)
+    (CharacterLoc PRINCESS P9)
+    (CharacterLoc PROF P2)
 
-    (PlayerLoc PLAYER P7)
+    (PlayerLoc PLAYER P1)
     (Orientation NORTH)
     (HandEmpty)
 )
 
 ; El objetivo va a ser entregar los objetos a los personajes
 (:goal
-    (and (DeliveredObj LEONARDO OSCAR) (DeliveredObj PRINCESA ROSA) (DeliveredObj BRUJA MANZANA) (DeliveredObj PROFESOR ALGORITMO) (DeliveredObj PRINCIPE ORO)))
+    (and (DeliveredObj DICAPRIO OSCAR) (DeliveredObj PRINCESS ROSA) (DeliveredObj WITCH APPLE) (DeliveredObj PROF ALG) (DeliveredObj PRINCIPE GOLD)))
 )

@@ -31,6 +31,8 @@
     (DeliveredObj ?charctr - Character ?obj - Object)
     (PlaceType ?place - Place ?type - Ground)
     (SavedObject ?obj - Object)
+    (GroundObject ?type - Ground ?obj - Object)
+    (NoNeedObject ?type - Ground)
     (BagEmpty)
     (HandEmpty)
 
@@ -77,8 +79,10 @@
   )
 
   (:action MOVE
-    :parameters (?plyr - Player ?p1 - Place ?p2 - Place ?plyr_or - Compass )
-    :precondition (and (PlayerLoc ?plyr ?p1) (not (PlayerLoc ?plyr ?p2)) (NeighborPlace ?p1 ?p2 ?plyr_or) (Orientation ?plyr_or))
+    :parameters (?plyr - Player ?p1 - Place ?p2 - Place ?plyr_or - Compass ?Ground - Ground ?obj - Object )
+    :precondition (and (PlayerLoc ?plyr ?p1) (not (PlayerLoc ?plyr ?p2)) (NeighborPlace ?p1 ?p2 ?plyr_or) (Orientation ?plyr_or) (PlaceType ?p2 ?Ground)
+                    (or (NoNeedObject ?Ground) (and (or (HandObject ?obj) (SavedObject ?obj)) (GroundObject ?Ground ?obj)  ))
+                  )
     :effect (and (PlayerLoc ?plyr ?p2) (not (PlayerLoc ?plyr ?p1)) (increase (Cost) (Distance ?p1 ?p2)))
   )
 

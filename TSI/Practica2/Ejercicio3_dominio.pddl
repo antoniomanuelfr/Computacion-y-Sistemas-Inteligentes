@@ -27,7 +27,7 @@
     (CharacterLoc ?chrctr - Character ?plc - Place)
     (Orientation ?comps - Compass)
     (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass)
-    (HasObject ?obj - Object)
+    (HandObject ?obj - Object)
     (DeliveredObj ?charctr - Character ?obj - Object)
     (PlaceType ?place - Place ?type - Ground)
     (SavedObject ?obj - Object)
@@ -84,33 +84,33 @@
 
   (:action PICK_UP
     :parameters (?plyr - Player ?loc - Place ?obj - Object)
-    :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (HandEmpty))
-    :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty)) (HasObject ?obj) )
+    :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (HandEmpty) )
+    :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty)) (HandObject ?obj) )
   )
 
 
   (:action DROP
     :parameters (?plyr - Player ?loc - Place ?obj - Object)
-    :precondition (and (PlayerLoc ?plyr ?loc) (HasObject ?obj))
-    :effect (and (not (HasObject ?obj)) (ObjectLoc ?obj ?loc) (HandEmpty))
+    :precondition (and (PlayerLoc ?plyr ?loc) (HandObject ?obj))
+    :effect (and (not (HandObject ?obj)) (ObjectLoc ?obj ?loc) (HandEmpty))
   )
 
   (:action GIVE
     :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Object)
-    :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HasObject ?obj))
-    :effect (and (not (HasObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
+    :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HandObject ?obj))
+    :effect (and (not (HandObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
   )
 
 
   (:action POP
     :parameters (?obj - Object)
     :precondition (and (SavedObject ?obj) (HandEmpty))
-    :effect (and (not (SavedObject ?obj)) (not (HandEmpty)) (HasObject ?obj) (BagEmpty))
+    :effect (and (not (SavedObject ?obj)) (not (HandEmpty)) (HandObject ?obj) (BagEmpty))
   )
 
   (:action PUSH
     :parameters (?obj - Object)
-    :precondition (and (BagEmpty) (HasObject ?obj))
-    :effect (and (not (HasObject ?obj)) (not (BagEmpty)) (SavedObject ?obj) (HandEmpty))
+    :precondition (and (BagEmpty) (HandObject ?obj))
+    :effect (and (not (HandObject ?obj)) (not (BagEmpty)) (SavedObject ?obj) (HandEmpty))
   )
 )

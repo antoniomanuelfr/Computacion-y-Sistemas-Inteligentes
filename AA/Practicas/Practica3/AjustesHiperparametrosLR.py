@@ -13,7 +13,6 @@ from sklearn.linear_model import Lasso ,Ridge
 from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.model_selection import GridSearchCV
-import warnings
 
 def gridSearchFunction(Model,parameters,scoring):
 	clf = GridSearchCV(Model, parameters, cv=5,scoring=scoring)

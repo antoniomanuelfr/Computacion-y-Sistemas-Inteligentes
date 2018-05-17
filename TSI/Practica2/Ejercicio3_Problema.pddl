@@ -5,7 +5,7 @@
 (:OBJECTS
     P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18 P19 P20 P21 P22 P23 P24 P25 - Place
     PLAYER - Player
-    OSCAR APPLE ROSA ALG GOLD - Object
+    OSCAR APPLE ROSA ALG GOLD BIKINI SHOE - Object
     PRINCESS PRINCIPE WITCH PROF DICAPRIO - Character
     NORTH SOUTH EAST WEST - Compass
     FOREST WATER EDGE SAND STONE - Ground
@@ -199,7 +199,7 @@
     (PlaceType P6 STONE)
     (PlaceType P7 WATER)
     (PlaceType P8 WATER)
-    (PlaceType P9 SAND)
+    (PlaceType P9 STONE)
     (PlaceType P10 WATER)
     (PlaceType P11 STONE)
     (PlaceType P12 FOREST)
@@ -222,10 +222,12 @@
     (ObjectLoc APPLE P4)
     (ObjectLoc ROSA P19)
     (ObjectLoc ALG P12)
+    (ObjectLoc SHOE P6)
+    (ObjectLoc BIKINI P20)
 
     (CharacterLoc PRINCIPE P15)
     (CharacterLoc DICAPRIO P2)
-    (CharacterLoc WITCH P24)
+    (CharacterLoc WITCH P23)
     (CharacterLoc PRINCESS P9)
     (CharacterLoc PROF P3)
 

@@ -1,4 +1,4 @@
-(define (problem Problema1)
+(define (problem Problema2)
 
 (:domain Practica2)
 

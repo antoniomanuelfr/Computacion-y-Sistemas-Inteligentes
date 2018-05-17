@@ -26,10 +26,12 @@
     (ObjectLoc ?obj - Object ?plc - Place)
     (CharacterLoc ?chrctr - Character ?plc - Place)
     (Orientation ?comps - Compass)
-    (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass ?distance - Distance)
+    (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass)
     (HasObject ?obj - Object)
     (DeliveredObj ?charctr - Character ?obj - Object)
     (PlaceType ?place - Place ?type - Ground)
+    (SavedObject ?obj - Object)
+    (BagEmpty)
     (HandEmpty)
 
   )
@@ -99,16 +101,16 @@
     :effect (and (not (HasObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
   )
 
-  (:action PUSH
-    :parameters (?x - object)
-    :precondition (and ())
-    :effect (and ())
-  )
 
   (:action POP
-    :parameters (?x - object)
-    :precondition (and ())
-    :effect (and ()))
+    :parameters (?obj - Object)
+    :precondition (and (SavedObject ?obj) (HandEmpty))
+    :effect (and (not (SavedObject ?obj)) (not (HandEmpty)) (HasObject ?obj) (BagEmpty))
+  )
 
-
+  (:action PUSH
+    :parameters (?obj - Object)
+    :precondition (and (BagEmpty) (HasObject ?obj))
+    :effect (and (not (HasObject ?obj)) (not (BagEmpty)) (SavedObject ?obj) (HandEmpty))
+  )
 )

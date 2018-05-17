@@ -1,4 +1,4 @@
-(define (problem Problema1)
+(define (problem Problema3)
 
 (:domain Practica2)
 
@@ -8,7 +8,7 @@
     OSCAR APPLE ROSA ALG GOLD - Object
     PRINCESS PRINCIPE WITCH PROF DICAPRIO - Character
     NORTH SOUTH EAST WEST - Compass
-    BOSQUE AGUA PRECIPICIO ARENA PIEDRA - Ground
+    FOREST WATER EDGE SAND STONE - Ground
 )
 
 (:INIT
@@ -102,8 +102,6 @@
     (NeighborPlace P25 P23 WEST)
     (NeighborPlace P25 P24 NORTH)
 
-    ;=(Distances
-
     (= (Distance P1 P2) 1)
     (= (Distance P1 P14) 1)
     (= (Distance P1 P6) 1)
@@ -193,10 +191,31 @@
     (= (Distance P25 P23) 1)
     (= (Distance P25 P24) 1)
 
-    ;Tipo de suelo
-
-    (PlaceType P1)
-
+    (PlaceType P1 SAND)
+    (PlaceType P2 SAND)
+    (PlaceType P3 STONE)
+    (PlaceType P4 SAND)
+    (PlaceType P5 SAND)
+    (PlaceType P6 STONE)
+    (PlaceType P7 WATER)
+    (PlaceType P8 WATER)
+    (PlaceType P9 SAND)
+    (PlaceType P10 WATER)
+    (PlaceType P11 STONE)
+    (PlaceType P12 FOREST)
+    (PlaceType P13 FOREST)
+    (PlaceType P14 STONE)
+    (PlaceType P15 STONE)
+    (PlaceType P16 FOREST)
+    (PlaceType P17 FOREST)
+    (PlaceType P18 FOREST)
+    (PlaceType P19 FOREST)
+    (PlaceType P20 SAND)
+    (PlaceType P21 SAND)
+    (PlaceType P22 STONE)
+    (PlaceType P23 STONE)
+    (PlaceType P24 EDGE)
+    (PlaceType P25 EDGE)
     ; Objects
     (ObjectLoc GOLD P5)
     (ObjectLoc OSCAR P22)
@@ -216,7 +235,8 @@
     (= (Cost) 0)
 )
 
-; El objetivo va a ser entregar los objetos a los personajes
 (:goal
     (and (DeliveredObj DICAPRIO OSCAR) (DeliveredObj PRINCESS ROSA) (DeliveredObj WITCH APPLE) (DeliveredObj PROF ALG) (DeliveredObj PRINCIPE GOLD)))
+    (:metric minimize (Cost))
+
 )

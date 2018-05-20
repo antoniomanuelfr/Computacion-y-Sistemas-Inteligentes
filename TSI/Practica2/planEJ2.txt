@@ -71,11 +71,11 @@ step    0: TURN_L NORTH
        17: MOVE PLAYER P15 P19 EAST
        18: TURN_R EAST
        19: TURN_R SOUTH
-       20: PICK_UP PLAYER P19 ROSA
+       20: PICK_UP PLAYER P19 ROSE
        21: MOVE PLAYER P19 P15 WEST
        22: TURN_L WEST
        23: MOVE PLAYER P15 P20 SOUTH
-       24: DROP PLAYER P20 ROSA
+       24: DROP PLAYER P20 ROSE
        25: TURN_R SOUTH
        26: MOVE PLAYER P20 P1 WEST
        27: TURN_R WEST
@@ -119,7 +119,7 @@ step    0: TURN_L NORTH
        65: MOVE PLAYER P2 P1 NORTH
        66: TURN_R NORTH
        67: MOVE PLAYER P1 P20 EAST
-       68: PICK_UP PLAYER P20 ROSA
+       68: PICK_UP PLAYER P20 ROSE
        69: TURN_R EAST
        70: TURN_R SOUTH
        71: MOVE PLAYER P20 P1 WEST
@@ -130,11 +130,11 @@ step    0: TURN_L NORTH
        76: MOVE PLAYER P8 P7 WEST
        77: TURN_R WEST
        78: MOVE PLAYER P7 P9 NORTH
-       79: DROP PLAYER P9 ROSA
+       79: DROP PLAYER P9 ROSE
        80: TURN_R NORTH
        81: TURN_R EAST
-       82: PICK_UP PLAYER P9 ROSA
-       83: GIVE PLAYER PRINCESS P9 ROSA
+       82: PICK_UP PLAYER P9 ROSE
+       83: GIVE PLAYER PRINCESS P9 ROSE
      
 
 time spent:    0.00 seconds instantiating 347 easy, 0 hard action templates
@@ -142,6 +142,6 @@ time spent:    0.00 seconds instantiating 347 easy, 0 hard action templates
                0.00 seconds creating final representation with 235 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               2.47 seconds searching, evaluating 53463 states, to a max depth of 0
-               2.47 seconds total time
+               2.43 seconds searching, evaluating 53463 states, to a max depth of 0
+               2.43 seconds total time
 

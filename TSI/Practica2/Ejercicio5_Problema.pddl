@@ -219,10 +219,20 @@
 
   ; Objects
   (ObjectLoc GOLD P5)
-  (ObjectLoc OSCAR P22)
+  (ObjectLoc GOLD P22)
+  (ObjectLoc GOLD P17)
+
   (ObjectLoc APPLE P4)
+  (ObjectLoc APPLE P7)
+  (ObjectLoc APPLE P8)
+
   (ObjectLoc ROSE P19)
+  (ObjectLoc ROSE P19)
+  (ObjectLoc ROSE P19)
+
   (ObjectLoc ALG P12)
+  (ObjectLoc OSCAR P22)
+
   (ObjectLoc SHOE P7)
   (ObjectLoc BIKINI P20)
 
@@ -273,6 +283,12 @@
   (BagEmpty)
   (= (Points) 0)
   (= (Cost) 0)
+  (= (NumberObjects) 2)
+  (= (ObjectsDelivered PRINCE) 0)
+  (= (ObjectsDelivered PRINCESS) 0)
+  (= (ObjectsDelivered PROF) 0)
+  (= (ObjectsDelivered DICAPRIO) 0)
+  (= (ObjectsDelivered WITCH) 0)
 )
 
 (:goal

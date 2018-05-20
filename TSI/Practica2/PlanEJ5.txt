@@ -1,0 +1,128 @@
+
+ff: parsing domain file
+domain 'PRACTICA2' defined
+ ... done.
+ff: parsing problem file
+problem 'PROBLEMA3' defined
+ ... done.
+
+
+
+no optimization required. skipping criterion.
+
+
+no metric specified. plan length assumed.
+
+task contains conditional effects. turning off state domination.
+
+
+
+checking for cyclic := effects --- OK.
+
+ff: search configuration is EHC, if that fails then  best-first on 1*g(s) + 5*h(s) where
+    metric is  plan length
+
+Cueing down from goal distance:   18 into depth [1]
+                                  17            [1]
+                                  16            [1][2][3][4][5][6]
+                                  15            [1][2][3][4][5][6][7]
+                                  13            [1][2]
+                                   5            [1][2][3][4][5][6][7][8]
+                                   4            [1][2][3][4][5][6][7][8][9][10][11]
+                                   3            [1][2][3][4][5][6][7][8][9][10][11][12][13][14][15]
+                                   2            [1][2][3][4][5][6][7][8][9][10][11][12][13][14][15][16][17][18][19][20][21][22][23][24][25][26][27][28][29][30]
+                                   1            [1]
+                                   0            
+
+ff: found legal plan as follows
+
+step    0: TURN_R NORTH
+        1: MOVE PLAYER P1 P20 EAST SAND STONE
+        2: MOVE PLAYER P20 P22 EAST STONE STONE
+        3: TURN_R EAST
+        4: MOVE PLAYER P22 P23 SOUTH STONE STONE
+        5: TURN_R SOUTH
+        6: TURN_R WEST
+        7: MOVE PLAYER P23 P22 NORTH STONE STONE
+        8: TURN_L NORTH
+        9: PICK_UP PLAYER P22 OSCAR
+       10: PUSH OSCAR
+       11: PICK_UP PLAYER P22 GOLD
+       12: MOVE PLAYER P22 P20 WEST SAND STONE
+       13: TURN_R WEST
+       14: MOVE PLAYER P20 P15 NORTH STONE STONE
+       15: GIVE PLAYER PRINCE P15 GOLD
+       16: TURN_R NORTH
+       17: TURN_R EAST
+       18: MOVE PLAYER P15 P20 SOUTH SAND STONE
+       19: MOVE PLAYER P20 P21 SOUTH SAND STONE
+       20: TURN_R SOUTH
+       21: MOVE PLAYER P21 P2 WEST SAND STONE
+       22: POP OSCAR
+       23: GIVE PLAYER DICAPRIO P2 OSCAR
+       24: MOVE PLAYER P2 P3 WEST STONE STONE
+       25: MOVE PLAYER P3 P4 WEST SAND STONE
+       26: TURN_R WEST
+       27: TURN_R NORTH
+       28: PICK_UP PLAYER P4 APPLE
+       29: MOVE PLAYER P4 P3 EAST STONE STONE
+       30: MOVE PLAYER P3 P2 EAST SAND STONE
+       31: MOVE PLAYER P2 P22 EAST STONE STONE
+       32: TURN_R EAST
+       33: MOVE PLAYER P22 P23 SOUTH STONE STONE
+       34: GIVE PLAYER WITCH P23 APPLE
+       35: TURN_R SOUTH
+       36: MOVE PLAYER P23 P21 WEST SAND STONE
+       37: MOVE PLAYER P21 P2 WEST SAND STONE
+       38: MOVE PLAYER P2 P3 WEST STONE STONE
+       39: MOVE PLAYER P3 P4 WEST SAND STONE
+       40: TURN_R WEST
+       41: MOVE PLAYER P4 P5 NORTH SAND STONE
+       42: TURN_R NORTH
+       43: PICK_UP PLAYER P5 GOLD
+       44: MOVE PLAYER P5 P6 EAST STONE STONE
+       45: MOVE PLAYER P6 P1 EAST SAND STONE
+       46: MOVE PLAYER P1 P20 EAST SAND STONE
+       47: TURN_L EAST
+       48: MOVE PLAYER P20 P15 NORTH STONE STONE
+       49: GIVE PLAYER PRINCE P15 GOLD
+       50: TURN_L NORTH
+       51: TURN_L WEST
+       52: MOVE PLAYER P15 P20 SOUTH SAND STONE
+       53: TURN_R SOUTH
+       54: PICK_UP PLAYER P20 BIKINI
+       55: MOVE PLAYER P20 P1 WEST SAND STONE
+       56: MOVE PLAYER P1 P6 WEST STONE STONE
+       57: TURN_R WEST
+       58: MOVE PLAYER P6 P8 NORTH WATER BIKINI
+       59: TURN_L NORTH
+       60: PUSH BIKINI
+       61: TURN_L WEST
+       62: PICK_UP PLAYER P8 APPLE
+       63: MOVE PLAYER P8 P6 SOUTH STONE STONE
+       64: MOVE PLAYER P6 P3 SOUTH STONE STONE
+       65: GIVE PLAYER PROF P3 APPLE
+       66: TURN_L SOUTH
+       67: TURN_L EAST
+       68: MOVE PLAYER P3 P6 NORTH STONE STONE
+       69: MOVE PLAYER P6 P8 NORTH WATER BIKINI
+       70: TURN_L NORTH
+       71: MOVE PLAYER P8 P7 WEST WATER BIKINI
+       72: TURN_L WEST
+       73: TURN_L SOUTH
+       74: PICK_UP PLAYER P7 APPLE
+       75: MOVE PLAYER P7 P8 EAST WATER BIKINI
+       76: TURN_R EAST
+       77: MOVE PLAYER P8 P6 SOUTH STONE STONE
+       78: MOVE PLAYER P6 P3 SOUTH STONE STONE
+       79: GIVE PLAYER PROF P3 APPLE
+     
+
+time spent:    0.12 seconds instantiating 2687 easy, 1918 hard action templates
+               0.00 seconds reachability analysis, yielding 266 facts and 2193 actions
+               0.00 seconds creating final representation with 262 relevant facts, 12 relevant fluents
+               0.01 seconds computing LNF
+               0.00 seconds building connectivity graph
+               0.19 seconds searching, evaluating 1334 states, to a max depth of 30
+               0.32 seconds total time
+

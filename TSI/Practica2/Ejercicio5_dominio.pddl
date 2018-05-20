@@ -21,6 +21,8 @@
     (Distance ?Place1 ?Place2 - Place)
     (Points)
     (Puntuation ?chrctr - Character ?obj - Object)
+    (NumberObjects)
+    (ObjectsDelivered ?chrctr - Character)
 
 )
 
@@ -104,8 +106,8 @@
 
   (:action GIVE
     :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Object)
-    :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HandObject ?obj))
-    :effect (and (not (HandObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj) (increase (Points) (Puntuation ?chrctr ?obj)))
+    :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HandObject ?obj)(< (ObjectsDelivered ?chrctr) (NumberObjects)))
+    :effect (and (not (HandObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj) (increase (Points) (Puntuation ?chrctr ?obj)) (increase (ObjectsDelivered ?chrctr) 1))
   )
 
 

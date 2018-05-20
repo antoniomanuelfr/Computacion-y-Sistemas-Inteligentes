@@ -180,11 +180,11 @@ step    0: TURN_L NORTH
       119: GIVE PLAYER PRINCESS P9 ROSE
      
 
-time spent:    0.03 seconds instantiating 407 easy, 318 hard action templates
+time spent:    0.02 seconds instantiating 407 easy, 318 hard action templates
                0.00 seconds reachability analysis, yielding 299 facts and 683 actions
                0.00 seconds creating final representation with 297 relevant facts, 1 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.64 seconds searching, evaluating 13159 states, to a max depth of 32
-               0.67 seconds total time
+               0.66 seconds searching, evaluating 13159 states, to a max depth of 32
+               0.68 seconds total time
 

@@ -5,7 +5,7 @@
 (:OBJECTS
     P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18 P19 P20 P21 P22 P23 P24 P25 - Place
     PLAYER - Player
-    OSCAR APPLE ROSA ALG GOLD - Obj
+    OSCAR APPLE ROSE ALG GOLD - Obj
     PRINCESS PRINCIPE WITCH PROF DICAPRIO - Character
     NORTH SOUTH EAST WEST - Compass
 )
@@ -196,7 +196,7 @@
     (ObjectLoc GOLD P5)
     (ObjectLoc OSCAR P22)
     (ObjectLoc APPLE P4)
-    (ObjectLoc ROSA P19)
+    (ObjectLoc ROSE P19)
     (ObjectLoc ALG P12)
 
     (CharacterLoc PRINCIPE P15)
@@ -213,6 +213,6 @@
 
 ; El objetivo va a ser entregar los objetos a los personajes
 (:goal
-    (and (DeliveredObj DICAPRIO OSCAR) (DeliveredObj PRINCESS ROSA) (DeliveredObj WITCH APPLE) (DeliveredObj PROF ALG) (DeliveredObj PRINCIPE GOLD)))
+    (and (DeliveredObj DICAPRIO OSCAR) (DeliveredObj PRINCESS ROSE) (DeliveredObj WITCH APPLE) (DeliveredObj PROF ALG) (DeliveredObj PRINCIPE GOLD)))
     (:metric minimize (Cost))
 )

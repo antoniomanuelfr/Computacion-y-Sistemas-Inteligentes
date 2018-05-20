@@ -218,14 +218,15 @@
 
 
   ; Objects
-  (ObjectLoc GOLD P22)
-  (ObjectLoc GOLD P21)
-  (ObjectLoc GOLD P20)
-  (ObjectLoc GOLD P17)
-  (ObjectLoc GOLD P5)
-  (ObjectLoc GOLD P10)
-  (ObjectLoc GOLD P12)
-  (ObjectLoc GOLD P9)
+  (ObjectLoc ROSE P22)
+  (ObjectLoc ROSE P21)
+  (ObjectLoc ROSE P16)
+  (ObjectLoc ROSE P17)
+  (ObjectLoc ROSE P5)
+  (ObjectLoc ROSE P10)
+  (ObjectLoc ROSE P12)
+  (ObjectLoc ROSE P3)
+
   (ObjectLoc OSCAR P15)
   (ObjectLoc SHOE P7)
   (ObjectLoc BIKINI P20)
@@ -260,8 +261,11 @@
   (= (Puntuation WITCH ROSE) 5)
   (= (Puntuation WITCH ALG) 1)
 
+  (CharacterLoc PRINCE P15)
   (CharacterLoc DICAPRIO P2)
-
+  (CharacterLoc WITCH P23)
+  (CharacterLoc PRINCESS P9)
+  (CharacterLoc PROF P3)
 
   (GroundObject FOREST SHOE)
   (GroundObject WATER BIKINI)

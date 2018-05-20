@@ -1,0 +1,147 @@
+
+ff: parsing domain file
+domain 'PRACTICA2' defined
+ ... done.
+ff: parsing problem file
+problem 'PROBLEMA2' defined
+ ... done.
+
+
+metric established (normalized to minimize): ((1.00*[RF0](COST)) - () + 0.00)
+
+task contains conditional effects. turning off state domination.
+
+
+
+checking for cyclic := effects --- OK.
+
+ff: search configuration is  best-first on 1*g(s) + 2*h(s) where
+    metric is ((1.00*[RF0](COST)) - () + 0.00)
+
+advancing to distance:   30
+                         29
+                         28
+                         27
+                         26
+                         25
+                         24
+                         23
+                         22
+                         21
+                         20
+                         19
+                         18
+                         17
+                         16
+                         15
+                         14
+                         12
+                         11
+                         10
+                          9
+                          8
+                          7
+                          6
+                          5
+                          4
+                          3
+                          2
+                          1
+                          0
+
+ff: found legal plan as follows
+
+step    0: TURN_L NORTH
+        1: MOVE PLAYER P1 P6 WEST
+        2: MOVE PLAYER P6 P5 WEST
+        3: PICK_UP PLAYER P5 GOLD
+        4: TURN_L WEST
+        5: TURN_L SOUTH
+        6: MOVE PLAYER P5 P6 EAST
+        7: MOVE PLAYER P6 P1 EAST
+        8: MOVE PLAYER P1 P20 EAST
+        9: TURN_L EAST
+       10: MOVE PLAYER P20 P15 NORTH
+       11: DROP PLAYER P15 GOLD
+       12: TURN_R NORTH
+       13: TURN_R EAST
+       14: PICK_UP PLAYER P15 GOLD
+       15: GIVE PLAYER PRINCIPE P15 GOLD
+       16: TURN_L SOUTH
+       17: MOVE PLAYER P15 P19 EAST
+       18: TURN_R EAST
+       19: TURN_R SOUTH
+       20: PICK_UP PLAYER P19 ROSA
+       21: MOVE PLAYER P19 P15 WEST
+       22: TURN_L WEST
+       23: MOVE PLAYER P15 P20 SOUTH
+       24: DROP PLAYER P20 ROSA
+       25: TURN_R SOUTH
+       26: MOVE PLAYER P20 P1 WEST
+       27: TURN_R WEST
+       28: MOVE PLAYER P1 P14 NORTH
+       29: MOVE PLAYER P14 P13 NORTH
+       30: MOVE PLAYER P13 P12 NORTH
+       31: TURN_L NORTH
+       32: PICK_UP PLAYER P12 ALG
+       33: TURN_L WEST
+       34: MOVE PLAYER P12 P13 SOUTH
+       35: MOVE PLAYER P13 P14 SOUTH
+       36: MOVE PLAYER P14 P1 SOUTH
+       37: MOVE PLAYER P1 P2 SOUTH
+       38: TURN_R SOUTH
+       39: MOVE PLAYER P2 P3 WEST
+       40: GIVE PLAYER PROF P3 ALG
+       41: MOVE PLAYER P3 P4 WEST
+       42: TURN_L WEST
+       43: PICK_UP PLAYER P4 APPLE
+       44: TURN_L SOUTH
+       45: MOVE PLAYER P4 P3 EAST
+       46: MOVE PLAYER P3 P2 EAST
+       47: MOVE PLAYER P2 P22 EAST
+       48: TURN_R EAST
+       49: MOVE PLAYER P22 P23 SOUTH
+       50: DROP PLAYER P23 APPLE
+       51: TURN_R SOUTH
+       52: TURN_R WEST
+       53: PICK_UP PLAYER P23 APPLE
+       54: GIVE PLAYER WITCH P23 APPLE
+       55: MOVE PLAYER P23 P22 NORTH
+       56: PICK_UP PLAYER P22 OSCAR
+       57: TURN_L NORTH
+       58: MOVE PLAYER P22 P20 WEST
+       59: TURN_L WEST
+       60: MOVE PLAYER P20 P21 SOUTH
+       61: TURN_R SOUTH
+       62: MOVE PLAYER P21 P2 WEST
+       63: TURN_R WEST
+       64: GIVE PLAYER DICAPRIO P2 OSCAR
+       65: MOVE PLAYER P2 P1 NORTH
+       66: TURN_R NORTH
+       67: MOVE PLAYER P1 P20 EAST
+       68: PICK_UP PLAYER P20 ROSA
+       69: TURN_R EAST
+       70: TURN_R SOUTH
+       71: MOVE PLAYER P20 P1 WEST
+       72: MOVE PLAYER P1 P6 WEST
+       73: TURN_R WEST
+       74: MOVE PLAYER P6 P8 NORTH
+       75: TURN_L NORTH
+       76: MOVE PLAYER P8 P7 WEST
+       77: TURN_R WEST
+       78: MOVE PLAYER P7 P9 NORTH
+       79: DROP PLAYER P9 ROSA
+       80: TURN_R NORTH
+       81: TURN_R EAST
+       82: PICK_UP PLAYER P9 ROSA
+       83: GIVE PLAYER PRINCESS P9 ROSA
+     
+
+time spent:    0.00 seconds instantiating 347 easy, 0 hard action templates
+               0.00 seconds reachability analysis, yielding 235 facts and 347 actions
+               0.00 seconds creating final representation with 235 relevant facts, 1 relevant fluents
+               0.00 seconds computing LNF
+               0.00 seconds building connectivity graph
+               2.47 seconds searching, evaluating 53463 states, to a max depth of 0
+               2.47 seconds total time
+

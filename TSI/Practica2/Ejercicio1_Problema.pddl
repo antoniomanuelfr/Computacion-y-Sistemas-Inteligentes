@@ -110,9 +110,9 @@
 
     (CharacterLoc PRINCIPE P15)
     (CharacterLoc DICAPRIO P2)
-    (CharacterLoc WITCH P24)
+    (CharacterLoc WITCH P23)
     (CharacterLoc PRINCESS P9)
-    (CharacterLoc PROF P2)
+    (CharacterLoc PROF P3)
 
     (PlayerLoc PLAYER P1)
     (Orientation NORTH)

@@ -221,15 +221,12 @@
   (ObjectLoc GOLD P22)
   (ObjectLoc GOLD P21)
   (ObjectLoc GOLD P20)
-  (ObjectLoc GOLD P7)
+  (ObjectLoc GOLD P17)
   (ObjectLoc GOLD P5)
   (ObjectLoc GOLD P10)
   (ObjectLoc GOLD P12)
   (ObjectLoc GOLD P9)
-  (ObjectLoc GOLD P6)
-  (ObjectLoc GOLD P7)
-  (ObjectLoc GOLD P8)
-
+  (ObjectLoc OSCAR P15)
   (ObjectLoc SHOE P7)
   (ObjectLoc BIKINI P20)
 

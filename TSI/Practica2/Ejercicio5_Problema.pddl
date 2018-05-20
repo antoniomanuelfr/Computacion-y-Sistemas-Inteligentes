@@ -227,8 +227,8 @@
   (ObjectLoc APPLE P8)
 
   (ObjectLoc ROSE P19)
-  (ObjectLoc ROSE P19)
-  (ObjectLoc ROSE P19)
+  (ObjectLoc ROSE P18)
+  (ObjectLoc ROSE P16)
 
   (ObjectLoc ALG P12)
   (ObjectLoc OSCAR P22)

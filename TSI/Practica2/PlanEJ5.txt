@@ -119,10 +119,10 @@ step    0: TURN_R NORTH
      
 
 time spent:    0.12 seconds instantiating 2687 easy, 1918 hard action templates
-               0.00 seconds reachability analysis, yielding 266 facts and 2193 actions
+               0.00 seconds reachability analysis, yielding 264 facts and 2193 actions
                0.00 seconds creating final representation with 262 relevant facts, 12 relevant fluents
                0.01 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.19 seconds searching, evaluating 1334 states, to a max depth of 30
-               0.32 seconds total time
+               0.17 seconds searching, evaluating 1334 states, to a max depth of 30
+               0.30 seconds total time
 

@@ -86,7 +86,7 @@
 
   (:action GIVE
     :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Obj)
-    :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HasObject ?obj))
+    :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HasObject ?obj)(not (DeliveredObj ?chrctr ?obj)))
     :effect (and (not (HasObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
   )
 )

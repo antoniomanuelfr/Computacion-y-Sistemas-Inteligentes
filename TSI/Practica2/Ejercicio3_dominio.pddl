@@ -8,7 +8,7 @@
 
   (:types
     Player
-    Object
+    Obj
     Character
     Place
     Compass
@@ -23,15 +23,15 @@
 
   (:predicates
     (PlayerLoc ?plyr - Player ?plc - Place)
-    (ObjectLoc ?obj - Object ?plc - Place)
+    (ObjectLoc ?obj - Obj ?plc - Place)
     (CharacterLoc ?chrctr - Character ?plc - Place)
     (Orientation ?comps - Compass)
     (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass)
-    (HandObject ?obj - Object)
-    (DeliveredObj ?charctr - Character ?obj - Object)
+    (HandObject ?obj - Obj)
+    (DeliveredObj ?charctr - Character ?obj - Obj)
     (PlaceType ?place - Place ?type - Ground)
-    (SavedObject ?obj - Object)
-    (GroundObject ?type - Ground ?obj - Object)
+    (SavedObject ?obj - Obj)
+    (GroundObject ?type - Ground ?obj - Obj)
     (NoNeedObject ?type - Ground)
     (BagEmpty)
     (HandEmpty)
@@ -79,7 +79,7 @@
   )
 
   (:action MOVE
-    :parameters (?plyr - Player ?p1 - Place ?p2 - Place ?plyr_or - Compass ?Ground - Ground ?obj - Object )
+    :parameters (?plyr - Player ?p1 - Place ?p2 - Place ?plyr_or - Compass ?Ground - Ground ?obj - Obj )
     :precondition (and (PlayerLoc ?plyr ?p1) (not (PlayerLoc ?plyr ?p2)) (NeighborPlace ?p1 ?p2 ?plyr_or) (Orientation ?plyr_or) (PlaceType ?p2 ?Ground)
                     (or (NoNeedObject ?Ground) (and (or (HandObject ?obj) (SavedObject ?obj)) (GroundObject ?Ground ?obj)  ))
                   )
@@ -87,33 +87,33 @@
   )
 
   (:action PICK_UP
-    :parameters (?plyr - Player ?loc - Place ?obj - Object)
+    :parameters (?plyr - Player ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (HandEmpty) )
     :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty)) (HandObject ?obj) )
   )
 
 
   (:action DROP
-    :parameters (?plyr - Player ?loc - Place ?obj - Object)
+    :parameters (?plyr - Player ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (HandObject ?obj))
     :effect (and (not (HandObject ?obj)) (ObjectLoc ?obj ?loc) (HandEmpty))
   )
 
   (:action GIVE
-    :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Object)
+    :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HandObject ?obj))
     :effect (and (not (HandObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
   )
 
 
   (:action POP
-    :parameters (?obj - Object)
+    :parameters (?obj - Obj)
     :precondition (and (SavedObject ?obj) (HandEmpty))
     :effect (and (not (SavedObject ?obj)) (not (HandEmpty)) (HandObject ?obj) (BagEmpty))
   )
 
   (:action PUSH
-    :parameters (?obj - Object)
+    :parameters (?obj - Obj)
     :precondition (and (BagEmpty) (HandObject ?obj))
     :effect (and (not (HandObject ?obj)) (not (BagEmpty)) (SavedObject ?obj) (HandEmpty))
   )

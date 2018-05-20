@@ -8,7 +8,7 @@
 
   (:types
     Player
-    Object
+    Obj
     Character
     Place
     Compass
@@ -16,12 +16,12 @@
 
   (:predicates
     (PlayerLoc ?plyr - Player ?plc - Place)
-    (ObjectLoc ?obj - Object ?plc - Place)
+    (ObjectLoc ?obj - Obj ?plc - Place)
     (CharacterLoc ?chrctr - Character ?plc - Place)
     (Orientation ?comps - Compass)
     (NeighborPlace ?place1 - Place ?place2 - Place ?orientation - Compass)
-    (HasObject ?obj - Object)
-    (DeliveredObj ?charctr - Character ?obj - Object)
+    (HasObject ?obj - Obj)
+    (DeliveredObj ?charctr - Character ?obj - Obj)
     (HandEmpty)
   )
 
@@ -72,20 +72,20 @@
   )
 
   (:action PICK_UP
-    :parameters (?plyr - Player ?loc - Place ?obj - Object)
+    :parameters (?plyr - Player ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (HandEmpty))
     :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty)) (HasObject ?obj) )
   )
 
 
   (:action DROP
-    :parameters (?plyr - Player ?loc - Place ?obj - Object)
+    :parameters (?plyr - Player ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (HasObject ?obj))
     :effect (and (not (HasObject ?obj)) (ObjectLoc ?obj ?loc) (HandEmpty))
   )
 
   (:action GIVE
-    :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Object)
+    :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HasObject ?obj))
     :effect (and (not (HasObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj))
   )

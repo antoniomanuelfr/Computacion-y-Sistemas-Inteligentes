@@ -230,8 +230,14 @@
   (ObjectLoc ROSE P18)
   (ObjectLoc ROSE P16)
 
-  (ObjectLoc ALG P12)
+  (ObjectLoc OSCAR P19)
+  (ObjectLoc OSCAR P17)
+  (ObjectLoc OSCAR P16)
   (ObjectLoc OSCAR P22)
+
+  (ObjectLoc ALG P12)
+  (ObjectLoc ALG P13)
+  (ObjectLoc ALG P14)
 
   (ObjectLoc SHOE P7)
   (ObjectLoc BIKINI P20)
@@ -301,6 +307,6 @@
 )
 
 (:goal
-    (and (>= (Points) 20) (>= (PlayerPoints PLAYER1) 5) (>= (PlayerPoints PLAYER1) 5)))
+    (and (>= (Points) 30) (>= (PlayerPoints PLAYER1) 2) (>= (PlayerPoints PLAYER1) 5)))
     (:metric minimize (Cost))
 )

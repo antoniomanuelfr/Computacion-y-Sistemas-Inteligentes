@@ -34,6 +34,7 @@
     (DeliveredObj ?charctr - Character ?obj - Obj)
     (PlaceType ?place - Place ?type - Ground)
     (SavedObject ?obj - Obj)
+    (HasObject ?obj - Obj)
     (GroundObject ?type - Ground ?obj - Obj)
     (NoNeedObject ?type - Ground)
     (BagEmpty)
@@ -88,24 +89,23 @@
                   )
     :effect (and (PlayerLoc ?plyr ?p2) (not (PlayerLoc ?plyr ?p1)) (increase (Cost) (Distance ?p1 ?p2)))
   )
-
   (:action PICK_UP
     :parameters (?plyr - Player ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (HandEmpty) )
-    :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty)) (HandObject ?obj) )
+    :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty)) (HandObject ?obj) (HasObject ?obj) )
   )
 
 
   (:action DROP
     :parameters (?plyr - Player ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (HandObject ?obj))
-    :effect (and (not (HandObject ?obj)) (ObjectLoc ?obj ?loc) (HandEmpty))
+    :effect (and (not (HandObject ?obj)) (not (HasObject ?obj)) (ObjectLoc ?obj ?loc) (HandEmpty))
   )
 
   (:action GIVE
     :parameters (?plyr - Player  ?chrctr - Character ?loc - Place ?obj - Obj)
     :precondition (and (PlayerLoc ?plyr ?loc) (CharacterLoc ?chrctr ?loc) (HandObject ?obj))
-    :effect (and (not (HandObject ?obj)) (HandEmpty) (DeliveredObj ?chrctr ?obj) (increase (Points) (Puntuation ?chrctr ?obj)))
+    :effect (and (not (HandObject ?obj)) (HandEmpty) (not (HasObject ?obj)) (DeliveredObj ?chrctr ?obj) (increase (Points) (Puntuation ?chrctr ?obj)))
   )
 
 

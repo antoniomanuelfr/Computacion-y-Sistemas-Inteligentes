@@ -26,7 +26,8 @@ Cueing down from goal distance:   24 into depth [1]
                                   23            [1]
                                   21            [1][2]
                                   20            [1][2]
-                                  19            [1][2][3][4][5]
+                                  19            [1][2]
+                                  18            [1][2][3][4]
                                   17            [1][2][3][4][5][6][7][8]
                                   16            [1][2][3]
                                   15            [1][2][3][4][5][6]
@@ -45,92 +46,93 @@ ff: found legal plan as follows
 step    0: TURN_L NORTH
         1: TURN_L WEST
         2: TURN_L SOUTH
-        3: MOVE PLAYER P1 P20 EAST SAND SHOE
-        4: MOVE PLAYER P20 P22 EAST STONE SHOE
+        3: MOVE PLAYER P1 P20 EAST SAND NONE
+        4: MOVE PLAYER P20 P22 EAST STONE NONE
         5: TURN_L EAST
-        6: TURN_L NORTH
-        7: TURN_L WEST
-        8: PICK_UP PLAYER P22 ROSE
-        9: MOVE PLAYER P22 P23 SOUTH STONE SHOE
-       10: TURN_R SOUTH
-       11: GIVE PLAYER WITCH P23 ROSE
-       12: MOVE PLAYER P23 P21 WEST SAND SHOE
-       13: TURN_L WEST
-       14: TURN_L SOUTH
-       15: PICK_UP PLAYER P21 ROSE
-       16: MOVE PLAYER P21 P23 EAST STONE SHOE
-       17: TURN_L EAST
-       18: GIVE PLAYER WITCH P23 ROSE
-       19: MOVE PLAYER P23 P22 NORTH STONE SHOE
-       20: TURN_L NORTH
-       21: MOVE PLAYER P22 P20 WEST SAND SHOE
-       22: TURN_R WEST
-       23: MOVE PLAYER P20 P15 NORTH STONE SHOE
-       24: TURN_L NORTH
-       25: PICK_UP PLAYER P15 OSCAR
-       26: TURN_L WEST
-       27: MOVE PLAYER P15 P20 SOUTH SAND SHOE
-       28: MOVE PLAYER P20 P21 SOUTH SAND SHOE
-       29: TURN_R SOUTH
-       30: MOVE PLAYER P21 P2 WEST SAND SHOE
-       31: MOVE PLAYER P2 P3 WEST STONE SHOE
-       32: TURN_L WEST
-       33: TURN_L SOUTH
-       34: MOVE PLAYER P3 P2 EAST SAND SHOE
-       35: GIVE PLAYER DICAPRIO P2 OSCAR
-       36: MOVE PLAYER P2 P22 EAST STONE SHOE
-       37: TURN_R EAST
-       38: TURN_R SOUTH
-       39: MOVE PLAYER P22 P20 WEST SAND SHOE
-       40: TURN_L WEST
-       41: PICK_UP PLAYER P20 BIKINI
-       42: MOVE PLAYER P20 P21 SOUTH SAND SHOE
-       43: TURN_R SOUTH
-       44: PUSH BIKINI
-       45: MOVE PLAYER P21 P2 WEST SAND SHOE
-       46: MOVE PLAYER P2 P3 WEST STONE SHOE
-       47: TURN_R WEST
-       48: PICK_UP PLAYER P3 ROSE
-       49: MOVE PLAYER P3 P6 NORTH STONE SHOE
-       50: MOVE PLAYER P6 P8 NORTH WATER BIKINI
-       51: TURN_L NORTH
-       52: MOVE PLAYER P8 P7 WEST WATER BIKINI
-       53: TURN_R WEST
-       54: MOVE PLAYER P7 P9 NORTH STONE SHOE
-       55: GIVE PLAYER PRINCESS P9 ROSE
-       56: TURN_R NORTH
-       57: MOVE PLAYER P9 P10 EAST WATER BIKINI
-       58: TURN_L EAST
-       59: TURN_L NORTH
-       60: PICK_UP PLAYER P10 ROSE
-       61: MOVE PLAYER P10 P9 WEST STONE SHOE
-       62: GIVE PLAYER PRINCESS P9 ROSE
-       63: TURN_L WEST
-       64: MOVE PLAYER P9 P7 SOUTH WATER BIKINI
-       65: TURN_L SOUTH
-       66: MOVE PLAYER P7 P8 EAST WATER BIKINI
-       67: TURN_R EAST
-       68: MOVE PLAYER P8 P6 SOUTH STONE SHOE
-       69: TURN_R SOUTH
-       70: MOVE PLAYER P6 P5 WEST SAND SHOE
-       71: TURN_L WEST
-       72: TURN_L SOUTH
-       73: PICK_UP PLAYER P5 ROSE
-       74: MOVE PLAYER P5 P6 EAST STONE SHOE
-       75: TURN_L EAST
-       76: MOVE PLAYER P6 P8 NORTH WATER BIKINI
-       77: TURN_L NORTH
-       78: MOVE PLAYER P8 P7 WEST WATER BIKINI
-       79: TURN_R WEST
-       80: MOVE PLAYER P7 P9 NORTH STONE SHOE
-       81: GIVE PLAYER PRINCESS P9 ROSE
+        6: PICK_UP PLAYER P22 ROSE
+        7: DROP PLAYER P22 NONE
+        8: TURN_L NORTH
+        9: TURN_L WEST
+       10: MOVE PLAYER P22 P23 SOUTH STONE NONE
+       11: TURN_R SOUTH
+       12: GIVE PLAYER WITCH P23 ROSE
+       13: MOVE PLAYER P23 P21 WEST SAND NONE
+       14: TURN_L WEST
+       15: TURN_L SOUTH
+       16: PICK_UP PLAYER P21 ROSE
+       17: MOVE PLAYER P21 P23 EAST STONE NONE
+       18: TURN_L EAST
+       19: GIVE PLAYER WITCH P23 ROSE
+       20: MOVE PLAYER P23 P22 NORTH STONE NONE
+       21: TURN_L NORTH
+       22: MOVE PLAYER P22 P20 WEST SAND NONE
+       23: TURN_R WEST
+       24: MOVE PLAYER P20 P15 NORTH STONE NONE
+       25: TURN_L NORTH
+       26: PICK_UP PLAYER P15 OSCAR
+       27: TURN_L WEST
+       28: MOVE PLAYER P15 P20 SOUTH SAND NONE
+       29: MOVE PLAYER P20 P21 SOUTH SAND NONE
+       30: TURN_R SOUTH
+       31: MOVE PLAYER P21 P2 WEST SAND NONE
+       32: MOVE PLAYER P2 P3 WEST STONE NONE
+       33: TURN_L WEST
+       34: TURN_L SOUTH
+       35: MOVE PLAYER P3 P2 EAST SAND NONE
+       36: GIVE PLAYER DICAPRIO P2 OSCAR
+       37: MOVE PLAYER P2 P22 EAST STONE NONE
+       38: TURN_R EAST
+       39: TURN_R SOUTH
+       40: MOVE PLAYER P22 P20 WEST SAND NONE
+       41: TURN_L WEST
+       42: PICK_UP PLAYER P20 BIKINI
+       43: MOVE PLAYER P20 P21 SOUTH SAND NONE
+       44: TURN_R SOUTH
+       45: PUSH BIKINI
+       46: MOVE PLAYER P21 P2 WEST SAND NONE
+       47: MOVE PLAYER P2 P3 WEST STONE NONE
+       48: TURN_R WEST
+       49: PICK_UP PLAYER P3 ROSE
+       50: MOVE PLAYER P3 P6 NORTH STONE NONE
+       51: MOVE PLAYER P6 P8 NORTH WATER BIKINI
+       52: TURN_L NORTH
+       53: MOVE PLAYER P8 P7 WEST WATER BIKINI
+       54: TURN_R WEST
+       55: MOVE PLAYER P7 P9 NORTH STONE NONE
+       56: GIVE PLAYER PRINCESS P9 ROSE
+       57: TURN_R NORTH
+       58: MOVE PLAYER P9 P10 EAST WATER BIKINI
+       59: TURN_L EAST
+       60: TURN_L NORTH
+       61: PICK_UP PLAYER P10 ROSE
+       62: MOVE PLAYER P10 P9 WEST STONE NONE
+       63: GIVE PLAYER PRINCESS P9 ROSE
+       64: TURN_L WEST
+       65: MOVE PLAYER P9 P7 SOUTH WATER BIKINI
+       66: TURN_L SOUTH
+       67: MOVE PLAYER P7 P8 EAST WATER BIKINI
+       68: TURN_R EAST
+       69: MOVE PLAYER P8 P6 SOUTH STONE NONE
+       70: TURN_R SOUTH
+       71: MOVE PLAYER P6 P5 WEST SAND NONE
+       72: TURN_L WEST
+       73: TURN_L SOUTH
+       74: PICK_UP PLAYER P5 ROSE
+       75: MOVE PLAYER P5 P6 EAST STONE NONE
+       76: TURN_L EAST
+       77: MOVE PLAYER P6 P8 NORTH WATER BIKINI
+       78: TURN_L NORTH
+       79: MOVE PLAYER P8 P7 WEST WATER BIKINI
+       80: TURN_R WEST
+       81: MOVE PLAYER P7 P9 NORTH STONE NONE
+       82: GIVE PLAYER PRINCESS P9 ROSE
      
 
-time spent:    0.03 seconds instantiating 407 easy, 318 hard action templates
-               0.00 seconds reachability analysis, yielding 174 facts and 514 actions
-               0.00 seconds creating final representation with 172 relevant facts, 2 relevant fluents
+time spent:    0.02 seconds instantiating 464 easy, 358 hard action templates
+               0.00 seconds reachability analysis, yielding 209 facts and 600 actions
+               0.00 seconds creating final representation with 207 relevant facts, 2 relevant fluents
                0.00 seconds computing LNF
                0.00 seconds building connectivity graph
-               0.11 seconds searching, evaluating 4093 states, to a max depth of 20
-               0.14 seconds total time
+               0.11 seconds searching, evaluating 3403 states, to a max depth of 20
+               0.13 seconds total time
 

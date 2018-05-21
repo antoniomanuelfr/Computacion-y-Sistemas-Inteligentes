@@ -264,7 +264,7 @@
   (CharacterLoc DICAPRIO P10)
   (CharacterLoc WITCH P23)
   (CharacterLoc PRINCESS P9)
-  (CharacterLoc PROF P11)
+  (CharacterLoc PROF)
 
   (GroundObject FOREST SHOE)
   (GroundObject WATER BIKINI)
@@ -296,6 +296,6 @@
 )
 
 (:goal
-    (and (>= (Points) 20)))
+    (and (>= (Points) 50)))
     (:metric minimize (Cost))
 )

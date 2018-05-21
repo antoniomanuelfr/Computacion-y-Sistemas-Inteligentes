@@ -1,0 +1,109 @@
+
+ff: parsing domain file
+domain 'PRACTICA2' defined
+ ... done.
+ff: parsing problem file
+problem 'PROBLEMA3' defined
+ ... done.
+
+
+
+no optimization required. skipping criterion.
+
+
+no metric specified. plan length assumed.
+
+task contains conditional effects. turning off state domination.
+
+
+
+checking for cyclic := effects --- OK.
+
+ff: search configuration is EHC, if that fails then  best-first on 1*g(s) + 5*h(s) where
+    metric is  plan length
+
+Cueing down from goal distance:   23 into depth [1]
+                                  22            [1]
+                                  15            [1]
+                                  14            [1]
+                                  12            [1]
+                                  10            [1][2][3][4]
+                                   8            [1][2][3]
+                                   6            [1][2][3][4][5][6][7]
+                                   5            [1][2][3][4][5][6]
+                                   3            [1][2][3][4][5][6][7][8][9][10][11][12][13]
+                                   2            [1][2][3][4][5][6][7][8][9][10][11][12][13][14][15][16][17][18][19][20]
+                                   1            [1]
+                                   0            
+
+ff: found legal plan as follows
+
+step    0: MOVE PLAYER2 P2 P1 NORTH SAND SHOE
+        1: TURN_R NORTH PLAYER1
+        2: TURN_R EAST PLAYER1
+        3: MOVE PLAYER1 P1 P2 SOUTH SAND SHOE
+        4: TURN_L PLAYER1 SOUTH
+        5: MOVE PLAYER1 P2 P22 EAST STONE SHOE
+        6: TURN_R EAST PLAYER1
+        7: PICK_UP PLAYER1 P22 OSCAR
+        8: MOVE PLAYER1 P22 P23 SOUTH STONE SHOE
+        9: TURN_R SOUTH PLAYER1
+       10: MOVE PLAYER1 P23 P21 WEST SAND SHOE
+       11: MOVE PLAYER1 P21 P2 WEST SAND SHOE
+       12: MOVE PLAYER1 P2 P3 WEST STONE SHOE
+       13: GIVE PLAYER1 PROF P3 OSCAR
+       14: MOVE PLAYER1 P3 P4 WEST SAND SHOE
+       15: TURN_R WEST PLAYER1
+       16: TURN_R NORTH PLAYER1
+       17: PICK_UP PLAYER1 P4 APPLE
+       18: MOVE PLAYER1 P4 P3 EAST STONE SHOE
+       19: MOVE PLAYER1 P3 P2 EAST SAND SHOE
+       20: GIVE PLAYER1 DICAPRIO P2 APPLE
+       21: MOVE PLAYER1 P2 P22 EAST STONE SHOE
+       22: TURN_R EAST PLAYER1
+       23: PICK_UP PLAYER1 P22 GOLD
+       24: MOVE PLAYER1 P22 P23 SOUTH STONE SHOE
+       25: GIVE PLAYER1 WITCH P23 GOLD
+       26: TURN_R SOUTH PLAYER1
+       27: MOVE PLAYER1 P23 P21 WEST SAND SHOE
+       28: MOVE PLAYER1 P21 P2 WEST SAND SHOE
+       29: MOVE PLAYER1 P2 P3 WEST STONE SHOE
+       30: MOVE PLAYER1 P3 P4 WEST SAND SHOE
+       31: TURN_R WEST PLAYER1
+       32: MOVE PLAYER1 P4 P5 NORTH SAND SHOE
+       33: TURN_R NORTH PLAYER1
+       34: PICK_UP PLAYER1 P5 GOLD
+       35: MOVE PLAYER1 P5 P6 EAST STONE SHOE
+       36: TURN_R EAST PLAYER1
+       37: MOVE PLAYER1 P6 P3 SOUTH STONE SHOE
+       38: GIVE PLAYER1 PROF P3 GOLD
+       39: TURN_R NORTH PLAYER2
+       40: MOVE PLAYER2 P1 P20 EAST SAND SHOE
+       41: TURN_L PLAYER1 SOUTH
+       42: MOVE PLAYER1 P3 P2 EAST SAND SHOE
+       43: MOVE PLAYER1 P2 P22 EAST STONE SHOE
+       44: TURN_L PLAYER1 EAST
+       45: TURN_L PLAYER1 NORTH
+       46: MOVE PLAYER1 P22 P20 WEST SAND SHOE
+       47: PICK_UP PLAYER1 P20 BIKINI
+       48: MOVE PLAYER1 P20 P1 WEST SAND SHOE
+       49: MOVE PLAYER1 P1 P6 WEST STONE SHOE
+       50: TURN_R WEST PLAYER1
+       51: MOVE PLAYER1 P6 P8 NORTH WATER BIKINI
+       52: TURN_L PLAYER1 NORTH
+       53: MOVE PLAYER1 P8 P7 WEST WATER BIKINI
+       54: TURN_R WEST PLAYER1
+       55: DROP PLAYER1 P7 BIKINI
+       56: PICK_UP PLAYER1 P7 APPLE
+       57: MOVE PLAYER1 P7 P9 NORTH STONE SHOE
+       58: GIVE PLAYER1 PRINCESS P9 APPLE
+     
+
+time spent:    0.05 seconds instantiating 814 easy, 636 hard action templates
+               0.01 seconds reachability analysis, yielding 332 facts and 1346 actions
+               0.00 seconds creating final representation with 328 relevant facts, 15 relevant fluents
+               0.00 seconds computing LNF
+               0.00 seconds building connectivity graph
+               0.55 seconds searching, evaluating 6537 states, to a max depth of 20
+               0.61 seconds total time
+

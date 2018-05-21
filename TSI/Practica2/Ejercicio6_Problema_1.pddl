@@ -4,8 +4,8 @@
 
 (:OBJECTS
     P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18 P19 P20 P21 P22 P23 P24 P25 - Place
-    PLAYER - Player
-    OSCAR APPLE ROSE ALG GOLD BIKINI SHOE  - Object
+    PLAYER1 PLAYER2 - Player
+    OSCAR APPLE ROSE ALG GOLD BIKINI SHOE  - Obj
     PRINCESS PRINCE WITCH PROF DICAPRIO - Character
     NORTH SOUTH EAST WEST - Compass
     FOREST WATER EDGE SAND STONE - Ground
@@ -277,10 +277,19 @@
   (NoNeedObject SAND)
   (NoNeedObject STONE)
 
-  (PlayerLoc PLAYER P1)
-  (Orientation NORTH)
-  (HandEmpty)
-  (BagEmpty)
+  (PlayerLoc PLAYER1 P1)
+  (PlayerLoc PLAYER2 p2)
+  (Orientation PLAYER1 NORTH)
+  (Orientation PLAYER2 NORTH)
+
+  (HandEmpty PLAYER1)
+  (BagEmpty PLAYER1)
+
+  (HandEmpty PLAYER2)
+  (BagEmpty PLAYER2)
+
+  (= (PlayerPoints PLAYER1) 0)
+  (= (PlayerPoints PLAYER2) 0)
   (= (Points) 0)
   (= (Cost) 0)
   (= (NumberObjects) 2)
@@ -292,6 +301,6 @@
 )
 
 (:goal
-    (and (>= (Points) 50)))
+    (and (>= (Points) 10) (= (PlayerPoints PLAYER1) 5) (= (PlayerPoints PLAYER1) 5)))
     (:metric minimize (Cost))
 )

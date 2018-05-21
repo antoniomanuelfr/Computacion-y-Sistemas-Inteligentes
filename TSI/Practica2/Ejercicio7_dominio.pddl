@@ -37,6 +37,7 @@
     (DeliveredObj ?charctr - Character ?obj - Obj)
     (PlaceType ?place - Place ?type - Ground)
     (SavedObject ?plyr - Player ?obj - Obj)
+    (SpecialObject ?obj - Obj)
     (GroundObject ?type - Ground ?obj - Obj)
     (NoNeedObject ?type - Ground)
     (BagEmpty ?plyr - Player )
@@ -97,7 +98,7 @@
 
   (:action PICK_UP
     :parameters (?plyr - Player ?loc - Place ?obj - Obj)
-    :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (Picker ?plyr) (HandEmpty ?plyr) )
+    :precondition (and (PlayerLoc ?plyr ?loc) (ObjectLoc ?obj ?loc) (or (Picker ?plyr) (SpecialObject ?obj)) (HandEmpty ?plyr) )
     :effect (and (not (ObjectLoc ?obj ?loc)) (not (HandEmpty ?plyr)) (HandObject ?plyr ?obj) )
   )
 

@@ -1,0 +1,49 @@
+\documentclass[10pt,spanish]{article}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{fancyhdr}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate} 
+
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\pagestyle{fancy}
+\renewcommand{\contentsname}{Índice}
+
+
+\rhead{Ingeniería de Conocimiento}
+\lhead{Práctica Final}
+
+
+\author{
+	\includegraphics[scale=1.1]{UGR} \\\\
+	\Large 	Antonio Manuel Fresneda Rodríguez\\
+	\\antoniomfr@correo.ugr.es
+	\\77447672-W
+	}
+\date{}
+\title{\huge \textbf{Práctica final Ingeniería de Conocimiento}}
+\begin{document}
+	\maketitle
+	\pagebreak
+	\tableofcontents
+	\pagebreak
+	\section{Ejercicio1}
+	Este ejercicio se realizó en la práctica 1. 
+	\section{Ejercicio2}
+	\begin{itemize}
+		\item \textbf{Menos de N empleados TG}\\
+		Para contar los empleados que de distintos trámites que tenemos he añadido dos nuevos hechos llamados \textit{EmpleadosLibres ?tramite ?total} que indica los empleados que están libres en ese momento.\\
+		También he modificado las reglas del ejercicio 1B para que cada vez que un trabajador pulsa el botón de disponible se incremente este contador y cuando se le asigne un usuario disminuya.
+		Una vez hecho esto, he definido una nueva regla que captura el hecho \textit{EmpleadosLibres TG ?tot} y en el caso de que ?tot sea menor que la cantidad mínima de empleados se notifique. Esta regla se llama \textbf{TGLibres}
+		\item \textbf{No hay empleados TE}\\
+		\item \textbf{Usuario que lleva más de un tiempo 	máximo de espera}\\ Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))))
+		}\\
+		Se añade un hecho con el identificador del usuario y su tiempo. \\Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al identificador del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) ?tiempoMax)}\\
+		Se imprime por pantalla si se cumple la condición que dicho usuario ya lleva demasiado tiempo esperando. Esta regla se llama: \textbf{ComprobarTiempo}
+	\item \textbf{Usuario cuyo trámite se retrasa}\\
+	\end{itemize}
+\end{document}

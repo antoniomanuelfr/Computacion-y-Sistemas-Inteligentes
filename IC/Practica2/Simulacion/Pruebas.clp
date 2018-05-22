@@ -300,14 +300,12 @@
   (Disponible ?empl)
   ?f <- (Asignado ?empl ?tipotramite ?n)
   ?g <- (EmpleadosLibres ?tipotramite ?totalEmpl)
-  ?h <- (Usuario ?tipotramite ?n)
-  ?i <- (TiempoInicialUsuario ?tipotramite ?n)
   =>
   (assert (Tramitado ?empl ?tipotramite ?n)
           (EmpleadosLibres ?tipotramite (+ ?totalEmpl 1))
   )
 
-  (retract ?f ?g ?h ?i)
+  (retract ?f ?g)
   )
 
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -340,12 +338,12 @@
   (defrule ComprobarTiempo
     ?e <-(TiempoInicialUsuario ?tipotramite ?n ?tiempo)
     (MaximoEsperaParaSerAtendido ?tipotramite ?tiempoMax)
-    (UltimoUsuarioAtendido ?tipotramite ?id)
-    (test (< ?id ?n))
+    (EmpleadosLibres ?tipotramite ?tot)
+    (test (!= ?tot 0))
     =>
     (if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) ?tiempoMax)
       then
-      (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
+      (printout t "El usuario " ?tipotramite " " ?n " " lleva esperando mas tiempo tiempo del maximo)
     )
   )
 

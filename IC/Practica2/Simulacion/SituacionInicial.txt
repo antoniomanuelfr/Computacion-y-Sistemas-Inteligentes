@@ -9,6 +9,6 @@
 (simulado desde-las 10 03 00 segundosporciclo 1)
 
 ;;;;;;; 3.- ELEGIR MODO, dejando descomentaod uno (solo uno) de los 3 siguientes hechos
-(NCiclos)      ;; nos preguntara cuantos ciclosqueremos que realice
-;(Tiempo)        ;; nos preguntara cuantos segundos queremso que este funcionado
+;(NCiclos)      ;; nos preguntara cuantos ciclosqueremos que realice
+(Tiempo)        ;; nos preguntara cuantos segundos queremso que este funcionado
 ;(Preguntando)  ;; nos preguntara cuando acaba cada ciclo si queremos realizar otro

@@ -1,0 +1,66 @@
+(NuevoUsuario TG 10 16 24)
+(NuevoUsuario TG 10 16 27)
+(NuevoUsuario TG 10 16 44)
+(NuevoUsuario TG 10 17 51)
+(NuevoUsuario TG 10 18 36)
+(NuevoUsuario TG 10 19 02)
+(NuevoUsuario TG 10 20 09)
+(NuevoUsuario TG 10 21 40)
+(NuevoUsuario TG 10 22 00)
+(NuevoUsuario TG 10 22 33)
+(NuevoUsuario TG 10 23 22)
+(NuevoUsuario TG 10 24 12)
+(NuevoUsuario TG 10 25 24)
+(NuevoUsuario TG 10 26 44)
+(NuevoUsuario TG 10 27 56)
+(NuevoUsuario TG 10 28 10)
+(NuevoUsuario TG 10 29 43)
+
+(NuevoUsuario TE 10 13 29)
+(NuevoUsuario TE 10 14 31)
+(NuevoUsuario TE 10 18 02)
+(NuevoUsuario TE 10 19 27)
+(NuevoUsuario TE 10 20 59)
+(NuevoUsuario TE 10 23 16)
+(NuevoUsuario TE 10 24 47)
+(NuevoUsuario TE 10 28 11)
+
+(llega G1 10 05 10)
+
+(BotonDisponible G1 10 7 55)
+(BotonDisponible G1 10 10 14)
+(BotonDisponible G1 10 16 39)
+(BotonDisponible G1 10 22 27)
+(BotonDisponible G1 10 29 6)
+
+(llega G2 10 04 28)
+(BotonDisponible G2 10 5 13)
+(BotonDisponible G2 10 11 34)
+(BotonDisponible G2 10 19 35)
+(seva G2 10 26 17)
+
+(llega G3 10 09 15)
+
+(BotonDisponible G3 10 14 43)
+(BotonDisponible G3 10 18 52)
+(BotonDisponible G3 10 27 11)
+
+(llega G5 10 23 46)
+(BotonDisponible G5 10 25 41)
+(BotonDisponible G3 10 19 53)
+
+
+(llega E1 10 9 10)
+(BotonDisponible E1 10 11 49)
+(BotonDisponible E1 10 19 22)
+(BotonDisponible E1 10 25 8)
+
+(llega E2 10 03 35)
+
+(BotonDisponible E2 10 9 18)
+(BotonDisponible E2 10 21 24)
+(BotonDisponible E2 10 29 38)
+
+(llega Director 10 03 28)
+(Se_desplaza Director Oficina3 10 20 02)
+(Se_desplaza Director Gerencia 10 24 25)

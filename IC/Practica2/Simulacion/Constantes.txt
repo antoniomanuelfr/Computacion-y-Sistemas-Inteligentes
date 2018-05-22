@@ -1,0 +1,15 @@
+(ComienzoJornada 8)                 ; La jornada laboral comienza a las 8h
+(FinalJornada 14)                   ; La jornada laboral termina a las 14h
+(ComienzoAtencion 9)                ; La atención al cliente comienza a las 9h
+(MinimoEmpleadosActivos TG 3)       ; Debe de haber al menos 3 empleados atendiendo trámites generales
+(MinimoEmpleadosActivos TE 1)       ; Debe de haber al menos 1 empleados atendiendo trámites especificos
+(MaximoEsperaParaSerAtendido TG 30) ; Un usuario de trámites generales debe esperar para ser atendido menos de 30 minutos
+(MaximoEsperaParaSerAtendido TE 20) ; Un usuario de trámites especificos debe esperar para ser atendido menos de 20 minutos
+(MaximoTiempoGestion TG 10)         ; Un trámite general debe gestionarse en menos de 10 minutos
+(TiempoMedioGestion TG 5)           ; El tiempo medio en la gestion de un tramite general debe ser menor de 5 minutos
+(MaximoTiempoGestion TE 15)         ; Un tramite específico debe gestionarse en menos de 15 minutos
+(TiempoMedioGestion TE 8)           ; El tiempo medio en la gestion de un tramite específico debe ser menor de 8 minutos
+(TiempoMaximoRetraso 15)            ; Un empleado debe llegar con menos de 15 minutos de retraso
+(TiempoMaximoDescanso 30)           ; Un empleado debe estar menos de 30 en total en su tiempo de descanso
+(MinimoTramitesPorDia TG 20)        ; Un empleado de trámites generales debe atender al menos a 20 usuarios al día
+(MinimoTramitesPorDia TE 15)        ; Un empleado de trámites específicos debe atender al menos a 15 usuarios al día

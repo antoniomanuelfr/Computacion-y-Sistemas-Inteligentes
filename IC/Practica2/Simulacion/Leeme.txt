@@ -1,0 +1,14 @@
+Para utilizar la simulacion para probar tu práctica:
+
+0.- Asegurate de utilizar solamente las funciones de tiempo que puedes encontrar en el fichero CicloControlado.clp. 
+Por ejemplo en lugar de (time) usa la variable global ?*transcurrido*, en lugar de (hora) usa la variable ?*hora*,
+en lugar de (minutos) usa la variable ?*minutos* y utiliza la funcion (mrest ?h) de CicloControlado.clp
+
+1.- Editar el fichero SituacionInicial.txt con las opciones que te interesen de la simulacion (ver ejemplo adjuntado)
+2.- Colocar todos los ficheros en un mismo directorio, donde nos aseguremos que un usuario normal tiene permisos de escritura.
+3.- Añadir la solución en el mismo directorio: los ficheros OficinaInteligente.clp para el código y Constantes.txt para los parámetros 
+4.- Desde clips cargar el fichero batch simulacion.bat, por ejemplo mediante el comando de clips  (batch "<path_to_directorio>/simulacion.bat")
+
+
+(5.- También se pueden cambiar los datos a simular, editando  DatosSimulados.txt, asegurandose de utilizar el formato allí utilizado,
+ cuya interpretacion resulta evidente.)

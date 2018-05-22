@@ -36,6 +36,7 @@
   (Empleado Recepcionista Recepcion)
   (Empleado Director Gerencia)
   )
+
    (deffacts Codificacion
    (Code TG "Tramites Generales")
    (Code TE "Tramites Especiales")
@@ -52,7 +53,7 @@
   (deffacts Inicializacion
   (Personas 0)                    ;;; Inicialmente hay 0 personas en las oficinas
   (Usuarios TG 0)                 ;;; Inicialmente hay 0 Usuarios de trámites generales
-  (UltimoUsuarioAtendido TG 0)    ;;; Inicialmente se han atendido 0 usuarios de tramites generales 
+  (UltimoUsuarioAtendido TG 0)    ;;; Inicialmente se han atendido 0 usuarios de tramites generales
   (Usuarios TE 0)
   (UltimoUsuarioAtendido TE 0)
   (Empleados 0)                   ;;; Inicialmente hay 0 empleados en las oficinas
@@ -75,40 +76,56 @@
   ;(MinimoTramitesPorDia TG 20)
   ;(MinimoTramitesPorDia TE 15)
   ;)
-  
-  
+
+
   (defrule cargarconstantes
   (declare (salience 10000))
   =>
   (load-facts Constantes.txt)
   )
- 
-  
+
+
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; PASO1 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;respuestas ante los hechos (Solicitud ?tipotramite) y (Disponible ?empl);;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- 
-  
+
+
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1A ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
+
   (defrule EncolarUsuario
   ?g <- (Solicitud ?tipotramite)
   ?f <- (Usuarios ?tipotramite ?n)
   =>
+  (bind ?t (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))))
   (assert (Usuario ?tipotramite (+ ?n 1))
           (Usuarios ?tipotramite (+ ?n 1))
+          (TiempoInicialUsuario ?tipotramite (+ ?n 1) ?t)
   )
   (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
   (retract ?f ?g)
   )
-  
+
+  (defrule ComprobarTiempo
+    ?e <-(TiempoInicialUsuario ?tipotramite ?n ?tiempo)
+    (MaximoEsperaParaSerAtendido ?tipotramite ?tiempoMax)
+    =>
+    (if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) ?tiempoMax)
+      then
+      (printout t "El usuario " ?tipotramite " " ?n " " lleva esperando mas tiempo tiempo del maximo)
+    )
+
+
+
+    )
+
+
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1B ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
+
   (defrule AsignarEmpleado
   ?g <- (Disponible ?empl)
   (Tarea ?empl ?tipotramite)
@@ -123,7 +140,7 @@
   (printout t "Usuaro " ?tipotramite ?a ", por favor pase a " ?ofic crlf)
   (retract ?f ?g)
   )
-  
+
   (defrule RegistrarCaso
   (declare (salience 10))
   (Disponible ?empl)
@@ -132,13 +149,13 @@
   (assert (Tramitado ?empl ?tipotramite ?n))
   (retract ?f)
   )
-  
+
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1C ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  
-   
- 
+
+
+
   (defrule NoposibleEncolarUsuario
   (declare (salience 20))
   ?g <- (Solicitud ?tipotramite)
@@ -154,4 +171,3 @@
   (printout t "Hay ya  " ?a " personas esperando y se cierra a las " ?h "h. No nos dara tiempo a atenderle." crlf)
   (retract ?g)
   )
-  

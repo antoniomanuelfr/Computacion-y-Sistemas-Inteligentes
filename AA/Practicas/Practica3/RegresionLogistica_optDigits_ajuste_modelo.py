@@ -5,14 +5,15 @@ from __future__ import print_function
 import itertools
 from sklearn import preprocessing
 from sklearn.externals import joblib
-from sklearn.metrics import confusion_matrix,classification_report
+from sklearn.metrics import confusion_matrix, classification_report
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def plot_confusion_matrix(cm, classes,
-						  normalize=False,
-						  title='Confusion matrix',
-						  cmap=plt.cm.Blues):
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
 	"""
 	This function prints and plots the confusion matrix.
 	Normalization can be applied by setting `normalize=True`.
@@ -36,28 +37,27 @@ def plot_confusion_matrix(cm, classes,
 	thresh = cm.max() / 2.
 	for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
 		plt.text(j, i, format(cm[i, j], fmt),
-				 horizontalalignment="center",
-				 color="white" if cm[i, j] > thresh else "black")
+		         horizontalalignment="center",
+		         color="white" if cm[i, j] > thresh else "black")
 
 	plt.tight_layout()
 	plt.ylabel('True label')
 	plt.xlabel('Predicted label')
 
+
 seed = 1997
-X_train=np.load("datos/optdigits_tra_X.npy")
-X_test=np.load("datos/optdigits_tes_X.npy")
-y_test=np.load("datos/optdigits_tes_y.npy")
-class_names=np.unique(y_test)
+X_train = np.load("datos/optdigits_tra_X.npy")
+X_test = np.load("datos/optdigits_tes_X.npy")
+y_test = np.load("datos/optdigits_tes_y.npy")
+class_names = np.unique(y_test)
 
-scale=preprocessing.StandardScaler().fit(X_train)
-#scale=preprocessing.Normalizer().fit (X_train)
+scale = preprocessing.StandardScaler().fit(X_train)
+# scale=preprocessing.Normalizer().fit (X_train)
 
-X_test=scale.transform(X_test)
+X_test = scale.transform(X_test)
 
-
-
-best_logistic_model=joblib.load('LogicRegresion_model.pkl')
-print ("The model is trained on the full train set and with best parameters")
+best_logistic_model = joblib.load('LogicRegresion_model.pkl')
+print("The model is trained on the full train set and with best parameters")
 
 print("The scores are computed with full test set")
 
@@ -67,6 +67,6 @@ print()
 
 print("Confusion Matrix")
 
-matrix=confusion_matrix(y_true,y_pred)
+matrix = confusion_matrix(y_true, y_pred)
 
-plot_confusion_matrix(matrix,class_names,normalize=True) 
+plot_confusion_matrix(matrix, class_names, normalize=True)

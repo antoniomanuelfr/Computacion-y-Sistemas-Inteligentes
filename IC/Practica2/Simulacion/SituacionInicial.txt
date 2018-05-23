@@ -1,6 +1,6 @@
 ;;;;;;;; 1.- (OPCIONAL) Elegir Ssistema operativo no windows: En el caso de no usar windows, descomentar el SO utilizado
 
-;(SistemaOperativo Linux)
+(SistemaOperativo Linux)
 ;(SistemaOperativo MacOS)
 
 ;;;; 2.-( OPCIONAL) Elegir si TIEMPO REAL o SIMULADO: Por defecto en tiempo real, si se quiere simulado descomentar el siguiente hecho y elegir hora, minutos y segundos

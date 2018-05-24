@@ -206,7 +206,7 @@ EmpleadosFichados
     )
 
   (defrule Libres
-    (declare (salience 10))
+    (declare (salience 1000))
     (EmpleadosFichados ?tipotramite ?tot)
     (MinimoEmpleadosActivos ?tipotramite ?min)
     (test (> ?min ?tot))

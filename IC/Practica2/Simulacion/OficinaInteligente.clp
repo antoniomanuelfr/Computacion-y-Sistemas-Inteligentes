@@ -100,7 +100,7 @@ EmpleadosFichados
   ?g <- (Solicitud ?tipotramite)
   ?f <- (Usuarios ?tipotramite ?n)
   =>
-  (bind ?t (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))))
+  (bind ?t (momento))
   (assert (Usuario ?tipotramite (+ ?n 1))
           (Usuarios ?tipotramite (+ ?n 1))
           (TiempoInicialUsuario ?tipotramite (+ ?n 1) ?t)
@@ -121,8 +121,10 @@ EmpleadosFichados
   (test (< ?atendidos ?total))
   =>
   (bind ?a (+ ?atendidos 1))
+  (bind ?t (momento))
   (assert (Asignado ?empl ?tipotramite ?a)
-          (UltimoUsuarioAtendido ?tipotramite ?a))
+          (UltimoUsuarioAtendido ?tipotramite ?a)
+          (TiempoInicialTramite ?tipotramite ?a ?t))
   (printout t "Usuaro " ?tipotramite ?a ", por favor pase a " ?ofic crlf)
   (retract ?f ?g)
   )
@@ -131,13 +133,10 @@ EmpleadosFichados
   (declare (salience 10))
   (Disponible ?empl)
   ?f <- (Asignado ?empl ?tipotramite ?n)
+  ?g <- (TiempoInicialTramite ?tipotramite ?n)
   =>
-  (bind ?t (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))))
-  (assert (Tramitado ?empl ?tipotramite ?n)
-          (TiempoInicialTramite ?tipotramite (+ ?n 1) ?t)
-
-  )
-  (retract ?f)
+  (assert (Tramitado ?empl ?tipotramite ?n))
+  (retract ?f ?g)
   (printout t "El empleado " ?empl " ahora esta disponible." crlf )
   )
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -173,7 +172,7 @@ EmpleadosFichados
     (UltimoUsuarioAtendido ?tipotramite ?id)
     (test (< ?id ?n))
     =>
-    (if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) (minuto-segundos ?tiempoMax))
+    (if (> (- (momento) ?tiempo) (minuto-segundos ?tiempoMax))
       then
       (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
     )
@@ -214,4 +213,13 @@ EmpleadosFichados
     (code ?tipotramite ?texto)
     =>
     (printout t "Hay menos de " ?min " trabajadores atendiento " ?texto crlf)
+    )
+
+  (defrule TiempoTramiteExcedido
+      (ciclo ?n)
+      (TiempoInicialTramite ?tipotramite ?n ?t)
+      (MaximoTiempoGestion ?tipotramite ?tmax)
+      (test (> (- (momento) ?t) ?tmax))
+      =>
+      (printout t "El tramite " ?tipotramite ?n " ha excedido el tiempo maximo" crlf)
     )

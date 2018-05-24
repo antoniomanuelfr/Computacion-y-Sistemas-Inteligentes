@@ -43,11 +43,12 @@
 		se notifica.
 		\item \textbf{No hay empleados TE}\\
 		Este ejercicio es lo mismo que el ejercicio anterior si cambiamos TG por una variable. Lo que he hecho ha sido modificar el fichero de constantes.
-		\item \textbf{Usuario que lleva más de un tiempo 	máximo de espera}\\ Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))))
+		\item \textbf{Usuario que lleva más de un tiempo 	máximo de espera}\\ Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (momento))
 		}\\
-		Se añade un hecho con el identificador del usuario y su tiempo. \\Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al identificador del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) ?tiempoMax)}\\
+		Se añade un hecho con el identificador del usuario y su tiempo. \\Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al identificador del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (momento) ?tiempo) ?tiempoMax)}\\
 		Se imprime por pantalla si se cumple la condición que dicho usuario ya lleva demasiado tiempo esperando. Esta regla se llama: \textbf{ComprobarTiempo}
 	\item \textbf{Usuario cuyo trámite se retrasa}\\
-
+		Para este ejercicio lo que he hecho ha sido añadir un nuevo hecho cada vez que a una persona se le ha asignado una oficina. Este hecho guarda el tiempo en el que se le asigno la oficina.\\
+	  Luego tengo otra regla que captura este hecho y el hecho \textit{(ciclo ?n)} con el que consigo que esta regla se dispare siempre y en el caso de que la resta del tiempo actual menos el tiempo en el que el usuario entro sea mayor que el limite hago la notificación.
 	\end{itemize}
 \end{document}

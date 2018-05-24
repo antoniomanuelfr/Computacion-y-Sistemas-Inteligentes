@@ -1,4 +1,4 @@
-EmpleadosFichados
+
 (deffacts Habitaciones
   (Habitacion Recepcion)    ;;;;  Receptión es una habitación
   (Habitacion Pasillo)

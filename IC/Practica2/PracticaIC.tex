@@ -7,7 +7,7 @@
 \usepackage{fancyhdr}
 \usepackage{amssymb}
 \usepackage{amsmath}
-\usepackage{enumerate} 
+\usepackage{enumerate}
 
 \providecommand{\abs}[1]{\lvert#1\rvert}
 \pagestyle{fancy}
@@ -32,18 +32,22 @@
 	\tableofcontents
 	\pagebreak
 	\section{Ejercicio1}
-	Este ejercicio se realizó en la práctica 1. 
+	Este ejercicio se realizó en la práctica 1.
 	\section{Ejercicio2}
 	\begin{itemize}
 		\item \textbf{Menos de N empleados TG}\\
-		Para contar los empleados que de distintos trámites que tenemos he añadido dos nuevos hechos llamados \textit{EmpleadosLibres ?tramite ?total} que indica los empleados que están libres en ese momento.\\
-		También he modificado las reglas del ejercicio 1B para que cada vez que un trabajador pulsa el botón de disponible se incremente este contador y cuando se le asigne un usuario disminuya.
-		Una vez hecho esto, he definido una nueva regla que captura el hecho \textit{EmpleadosLibres TG ?tot} y en el caso de que ?tot sea menor que la cantidad mínima de empleados se notifique. Esta regla se llama \textbf{TGLibres}
+		En este ejercicio nos pide que si hay menos de N empleados atendiendo TG. Esto quiere decir que el sistema avise cuando haya menos de N empleados fichados de un tipo. \\
+		Para hacer esto lo que he hecho ha sido crear una regla para que cuando fiche se añade un nuevo hecho. He creado una regla que captura el hecho de fichado y el hecho de que el
+		trabajador está libre. Esta regla lo que hace es incrementa un contador. En el caso de que se vaya he creado otra regla para que si se va decremente este contador. También he creado
+		otra regla para que se capture este hecho y el valor del minimo en el fichero de constantes. Una vez hecho esto en el caso de que el minimo sea menor que el valor de la constante
+		se notifica.
 		\item \textbf{No hay empleados TE}\\
+		Este ejercicio es lo mismo que el ejercicio anterior si cambiamos TG por una variable. Lo que he hecho ha sido modificar el fichero de constantes.
 		\item \textbf{Usuario que lleva más de un tiempo 	máximo de espera}\\ Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))))
 		}\\
 		Se añade un hecho con el identificador del usuario y su tiempo. \\Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al identificador del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) ?tiempoMax)}\\
 		Se imprime por pantalla si se cumple la condición que dicho usuario ya lleva demasiado tiempo esperando. Esta regla se llama: \textbf{ComprobarTiempo}
 	\item \textbf{Usuario cuyo trámite se retrasa}\\
+
 	\end{itemize}
 \end{document}

@@ -132,7 +132,11 @@ EmpleadosFichados
   (Disponible ?empl)
   ?f <- (Asignado ?empl ?tipotramite ?n)
   =>
-  (assert (Tramitado ?empl ?tipotramite ?n))
+  (bind ?t (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))))
+  (assert (Tramitado ?empl ?tipotramite ?n)
+          (TiempoInicialTramite ?tipotramite (+ ?n 1) ?t)
+
+  )
   (retract ?f)
   (printout t "El empleado " ?empl " ahora esta disponible." crlf )
   )
@@ -169,7 +173,7 @@ EmpleadosFichados
     (UltimoUsuarioAtendido ?tipotramite ?id)
     (test (< ?id ?n))
     =>
-    (if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) ?tiempoMax)
+    (if (> (- (+ (hora-segundos (horasistema)) (minuto-segundos (minutossistema)) (segundo-segundos (segundossistema))) ?tiempo) (minuto-segundos ?tiempoMax))
       then
       (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
     )
@@ -197,7 +201,8 @@ EmpleadosFichados
     (Tarea ?empl ?tipotramite)
     ?a <- (EmpleadosFichados ?tipotramite ?totalFichados)
     =>
-    (assert (EmpleadosFichados ?tipotramite (+ ?totalFichados 1)))
+    (assert (EmpleadosFichados ?tipotramite (- ?totalFichados 1)))
+    (printout t "El empleado " ?empl " se va" crlf)
     (retract ?a ?b)
     )
 

@@ -146,19 +146,19 @@ EmpleadosFichados
 
 
   (defrule NoposibleEncolarUsuario
-  (declare (salience 20))
-  ?g <- (Solicitud ?tipotramite)
-  (Usuarios ?tipotramite ?n)
-  (UltimoUsuarioAtendido ?tipotramite ?atendidos)
-  (TiempoMedioGestion ?tipotramite ?m)
-  (FinalJornada ?h)
-  (test (> (* (- ?n ?atendidos) ?m) (mrest ?h)))
-  (Code  ?tipotramite ?texto)
-  =>
-  (printout t "Lo siento pero por hoy no podremos atender mas " ?texto crlf)
-  (bind ?a (- ?n ?atendidos))
-  (printout t "Hay ya  " ?a " personas esperando y se cierra a las " ?h "h. No nos dara tiempo a atenderle." crlf)
-  (retract ?g)
+    (declare (salience 20))
+    ?g <- (Solicitud ?tipotramite)
+    (Usuarios ?tipotramite ?n)
+    (UltimoUsuarioAtendido ?tipotramite ?atendidos)
+    (TiempoMedioGestion ?tipotramite ?m)
+    (FinalJornada ?h)
+    (test (> (* (- ?n ?atendidos) ?m) (mrest ?h)))
+    (Code  ?tipotramite ?texto)
+    =>
+    (printout t "Lo siento pero por hoy no podremos atender mas " ?texto crlf)
+    (bind ?a (- ?n ?atendidos))
+    (printout t "Hay ya  " ?a " personas esperando y se cierra a las " ?h "h. No nos dara tiempo a atenderle." crlf)
+    (retract ?g)
   )
 
 
@@ -174,8 +174,7 @@ EmpleadosFichados
     =>
     (if (> (- (momento) ?tiempo) (minuto-segundos ?tiempoMax))
       then
-      (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
-    )
+      (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf))
   )
 
   (defrule Fichar

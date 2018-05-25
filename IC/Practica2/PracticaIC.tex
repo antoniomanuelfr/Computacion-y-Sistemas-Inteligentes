@@ -51,4 +51,7 @@
 		Para este ejercicio lo que he hecho ha sido añadir un nuevo hecho cada vez que a una persona se le ha asignado una oficina. Este hecho guarda el tiempo en el que se le asigno la oficina.\\
 	  Luego tengo otra regla que captura este hecho y el hecho \textit{(ciclo ?n)} con el que consigo que esta regla se dispare siempre y en el caso de que la resta del tiempo actual menos el tiempo en el que el usuario entro sea mayor que el limite hago la notificación.
 	\end{itemize}
+	Para la parte de guardar los datos lo que he hecho ha sido en la regla RegistrarCaso he añadido que capture tanto el hecho con la hora de inicio del tramite como la hora en la que empezó a estar en cola. \\
+	Una vez hecho esto he calculado el tiempo de tramite como el \textit{(- (momento) tiempoInicioTramite)} y el tiempo de espera en cola como: \textit{(- tiempoInicialTramite tiempoinicialCola}.
+	Ambos datos para todos los usuarios se han guardado en los ficheros datosE.txt (datos espera) y datosT.txt (datos tiempo trámite)
 \end{document}

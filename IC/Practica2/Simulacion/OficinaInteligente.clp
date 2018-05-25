@@ -146,7 +146,7 @@
   (bind ?tEspera (- ?tinicialTramite ?tinicialCola) )
 
   (assert (Tramitado ?empl ?tipotramite ?n))
-  (retract ?f ?g)
+  (retract ?f ?g ?v)
   (printout t "El empleado " ?empl " ahora esta disponible." crlf )
   (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
   (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)

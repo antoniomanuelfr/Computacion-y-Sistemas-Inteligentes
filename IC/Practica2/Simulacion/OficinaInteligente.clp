@@ -231,7 +231,7 @@
       (ciclo ?n)
       (TiempoInicialTramite ?tipotramite ?n ?t)
       (MaximoTiempoGestion ?tipotramite ?tmax)
-      (test (> (- (momento) ?t) ?tmax))
+      (test (> (- (momento) ?t) (minuto-segundos ?tmax)))
       =>
       (printout t "El tramite " ?tipotramite ?n " ha excedido el tiempo maximo" crlf)
     )

@@ -42,9 +42,11 @@
 		se notifica.
 		\item \textbf{No hay empleados TE}\\
 		Este ejercicio es lo mismo que el anterior si cambiamos TG por una variable. Lo que he hecho ha sido modificar el fichero de constantes.
-		\item \textbf{Usuario que lleva más de un tiempo máximo de espera}\\ Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (HoraActualizada))
+		\item \textbf{Usuario que lleva más de un tiempo máximo de espera}\\
+		 Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (HoraActualizada))
 		}\\
-		Se añade un hecho con el identificador del usuario y su tiempo. \\Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (HoraActualizada) ?tiempo) ?tiempoMax)} se imprime por pantalla que dicho usuario ya lleva demasiado tiempo esperando. Esta regla se llama: \textbf{ComprobarTiempo}
+		Se añade un hecho con el identificador del usuario y su tiempo. \\
+		Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (HoraActualizada) ?tiempo) ?tiempoMax)} se imprime por pantalla que dicho usuario ya lleva demasiado tiempo esperando. Esta regla se llama: \textbf{ComprobarTiempo}
 	\item \textbf{Usuario cuyo trámite se retrasa}\\
 		Para este ejercicio lo que he hecho ha sido añadir un nuevo hecho cada vez que a una persona se le ha asignado una oficina. Este hecho guarda el tiempo en que se le asigno la oficina.\\
 		Luego, tengo otra regla que captura dos hechos: El que guarda el tiempo en el que se le asignó la oficina y \textit{(HoraActualizada ?n)} con el que consigo que esta regla se dispare siempre y en el caso de que la resta del tiempo actual menos el tiempo en el que el usuario entro sea mayor que el limite hago la notificación.
@@ -54,6 +56,13 @@
 		Una vez hecho esto he calculado el tiempo de tramite como: \textit{(- (HoraActualizada) tiempoInicioTramite)} y el tiempo de espera en cola como: \textit{(- tiempoInicialTramite tiempoinicialCola}.
 		Ambos datos para todos los usuarios se han guardado en los ficheros datosE.txt (datos espera) y datosT.txt (datos tiempo trámite).
 	\section{Ejercicio 3}
+	\begin{itemize}
+		\item \textbf{Empleado empieza a trabajar con un retraso mayor al máximo}\\
+		Esta regla funciona casi igual que la del apartado 4 del ejercicio anterior.
+		\\Cuando ficha un empleado se guarda en un hecho la hora en la que ficho, se captura con una regla con el hecho \textit{(HoraActualizada ?n)} para que se ejecute en background y con un hecho de control, para que no entre en  un bucle.
+		\item
+	\end{itemize}
+
 
 
 \end{document}

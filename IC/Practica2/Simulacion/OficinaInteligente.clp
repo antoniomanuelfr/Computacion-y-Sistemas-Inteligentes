@@ -61,6 +61,14 @@
   (Ejecutar)
   (TiempoTramite TG 0)
   (TiempoTramite TE 0)
+  (NoFichado Director)
+  (NoFichado G1)
+  (NoFichado G2)
+  (NoFichado G3)
+  (NoFichado G4)
+  (NoFichado G5)
+  (NoFichado E1)
+  (NoFichado E2)
   )
   ;(deffacts Constantes
   ;(ComienzoJornada 8)
@@ -112,7 +120,7 @@
   (assert (Usuario ?tipotramite (+ ?n 1))
           (Usuarios ?tipotramite (+ ?n 1))
           (TiempoInicialUsuario ?tipotramite (+ ?n 1) ?t)
-          (NoComprobado ?tipotramite (+ ?n 1))
+          (NoComprobado ?tipotramite (+ ?n 1) 0)
   )
   (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
   (retract ?f ?g)
@@ -123,12 +131,12 @@
 
   (defrule AsignarEmpleado
   ?g <- (Disponible ?empl)
-  (Tarea ?empl ?tipotramite)
-  (Empleado ?empl ?ofic)
   ?f <- (UltimoUsuarioAtendido ?tipotramite ?atendidos)
+  (Empleado ?empl ?ofic)
+  (Tarea ?empl ?tipotramite)
   (Usuarios ?tipotramite ?total)
-  (test (< ?atendidos ?total))
   (HoraActualizada ?t)
+  (test (< ?atendidos ?total))
   =>
   (bind ?a (+ ?atendidos 1))
   (assert (Asignado ?empl ?tipotramite ?a)
@@ -143,14 +151,16 @@
   (Disponible ?empl)
   ?f <- (Asignado ?empl ?tipotramite ?n)
   ?g <- (TiempoInicialTramite ?tipotramite ?n ?tinicialTramite)
-  ?v <- (TiempoInicialUsuario ?tipotramite ?n  ?tinicialCola)
+  ?v <- (TiempoInicialUsuario ?tipotramite ?n ?tinicialCola)
+  ?z <- (NoComprobado ?tipotramite ?n)
   (HoraActualizada ?t)
   =>
   (bind ?tTramite (- ?t ?tinicialTramite) )
   (bind ?tEspera (- ?tinicialTramite ?tinicialCola) )
 
   (assert (Tramitado ?empl ?tipotramite ?n))
-  (retract ?f ?g ?v)
+  (retract ?f ?g ?v ?z)
+
   (printout t "El empleado " ?empl " ahora esta disponible." crlf )
   (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
   (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)
@@ -185,23 +195,29 @@
 
   (defrule ComprobarTiempo
     ?e <-(TiempoInicialUsuario ?tipotramite ?n ?tiempo)
+    ?v <-(NoComprobado ?tipotramite ?n ?val)
     (MaximoEsperaParaSerAtendido ?tipotramite ?tiempoMax)
     (UltimoUsuarioAtendido ?tipotramite ?id)
     (HoraActualizada ?hora)
-    ?v <-(NoComprobado ?tipotramite ?id)
     (test (< ?id ?n))
+    (test (< (- ?hora ?tiempo) (minuto-segundos ?tiempoMax)))
+    (test (eq ?val 0))
     =>
-    (if (> (- ?hora ?tiempo) (minuto-segundos ?tiempoMax))
-      then
-      (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
-      (retract ?v)
-      )
+    (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
+    (assert (NoComprobado ?tipotramite ?n 1))
+    (retract ?v)
   )
 
   (defrule Fichar
-    ?b <- (Ficha ?empl)
+    (Ficha ?empl)
+    (HoraActualizada ?hora)
+    ?b <- (NoFichado ?empl)
+
     =>
+    (assert (HoraFicha ?empl ?hora))
     (printout t "Ha fichado el empleado: " ?empl crlf)
+    (retract ?b)
+
     )
 
   (defrule ComienzaTrabajar
@@ -245,4 +261,19 @@
       (printout t "El tramite " ?tipotramite ?n " ha excedido el tiempo maximo" crlf)
     )
 
-    ;;Ejercicio 3
+
+      ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;; EJ3 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+    (defrule TiempoRetrasoExcedido
+        ?a <- (HoraFicha ?empleado ?t)
+        (MaximoTiempoRetraso ?tipotramite ?tmax)
+        (HoraActualizada ?hora)
+        (test (> ?hora 0))
+        (test (> (- ?hora ?t) (minuto-segundos ?tmax)))
+        =>
+        (printout t "El empleado " ?empleado " ha excedido el tiempo maximo de retraso" crlf)
+        (assert (HoraFicha ?empleado -1))
+        (retract ?a)
+      )

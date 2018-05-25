@@ -16,6 +16,60 @@ def Valoracion(X, Y, w, KNN, porcentaje_clas, porcentaje_red):
 	return (porcentaje_clas * tasa_clas) + (porcentaje_red * tasa_red), tasa_clas, tasa_red
 
 
+
+def BL(X_train, Y_train, sigma, alpha, w_ini):
+	puntuacion_hijo = -1
+	vecinos_generados = 0
+	n_caracteristicas = X_train.shape[1]
+	tamanio = X_train.shape[0]
+	total_red = 0
+	porcentaje_clas = alpha
+	porcentaje_red = (1 - alpha)
+	indices = np.arange(0, n_caracteristicas - 1)
+	indexes = list(indices)
+
+	w = w_ini
+
+	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
+	KNN.fit(X_train, Y_train)
+	w[w < 0.2] = 0
+	puntuacion_padre = Valoracion(X_train, Y_train, w, KNN, porcentaje_clas,  porcentaje_red)[0]
+	op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
+
+	for i in range(1, 1000):
+
+		index = indexes.pop()
+		w_ant = w[index]
+
+		w[index] = w[index] - op[index]
+		vecinos_generados += 1
+
+		total_ant = total_red
+		if w[index] < 0.2:
+			w[index] = 0
+
+		puntuacion_hijo = Valoracion(X_train, Y_train, w, KNN, porcentaje_clas,  porcentaje_red)[0]
+
+		if puntuacion_hijo > puntuacion_padre:
+			puntuacion_padre = puntuacion_hijo
+			vecinos_generados = 0
+		else:
+			w[index] = w_ant
+			total_red = total_ant
+
+		if not indexes:
+			op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
+			indexes = list(indices)
+			total_red = n_caracteristicas - np.count_nonzero(w)
+
+		if vecinos_generados == 20 * n_caracteristicas:
+			break
+
+	return w
+
+
+
+
 def SimulatedAnnealing(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigma, pmaxaciertos):
 	porcentaje_clas = alpha
 	porcentaje_red = 1 - alpha
@@ -59,3 +113,6 @@ def SimulatedAnnealing(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigm
 		tfinal = time()
 
 	return w, puntuacion, tfinal - tinicial
+
+
+#def ILS(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigma, pmaxaciertos,BL):

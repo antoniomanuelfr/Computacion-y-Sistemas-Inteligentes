@@ -105,11 +105,14 @@
   (defrule EncolarUsuario
   ?g <- (Solicitud ?tipotramite)
   ?f <- (Usuarios ?tipotramite ?n)
+
+  (HoraActualizada ?t)
   =>
-  (bind ?t (momento))
+
   (assert (Usuario ?tipotramite (+ ?n 1))
           (Usuarios ?tipotramite (+ ?n 1))
           (TiempoInicialUsuario ?tipotramite (+ ?n 1) ?t)
+          (NoComprobado ?tipotramite (+ ?n 1))
   )
   (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
   (retract ?f ?g)
@@ -125,9 +128,9 @@
   ?f <- (UltimoUsuarioAtendido ?tipotramite ?atendidos)
   (Usuarios ?tipotramite ?total)
   (test (< ?atendidos ?total))
+  (HoraActualizada ?t)
   =>
   (bind ?a (+ ?atendidos 1))
-  (bind ?t (momento))
   (assert (Asignado ?empl ?tipotramite ?a)
           (UltimoUsuarioAtendido ?tipotramite ?a)
           (TiempoInicialTramite ?tipotramite ?a ?t))
@@ -141,8 +144,9 @@
   ?f <- (Asignado ?empl ?tipotramite ?n)
   ?g <- (TiempoInicialTramite ?tipotramite ?n ?tinicialTramite)
   ?v <- (TiempoInicialUsuario ?tipotramite ?n  ?tinicialCola)
+  (HoraActualizada ?t)
   =>
-  (bind ?tTramite (- (momento) ?tinicialTramite) )
+  (bind ?tTramite (- ?t ?tinicialTramite) )
   (bind ?tEspera (- ?tinicialTramite ?tinicialCola) )
 
   (assert (Tramitado ?empl ?tipotramite ?n))
@@ -183,11 +187,15 @@
     ?e <-(TiempoInicialUsuario ?tipotramite ?n ?tiempo)
     (MaximoEsperaParaSerAtendido ?tipotramite ?tiempoMax)
     (UltimoUsuarioAtendido ?tipotramite ?id)
+    (HoraActualizada ?hora)
+    ?v <-(NoComprobado ?tipotramite ?id)
     (test (< ?id ?n))
     =>
-    (if (> (- (momento) ?tiempo) (minuto-segundos ?tiempoMax))
+    (if (> (- ?hora ?tiempo) (minuto-segundos ?tiempoMax))
       then
-      (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf))
+      (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
+      (retract ?v)
+      )
   )
 
   (defrule Fichar
@@ -231,7 +239,10 @@
       (ciclo ?n)
       (TiempoInicialTramite ?tipotramite ?n ?t)
       (MaximoTiempoGestion ?tipotramite ?tmax)
-      (test (> (- (momento) ?t) (minuto-segundos ?tmax)))
+      (HoraActualizada ?hora)
+      (test (> (- ?hora ?t) (minuto-segundos ?tmax)))
       =>
       (printout t "El tramite " ?tipotramite ?n " ha excedido el tiempo maximo" crlf)
     )
+
+    ;;Ejercicio 3

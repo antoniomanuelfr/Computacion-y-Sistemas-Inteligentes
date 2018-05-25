@@ -59,6 +59,8 @@
   (EmpleadosFichados TG 0)                   ;;; Inicialmente hay 0 empleados en las oficinas
   (EmpleadosFichados TE 0)
   (Ejecutar)
+  (TiempoTramite TG 0)
+  (TiempoTramite TE 0)
   )
   ;(deffacts Constantes
   ;(ComienzoJornada 8)
@@ -83,6 +85,10 @@
   (declare (salience 10000))
   =>
   (load-facts Constantes.txt)
+  (open "DatosT.txt" datosT "a")
+  (open "DatosE.txt" datosE "a")
+
+
   )
 
 
@@ -133,11 +139,18 @@
   (declare (salience 10))
   (Disponible ?empl)
   ?f <- (Asignado ?empl ?tipotramite ?n)
-  ?g <- (TiempoInicialTramite ?tipotramite ?n)
+  ?g <- (TiempoInicialTramite ?tipotramite ?n ?tinicialTramite)
+  ?v <- (TiempoInicialUsuario ?tipotramite ?n  ?tinicialCola)
   =>
+  (bind ?tTramite (- (momento) ?tinicialTramite) )
+  (bind ?tEspera (- ?tinicialTramite ?tinicialCola) )
+
   (assert (Tramitado ?empl ?tipotramite ?n))
   (retract ?f ?g)
   (printout t "El empleado " ?empl " ahora esta disponible." crlf )
+  (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
+  (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)
+
   )
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1C ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -119,7 +119,7 @@
 
   (assert (Usuario ?tipotramite (+ ?n 1))
           (Usuarios ?tipotramite (+ ?n 1))
-          (TiempoInicialUsuario ?tipotramite (+ ?n 1) ?t)
+          (TiempoInicialUsuario ?tipotramite (+ ?n 1) (momento))
           (NoComprobado ?tipotramite (+ ?n 1) 0)
   )
   (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
@@ -198,9 +198,9 @@
     ?v <-(NoComprobado ?tipotramite ?n ?val)
     (MaximoEsperaParaSerAtendido ?tipotramite ?tiempoMax)
     (UltimoUsuarioAtendido ?tipotramite ?id)
-    (HoraActualizada ?hora)
+    (HoraActualizada ?xc)
     (test (< ?id ?n))
-    (test (< (- ?hora ?tiempo) (minuto-segundos ?tiempoMax)))
+    (test (> (- ?xc ?tiempo) (* ?tiempoMax 60)))
     (test (eq ?val 0))
     =>
     (printout t "El usuario " ?tipotramite " " ?n " lleva esperando mas tiempo tiempo del maximo" crlf)
@@ -256,7 +256,7 @@
       (TiempoInicialTramite ?tipotramite ?n ?t)
       (MaximoTiempoGestion ?tipotramite ?tmax)
       (HoraActualizada ?hora)
-      (test (> (- ?hora ?t) (minuto-segundos ?tmax)))
+      (test (> (- ?hora ?t) (* ?tmax 60)))
       =>
       (printout t "El tramite " ?tipotramite ?n " ha excedido el tiempo maximo" crlf)
     )
@@ -271,7 +271,7 @@
         (MaximoTiempoRetraso ?tipotramite ?tmax)
         (HoraActualizada ?hora)
         (test (> ?hora 0))
-        (test (> (- ?hora ?t) (minuto-segundos ?tmax)))
+        (test (> (- ?hora ?t) (* ?tmax 60)))
         =>
         (printout t "El empleado " ?empleado " ha excedido el tiempo maximo de retraso" crlf)
         (assert (HoraFicha ?empleado -1))

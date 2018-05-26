@@ -17,11 +17,9 @@ def Valoracion(X, Y, w, KNN, porcentaje_clas, porcentaje_red):
 
 
 
-def BL(X_train, Y_train, sigma, alpha, w_ini):
-	puntuacion_hijo = -1
+def BL(X_train, Y_train, sigma, alpha, KNN, w_ini):
 	vecinos_generados = 0
 	n_caracteristicas = X_train.shape[1]
-	tamanio = X_train.shape[0]
 	total_red = 0
 	porcentaje_clas = alpha
 	porcentaje_red = (1 - alpha)
@@ -29,9 +27,6 @@ def BL(X_train, Y_train, sigma, alpha, w_ini):
 	indexes = list(indices)
 
 	w = w_ini
-
-	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
-	KNN.fit(X_train, Y_train)
 	w[w < 0.2] = 0
 	puntuacion_padre = Valoracion(X_train, Y_train, w, KNN, porcentaje_clas,  porcentaje_red)[0]
 	op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
@@ -67,7 +62,13 @@ def BL(X_train, Y_train, sigma, alpha, w_ini):
 
 	return w
 
+def mutacion(w,sigma):
 
+	indices = np.arange(0, w.shape[0])
+	np.random.shuffle(indices)
+	indices = indices[0:int((0.1 * w.shape[0]) + 0.5)]
+
+	w[indices] = w[indices] + np.random.normal(0, sigma)
 
 
 def SimulatedAnnealing(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigma, pmaxaciertos):
@@ -115,4 +116,12 @@ def SimulatedAnnealing(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigm
 	return w, puntuacion, tfinal - tinicial
 
 
-#def ILS(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigma, pmaxaciertos,BL):
+def ILS(X_train, y_train, alpha, sigma, BL):
+	w = np.random.uniform(0, 1, y_train.shape[1])
+	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
+	KNN.fit(X_train, y_train)
+	w = BL(X_train, y_train, 0.3, alpha, KNN, w)
+
+	for i in range (1,15):
+		w=mutacion(w,sigma)
+		w=BL(X_train,y_train,0.3,alpha,KNN,w)

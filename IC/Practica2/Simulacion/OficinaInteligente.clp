@@ -270,10 +270,35 @@
         ?a <- (HoraFicha ?empleado ?t)
         (MaximoTiempoRetraso ?tipotramite ?tmax)
         (HoraActualizada ?hora)
-        (test (> ?hora 0))
+        (test (> ?t 0))
         (test (> (- ?hora ?t) (* ?tmax 60)))
         =>
         (printout t "El empleado " ?empleado " ha excedido el tiempo maximo de retraso" crlf)
         (assert (HoraFicha ?empleado -1))
         (retract ?a)
       )
+
+      (defrule EmpleadoDescansa
+        ?b <-(Descanso ?empl)
+        (Tarea ?empl ?tipotramite)
+        ?a <- (EmpleadosFichados ?tipotramite ?totalFichados)
+        (HoraActualizada ?hora)
+        =>
+        (assert (EmpleadosFichados ?tipotramite (- ?totalFichados 1))
+                (HoraDescanso ?empl ?hora)
+        )
+        (printout t "El empleado " ?empl " se va" crlf)
+        (retract ?a ?b)
+        )
+
+      (defrule ComprobarTiempoDescanso
+          ?a <- (HoraDescanso ?empleado ?t)
+          (TiempoMaximoDescanso ?tmax)
+          (HoraActualizada ?hora)
+          (test (> ?t 0))
+          (test (> (- ?hora ?t) (* ?tmax 60)))
+          =>
+          (printout t "El empleado " ?empleado " ha excedido el tiempo maximo de descanso." crlf)
+          (assert (HoraDescanso ?empleado -1))
+          (retract ?a)
+        )

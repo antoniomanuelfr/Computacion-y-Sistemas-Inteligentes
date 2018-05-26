@@ -344,6 +344,7 @@
           (fin)
           (test (< ?total ?minimo))
           =>
+          (printout t "El empleado " ?empl " ha atendido menos de " ?minimo " tramites. " crlf )
           )
         (defrule Consulta
           ?a <- (Consulta ?empl)

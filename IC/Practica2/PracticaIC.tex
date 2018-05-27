@@ -19,11 +19,11 @@
 
 
 \author{
-	\includegraphics[scale=1.1]{UGR} \\\\
+	\includegraphics[scale=5]{UGR} \\\\
 	\Large 	Antonio Manuel Fresneda Rodríguez\\
 	\\antoniomfr@correo.ugr.es
-	\\77447672-W
-	}
+	\\
+}
 \date{}
 \title{\huge \textbf{Práctica final Ingeniería de Conocimiento}}
 \begin{document}
@@ -31,24 +31,58 @@
 	\pagebreak
 	\tableofcontents
 	\pagebreak
-	\section{Ejercicio1}
+	\section{Ejercicio 1}
 	Este ejercicio se realizó en la práctica 1.
-	\section{Ejercicio2}
+	\section{Ejercicio 2}
 	\begin{itemize}
 		\item \textbf{Menos de N empleados TG}\\
 		En este ejercicio nos pide que si hay menos de N empleados atendiendo TG. Esto quiere decir que el sistema avise cuando haya menos de N empleados fichados de un tipo. \\
 		Para hacer esto lo que he hecho ha sido crear una regla para que cuando fiche se añade un nuevo hecho. He creado una regla que captura el hecho de fichado y el hecho de que el
-		trabajador está libre. Esta regla lo que hace es incrementa un contador. En el caso de que se vaya he creado otra regla para que si se va decremente este contador. También he creado
-		otra regla para que se capture este hecho y el valor del minimo en el fichero de constantes. Una vez hecho esto en el caso de que el minimo sea menor que el valor de la constante
+		trabajador está libre. Esta regla lo que hace es incrementa un contador. En el caso de que se vaya he creado otra regla que disminuye este contador. También he creado otra regla para que se capture este hecho y el valor del mínimo en el fichero de constantes. Una vez hecho esto en el caso de que el mínimo sea menor que el valor de la constante
 		se notifica.
 		\item \textbf{No hay empleados TE}\\
-		Este ejercicio es lo mismo que el ejercicio anterior si cambiamos TG por una variable. Lo que he hecho ha sido modificar el fichero de constantes.
-		\item \textbf{Usuario que lleva más de un tiempo 	máximo de espera}\\ Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (momento))
+		Este ejercicio es lo mismo que el anterior si cambiamos TG por una variable. Lo que he hecho ha sido modificar el fichero de constantes.
+		\item \textbf{Usuario que lleva más de un tiempo máximo de espera}\\
+		Lo que he hecho ha sido que a la hora de que un usuario entre a la cola de espera, calculo el tiempo actual del sistema con la siguiente orden:\\ \textit{(bind ?t (HoraActualizada))
 		}\\
-		Se añade un hecho con el identificador del usuario y su tiempo. \\Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al identificador del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (momento) ?tiempo) ?tiempoMax)}\\
-		Se imprime por pantalla si se cumple la condición que dicho usuario ya lleva demasiado tiempo esperando. Esta regla se llama: \textbf{ComprobarTiempo}
-	\item \textbf{Usuario cuyo trámite se retrasa}\\
-		Para este ejercicio lo que he hecho ha sido añadir un nuevo hecho cada vez que a una persona se le ha asignado una oficina. Este hecho guarda el tiempo en el que se le asigno la oficina.\\
-	  Luego tengo otra regla que captura este hecho y el hecho \textit{(ciclo ?n)} con el que consigo que esta regla se dispare siempre y en el caso de que la resta del tiempo actual menos el tiempo en el que el usuario entro sea mayor que el limite hago la notificación.
+		Se añade un hecho con el identificador del usuario y su tiempo. \\
+		Luego tengo una regla que captura este hecho  (identificando aquellos usuarios cuyo identificador sea mayor al del ultimo usuario atendido de dicho tramite) y si se da la condición:\\ \textit{(if (> (- (HoraActualizada) ?tiempo) ?tiempoMax)} se imprime por pantalla que dicho usuario ya lleva demasiado tiempo esperando. Esta regla se llama: \textbf{ComprobarTiempo}
+		\item \textbf{Usuario cuyo trámite se retrasa}\\
+		Para este ejercicio lo que he hecho ha sido añadir un nuevo hecho cada vez que a una persona se le ha asignado una oficina. Este hecho guarda el tiempo en que se le asigno la oficina.\\
+		Luego, tengo otra regla que captura dos hechos: El que guarda el tiempo en el que se le asignó la oficina y \textit{(HoraActualizada ?n)} con el que consigo que esta regla se dispare siempre y en el caso de que la resta del tiempo actual menos el tiempo en el que el usuario entro sea mayor que el limite hago la notificación.
+		He añadido tambien un hecho de control para que no cicle.
 	\end{itemize}
+	Para la parte de guardar los datos lo que he hecho ha sido en la regla RegistrarCaso he añadido que capture tanto el hecho con la hora de inicio del tramite como la hora en la que empezó a estar en cola. \\
+	Una vez hecho esto he calculado el tiempo de tramite como: \textit{(- (HoraActualizada) tiempoInicioTramite)} y el tiempo de espera en cola como: \textit{(- tiempoInicialTramite tiempoinicialCola}.
+	Ambos datos para todos los usuarios se han guardado en los ficheros datosE.txt (datos espera) y datosT.txt (datos tiempo trámite).
+	\pagebreak
+	\section{Ejercicio 3}
+	\begin{itemize}
+		\item \textbf{Empleado empieza a trabajar con un retraso mayor al máximo}\\
+		Esta regla funciona casi igual que la del apartado 4 del ejercicio anterior.
+		\\Cuando ficha un empleado se guarda en un hecho la hora en la que ficho, se captura con una regla con el hecho \textit{(HoraActualizada ?n)} para que se ejecute en background. Pero esta vez no tengo un hecho de control. Para que no entre en un bucle he decidido que una vez que la regla se ejecute ponerle un tiempo negativo y así hacer que no se dispare la regla.
+		Esto no lo he hecho antes porque necesitaba guardar la hora.
+		\item \textbf{Empleado lleva mas de un tiempo máximo de descanso}\\
+		Este apartado sigue siendo parecido al anterior.
+		\\Cuando un empleado le da al botón de descansar se guarda la hora en la que le dio al botón y con el hecho \textit{(HoraActualizada ?n)} hago que la regla se dispare en background restando ?n a la hora que se había guardado. En el caso de que esta sea mayor que el tiempo máximo se notifica.
+		\item \textbf{Ha gestionado un número mínimo de trámites}\\
+		Cuando se hace un \textit{assert} del hecho \textit{(fin)} se dispara esta regla.\\
+		Cada vez que un empleado tramita un trámite, tiene un contador asociado que se incrementa.
+		La regla captura este hecho y el hecho donde esta el mínimo de tramites para un tipo. Si el número de trámites que ha tramitado es menor que el este, se notifica.
+		\item \textbf{Pregunta por la situación de los empleados}\\
+		Aquí si he cambiado bastante. Primero he creado un hecho para cada empleado llamado \textit{EstadoEmpleado} que registra el estado del empleado de la siguiente forma:
+		\begin{itemize}
+			\item 0 si no está fichado.
+			\item 1 si está fichado.
+			\item 2 si está disponible.
+			\item 3 si está atendiendo-
+			\item 4 si está descansando.
+		\end{itemize}
+		Cada vez que el empleado cambia de situación actualizo el campo según lo que vaya a hacer.
+		Finalmente tengo una regla que captura el hecho \textit{Consulta ?empl} y el hecho \textit{EstadoEmpleado} e imprime por pantalla el estado actual del empleado. \\
+		Por ultimo he adaptado algunas reglas para que usen estos hechos y así tener menos hechos de control.
+
+	\end{itemize}
+
+
 \end{document}

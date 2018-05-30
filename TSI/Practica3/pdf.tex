@@ -1,0 +1,54 @@
+\documentclass[10pt,spanish]{article}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{fancyhdr}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\pagestyle{fancy}
+\renewcommand{\contentsname}{Índice}
+
+
+\rhead{TSI}
+\lhead{Práctica 3}
+
+
+\author{
+	\includegraphics[scale=5]{UGR} \\\\
+	\Large 	Antonio Manuel Fresneda Rodríguez\\
+	\\antoniomfr@correo.ugr.es
+	\\
+}
+\date{}
+\title{\huge \textbf{Práctica 3\\ Tecnología sistemas inteligentes}}
+\begin{document}
+	\maketitle
+	\pagebreak
+	\tableofcontents
+	\pagebreak
+	\section{Ejercicio 0}
+	Este ejercicio comprobamos que el dominio y el problema funcionan correctamente. La salida del planificador esta en el archivo EJ0.txt
+	\section{Ejercicio 1}
+	Este problema no se puede resolver. Esto ocurre debido a que la tarea de transportar a una persona que no esté en el mismo lugar que el avión no está definida.
+	Para resolverlo la hemos implementado he definido un nuevo caso para la tarea.
+	\begin{itemize}
+		\item \textit {Precondiciones}: Que el avión esté en cA, la persona esté en cP y cp sea distinto de cA.
+		\item \textit {Acciones}: El avión va de Ca a Cp, la persona embarca en el avión y el avión vuela a la ciudad de destino del pasajero.
+	\end{itemize}
+	La salida del plan esta en el archivo EJ1.txt en la carpeta EJ1.
+	\section{Ejercicio2}
+	En este problema nos dicen que tenemos que tener en cuenta el combustible.\\
+	El dominio del ejercicio anterior no tenía en cuenta que nos quedasemos sin combustible. Para ello he añadido \textit{method: fuel-no-suficiente} a la tarea: \textit{mover-avion}.\\
+		\begin{itemize}
+			\item \textit{Precondiciones}: Que no haya fuel para viajar de la ciudad c1 a c2.
+			\item \textit{Acciones}: Recargamos el depósito en la ciudad 1 y volamos despues a la ciudad 2.
+		\end{itemize}
+	\section{Ejercicio3}
+	
+
+\end{document}

@@ -37,9 +37,46 @@
   (Empleado Director Gerencia)
   )
 
+(deffacts Personas
+  (NumeroPersonas Recepcion 0)    ;;;;  Receptión es una habitación
+  (NumeroPersonas Pasillo 0)
+  (NumeroPersonas Oficina1 0)
+  (NumeroPersonas Oficina2 0)
+  (NumeroPersonas Oficina3 0)
+  (NumeroPersonas Oficina4 0)
+  (NumeroPersonas Oficina5 0)
+  (NumeroPersonas OficinaDoble 0)
+  (NumeroPersonas Gerencia 0)
+  (NumeroPersonas Papeleria 0)
+  (NumeroPersonas Aseos 0)
+  (NumeroPersonas AseoHombres 0)
+  (NumeroPersonas AseoMujeres 0)
+  )
+
+  (deffacts Luces
+    (Luz Recepcion OFF)    ;;;;  Receptión es una habitación
+    (Luz Pasillo OFF)
+    (Luz Oficina1 OFF)
+    (Luz Oficina2 OFF)
+    (Luz Oficina3 OFF)
+    (Luz Oficina4 OFF)
+    (Luz Oficina5 OFF)
+    (Luz OficinaDoble OFF)
+    (Luz Gerencia OFF)
+    (Luz Papeleria OFF)
+    (Luz Aseos OFF)
+    (Luz AseoHombres OFF)
+    (Luz AseoMujeres OFF)
+    )
+
    (deffacts Codificacion
    (Code TG "Tramites Generales")
    (Code TE "Tramites Especiales")
+   (Code 0 "No fichado")
+   (Code 1 "Fichado")
+   (Code 2 "Disponible")
+   (Code 3 "Atendiendo")
+   (Code 4 "Descansando")
    )
   (deffacts Tareas
   (Tarea G1 TG)                   ;;;;; El empleado G1 atiende Trámites Generales
@@ -207,9 +244,9 @@
   )
 
 
-  ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;; EJ2 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;; EJ2 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (defrule ComprobarTiempo
     ?e <-(TiempoInicialUsuario ?tipotramite ?n ?tiempo)
@@ -292,9 +329,9 @@
     )
 
 
-      ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;; EJ3 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-      ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;; EJ3 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (defrule TiempoRetrasoExcedido
         ?a <- (HoraFicha ?empleado ?t)
@@ -350,6 +387,56 @@
         (defrule Consulta
           ?a <- (Consulta ?empl)
           (EstadoEmpleado ?empl ?estado)
+          (Code ?estado ?txt)
           =>
-          (printout t "El empleado esta: " ?estado crlf)
+          (printout t "El empleado "  ?empl " esta: " ?txt crlf)
           )
+
+
+;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;; EJ4 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule LuzHab
+  (Sensor_puerta ?hab)
+  ?a <- (Luz ?hab OFF)
+  ?b <- (NumeroPersonas ?hab ?t)
+  =>
+  (printout t "Encendemos la luz de: " ?hab crlf)
+  (retract ?a ?b)
+  (assert (Luz ?hab ON)
+          (NumeroPersonas ?hab (+ ?t 1))
+  )
+  )
+
+  (defrule ApagarLuzHab
+    (not (Sensor_presencia ?hab))
+    (not (Sensor_puerta ?hab))
+    ?a <- (Luz ?hab ON)
+    ?b <- (NumeroPersonas ?hab ?t)
+    (test (neq ?hab Pasillo))
+
+    =>
+    (printout t "Apagamos la luz de:" ?hab ?t crlf)
+    (retract ?a ?b)
+    (assert (Luz ?hab OFF)
+            (NumeroPersonas ?hab 0)
+    )
+    )
+
+  (defrule EntraHabitacion
+    (Sensor_puerta ?hab)
+    (Sensor_presencia Pasillo)
+    ?p<- (NumeroPersonas Pasillo ?totP)
+    ?b <- (NumeroPersonas ?hab ?tot)
+    ?a <- (Luz ?hab ?)
+    =>
+      (assert
+              (NumeroPersonas ?hab (+ ?tot 1))
+              (NumeroPersonas Pasillo (- ?totP 1))
+              (Luz ?hab ON)
+              )
+      (retract ?a ?p ?b)
+
+      (printout t "Alguien entra en " ?hab crlf)
+    )

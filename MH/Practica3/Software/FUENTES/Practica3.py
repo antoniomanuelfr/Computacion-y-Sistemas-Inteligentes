@@ -4,6 +4,7 @@
 from sklearn.neighbors import KNeighborsClassifier
 
 import numpy as np
+import math
 from time import time
 
 
@@ -71,24 +72,33 @@ def mutacion(w,sigma):
 	w[indices] = w[indices] + np.random.normal(0, sigma)
 
 
-def SimulatedAnnealing(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigma, pmaxaciertos):
+def SimulatedAnnealing(X_train, y_train, alpha, nu, fi, Tfinal, sigma, pmaxaciertos, M):
 	porcentaje_clas = alpha
 	porcentaje_red = 1 - alpha
+	max_vecinos = 10 * X_train.shape[1]
 	aciertos_maximos = pmaxaciertos * max_vecinos
 	n_caracteristicas = X_train.shape[1]
 	w = np.random.uniform(0, 1, n_caracteristicas)
 	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
 	KNN.fit(X_train, y_train)
-	T = T0
+
 	best_w = np.copy(w)
-	best_punt = Valoracion(X_train, y_train, KNN, porcentaje_clas, porcentaje_red)
+	best_punt = Valoracion(X_train, y_train,w, KNN, porcentaje_clas, porcentaje_red)
 	indexes = list(range(0, n_caracteristicas - 1))
 	op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
 	aciertos = 0
+	tot=1
+	T=(nu * best_punt[0])/-np.log(fi)
+
 	tinicial = time()
+	B=(T-Tfinal)/(M * T * Tfinal)
 	while T >= Tfinal:
 		T_ant = T
 		for i in range(0, max_vecinos):
+			if not indexes:
+				indexes = list(range(0, n_caracteristicas - 1))
+				op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
+
 			index = indexes.pop()
 			w_ant = w[index]
 
@@ -97,23 +107,29 @@ def SimulatedAnnealing(X_train, y_train, alpha, max_vecinos, T0, Tfinal, B, sigm
 				w[index] = 0
 
 			puntuacion = Valoracion(X_train, y_train, w, KNN, porcentaje_clas, porcentaje_red)
-			df = best_punt - puntuacion[0]
+			tot+=1
+			df = best_punt[0] - puntuacion[0]
 
-			if df < 0 or np.random.uniform(0, 1) <= np.exp(-df / i * T):
+			if df < 0 or np.random.uniform(0, 1) <= np.exp(-df / T):
 				aciertos += 1
-				if puntuacion > best_punt:
+				if puntuacion[0] > best_punt[0]:
 					best_punt = puntuacion
 					best_w[index] = w[index]
+				if aciertos >=aciertos_maximos:
+					break
 
 			else:
 				w[index] = w_ant
-		if aciertos >= aciertos_maximos or aciertos == 0:
+
+		print("Exitos ", aciertos, "Temp: ", T, " Evaluaciones: ", tot)
+		if aciertos == 0:
 			break
-
 		T = T_ant / (1 + B * T_ant)
-		tfinal = time()
+		#T=0.99 * T_ant
 
-	return w, puntuacion, tfinal - tinicial
+	tfinal = time()
+
+	return  puntuacion, (tfinal - tinicial),w
 
 
 def ILS(X_train, y_train, alpha, sigma, BL):

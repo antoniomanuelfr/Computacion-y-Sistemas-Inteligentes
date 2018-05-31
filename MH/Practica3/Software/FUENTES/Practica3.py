@@ -9,7 +9,7 @@ from time import time
 
 
 # Funcion de valoracion para w
-def Valoracion(X, Y, w, KNN, porcentaje_clas, porcentaje_red):
+def Valoracion(X, Y,  w, KNN, porcentaje_clas, porcentaje_red):
 	neighbors = KNN.kneighbors(n_neighbors=1, return_distance=False)
 	Y_vecinos = Y[neighbors]
 	tasa_clas = np.sum(np.transpose(Y_vecinos) == Y) / X.shape[0]
@@ -71,21 +71,27 @@ def mutacion(w,sigma):
 
 	w[indices] = w[indices] + np.random.normal(0, sigma)
 
+	return w
 
-def SimulatedAnnealing(X_train, y_train, alpha, nu, fi, Tfinal, sigma, pmaxaciertos, M):
+
+def SimulatedAnnealing(X_train, y_train, X_test, Y_test, alpha, nu, fi, Tfinal, sigma, pmaxaciertos, M):
 	porcentaje_clas = alpha
 	porcentaje_red = 1 - alpha
+
 	max_vecinos = 10 * X_train.shape[1]
 	aciertos_maximos = pmaxaciertos * max_vecinos
 	n_caracteristicas = X_train.shape[1]
-	w = np.random.uniform(0, 1, n_caracteristicas)
+
+	w = np.ones(n_caracteristicas)
 	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
 	KNN.fit(X_train, y_train)
-
+	w = np.random.uniform(0, 1, n_caracteristicas)
 	best_w = np.copy(w)
+
 	best_punt = Valoracion(X_train, y_train,w, KNN, porcentaje_clas, porcentaje_red)
 	indexes = list(range(0, n_caracteristicas - 1))
 	op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
+
 	aciertos = 0
 	tot=1
 	T=(nu * best_punt[0])/-np.log(fi)
@@ -105,6 +111,8 @@ def SimulatedAnnealing(X_train, y_train, alpha, nu, fi, Tfinal, sigma, pmaxacier
 			w[index] = w[index] + op[index]
 			if w[index] < 0.2:
 				w[index] = 0
+			if w[index] > 1:
+				w[index]=1
 
 			puntuacion = Valoracion(X_train, y_train, w, KNN, porcentaje_clas, porcentaje_red)
 			tot+=1
@@ -121,23 +129,31 @@ def SimulatedAnnealing(X_train, y_train, alpha, nu, fi, Tfinal, sigma, pmaxacier
 			else:
 				w[index] = w_ant
 
-		print("Exitos ", aciertos, "Temp: ", T, " Evaluaciones: ", tot)
+		#print("Exitos ", aciertos, "Temp: ", T, " Evaluaciones: ", tot)
 		if aciertos == 0:
 			break
-		T = T_ant / (1 + B * T_ant)
+		T = T_ant / (1 + (B * T_ant))
 		#T=0.99 * T_ant
 
 	tfinal = time()
-
+	print("Puntuacion test: ", KNN.score(X_test, Y_test))
 	return  puntuacion, (tfinal - tinicial),w
 
 
-def ILS(X_train, y_train, alpha, sigma, BL):
-	w = np.random.uniform(0, 1, y_train.shape[1])
+def ILS(X_train, y_train, X_test, Y_test, alpha, sigma):
+	pred=alpha
+	pclas=1-alpha
+	w = np.random.uniform(0, 1, X_train.shape[1])
+	tinicial=time()
 	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
 	KNN.fit(X_train, y_train)
 	w = BL(X_train, y_train, 0.3, alpha, KNN, w)
-
 	for i in range (1,15):
 		w=mutacion(w,sigma)
 		w=BL(X_train,y_train,0.3,alpha,KNN,w)
+
+	puntuacion=Valoracion(X_train, y_train, w, KNN, pclas, pred)
+
+	tfinal=time()
+	print("Error de test:_ ", KNN.score(X_test, Y_test))
+	return puntuacion, (tfinal - tinicial), w

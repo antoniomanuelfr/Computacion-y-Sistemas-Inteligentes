@@ -25,7 +25,7 @@
 	\\
 }
 \date{}
-\title{\huge \textbf{Práctica 3\\ Tecnología sistemas inteligentes}}
+\title{\huge \textbf{Práctica 3\\ Técnica sistemas inteligentes}}
 \begin{document}
 	\maketitle
 	\pagebreak
@@ -43,12 +43,29 @@
 	La salida del plan esta en el archivo EJ1.txt en la carpeta EJ1.
 	\section{Ejercicio2}
 	En este problema nos dicen que tenemos que tener en cuenta el combustible.\\
-	El dominio del ejercicio anterior no tenía en cuenta que nos quedasemos sin combustible. Para ello he añadido \textit{method: fuel-no-suficiente} a la tarea: \textit{mover-avion}.\\
+	El dominio del ejercicio anterior no tenía en cuenta que nos quedásemos sin combustible. Para ello he añadido \textit{method: fuel-no-suficiente} a la tarea: \textit{mover-avion}.\\
 		\begin{itemize}
 			\item \textit{Precondiciones}: Que no haya fuel para viajar de la ciudad c1 a c2.
-			\item \textit{Acciones}: Recargamos el depósito en la ciudad 1 y volamos despues a la ciudad 2.
+			\item \textit{Acciones}: Recargamos el depósito en la ciudad 1 y volamos después a la ciudad 2.
 		\end{itemize}
+	La salida del plan está en el archivo EJ2.txt en la carpeta E2.
 	\section{Ejercicio3}
-	
+	Para poder representar en nuestro dominio que el avión puede tener dos tipos de velocidad (lento y rápida) y dos tipo de consumo (lento y rápido) vamos a tener que modificar los predicados derivados para estimar si vamos a tener fuel y la tarea de moverse del avión, ya que va a recorrer más distancia en menos tiempo.\\
+	He declarado la función \textit{(fuel-limit)} y he añadido los predicados \textit{(hay-fuel-viaje-lento ?a ?c1 ?c2)} y \textit{(hay-fuel-viaje-rapido ?a ?c1 ?c2)}\\
+	El derivado de cada uno deduce que el el fuel del avión \text{?a} sea mayor que el consumo volado de forma lenta/rápida multiplicado por la distancia entre las ciudades ?c1 y ?c2.\\
+	Una vez hecho esto, he modificado la tarea de mover el avión añadiendo lo siguiente:
+	\begin{itemize}
+		\item \textit{fuel-suficiente-viaje-(lento o rápido)}
+		\begin{itemize}
+			\item \textit{Precondiciones}: Que el avión tenga suficiente fuel para viajar de ?c1 a ?c2 viajando de forma lenta/rápida y que el total de fuel usado (que se incrementa cada vez que se vuela de un sitio a otro) sea menor que el limite de fuel. 
+			\item \textit{Tarea}: Volar de ?c1 a ?c2
+		\end{itemize}
+		\item \textit{fuel-no-suficiente-viaje-(lento o rápido)}
+		\begin{itemize}
+			\item \textit{Precondiciones}: Que el avión no tenga suficiente fuel para viajar de ?c1 a ?c2 viajando de forma lenta/rápida y que el total de fuel usado (que se incrementa cada vez que se vuela de un sitio a otro) sea menor que el limite de fuel. 
+			\item \textit{Tarea}:Repostar el avión en ?c1 y Volar de ?c1 a ?c2
+		\end{itemize}
+	\end{itemize}
+	La salida del plan está en el archivo EJ3.txt
 
 \end{document}

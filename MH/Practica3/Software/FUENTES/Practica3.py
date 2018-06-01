@@ -9,13 +9,12 @@ from time import time
 
 
 # Funcion de valoracion para w
-def Valoracion(X, Y,  w, KNN, porcentaje_clas, porcentaje_red):
+def Valoracion(X, Y, w, KNN, porcentaje_clas, porcentaje_red):
 	neighbors = KNN.kneighbors(n_neighbors=1, return_distance=False)
 	Y_vecinos = Y[neighbors]
 	tasa_clas = np.sum(np.transpose(Y_vecinos) == Y) / X.shape[0]
 	tasa_red = (X.shape[1] - np.count_nonzero(w)) / X.shape[1]
 	return (porcentaje_clas * tasa_clas) + (porcentaje_red * tasa_red), tasa_clas, tasa_red
-
 
 
 def BL(X_train, Y_train, sigma, alpha, KNN, w_ini):
@@ -29,7 +28,7 @@ def BL(X_train, Y_train, sigma, alpha, KNN, w_ini):
 
 	w = w_ini
 	w[w < 0.2] = 0
-	puntuacion_padre = Valoracion(X_train, Y_train, w, KNN, porcentaje_clas,  porcentaje_red)[0]
+	puntuacion_padre = Valoracion(X_train, Y_train, w, KNN, porcentaje_clas, porcentaje_red)[0]
 	op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
 
 	for i in range(1, 1000):
@@ -44,7 +43,7 @@ def BL(X_train, Y_train, sigma, alpha, KNN, w_ini):
 		if w[index] < 0.2:
 			w[index] = 0
 
-		puntuacion_hijo = Valoracion(X_train, Y_train, w, KNN, porcentaje_clas,  porcentaje_red)[0]
+		puntuacion_hijo = Valoracion(X_train, Y_train, w, KNN, porcentaje_clas, porcentaje_red)[0]
 
 		if puntuacion_hijo > puntuacion_padre:
 			puntuacion_padre = puntuacion_hijo
@@ -63,8 +62,8 @@ def BL(X_train, Y_train, sigma, alpha, KNN, w_ini):
 
 	return w
 
-def mutacion(w,sigma):
 
+def mutacion(w, sigma):
 	indices = np.arange(0, w.shape[0])
 	np.random.shuffle(indices)
 	indices = indices[0:int((0.1 * w.shape[0]) + 0.5)]
@@ -74,7 +73,7 @@ def mutacion(w,sigma):
 	return w
 
 
-def SimulatedAnnealing(X_train, y_train, X_test, Y_test, alpha, nu, fi, Tfinal, sigma, pmaxaciertos, M):
+def SA(X_train, y_train, x_test, y_test, alpha, nu, fi, Tfinal, sigma, pmaxaciertos, M):
 	porcentaje_clas = alpha
 	porcentaje_red = 1 - alpha
 
@@ -88,18 +87,17 @@ def SimulatedAnnealing(X_train, y_train, X_test, Y_test, alpha, nu, fi, Tfinal, 
 	w = np.random.uniform(0, 1, n_caracteristicas)
 	best_w = np.copy(w)
 
-	best_punt = Valoracion(X_train, y_train,w, KNN, porcentaje_clas, porcentaje_red)
+	best_punt = Valoracion(X_train, y_train, w, KNN, porcentaje_clas, porcentaje_red)
 	indexes = list(range(0, n_caracteristicas - 1))
 	op = np.random.normal(loc=0, scale=sigma, size=n_caracteristicas)
 
 	aciertos = 0
-	tot=1
-	T=(nu * best_punt[0])/-np.log(fi)
+	tot = 1
+	T = (nu * best_punt[0]) / -np.log(fi)
 
 	tinicial = time()
-	B=(T-Tfinal)/(M * T * Tfinal)
+	B = (T - Tfinal) / (M * T * Tfinal)
 	while T >= Tfinal:
-		T_ant = T
 		for i in range(0, max_vecinos):
 			if not indexes:
 				indexes = list(range(0, n_caracteristicas - 1))
@@ -112,10 +110,10 @@ def SimulatedAnnealing(X_train, y_train, X_test, Y_test, alpha, nu, fi, Tfinal, 
 			if w[index] < 0.2:
 				w[index] = 0
 			if w[index] > 1:
-				w[index]=1
+				w[index] = 1
 
 			puntuacion = Valoracion(X_train, y_train, w, KNN, porcentaje_clas, porcentaje_red)
-			tot+=1
+			tot += 1
 			df = best_punt[0] - puntuacion[0]
 
 			if df < 0 or np.random.uniform(0, 1) <= np.exp(-df / T):
@@ -123,37 +121,38 @@ def SimulatedAnnealing(X_train, y_train, X_test, Y_test, alpha, nu, fi, Tfinal, 
 				if puntuacion[0] > best_punt[0]:
 					best_punt = puntuacion
 					best_w[index] = w[index]
-				if aciertos >=aciertos_maximos:
+				if aciertos >= aciertos_maximos:
 					break
 
 			else:
 				w[index] = w_ant
 
-		#print("Exitos ", aciertos, "Temp: ", T, " Evaluaciones: ", tot)
+		# print("Exitos ", aciertos, "Temp: ", T, " Evaluaciones: ", tot)
 		if aciertos == 0:
 			break
-		T = T_ant / (1 + (B * T_ant))
-		#T=0.99 * T_ant
+		T = T / (1 + (B * T))
+		#T=0.99 * T
 
 	tfinal = time()
-	print("Puntuacion test: ", KNN.score(X_test, Y_test))
-	return  puntuacion, (tfinal - tinicial),w
+	print("Clas: ", puntuacion[1], " red: ", puntuacion[2], " tiempo: ", (tfinal - tinicial))
+	print("Error de test:_ ", KNN.score(x_test, y_test))
 
 
-def ILS(X_train, y_train, X_test, Y_test, alpha, sigma):
-	pred=alpha
-	pclas=1-alpha
-	w = np.random.uniform(0, 1, X_train.shape[1])
-	tinicial=time()
+
+def ILS(x_train, y_train, x_test, y_test, alpha, sigma):
+	pred = alpha
+	pclas = 1 - alpha
+	w = np.random.uniform(0, 1, x_train.shape[1])
+	tinicial = time()
 	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
-	KNN.fit(X_train, y_train)
-	w = BL(X_train, y_train, 0.3, alpha, KNN, w)
-	for i in range (1,15):
-		w=mutacion(w,sigma)
-		w=BL(X_train,y_train,0.3,alpha,KNN,w)
+	KNN.fit(x_train, y_train)
+	w = BL(x_train, y_train, 0.3, alpha, KNN, w)
+	for i in range(1, 15):
+		w = mutacion(w, sigma)
+		w = BL(x_train, y_train, 0.3, alpha, KNN, w)
 
-	puntuacion=Valoracion(X_train, y_train, w, KNN, pclas, pred)
+	puntuacion = Valoracion(x_train, y_train, w, KNN, pclas, pred)
 
-	tfinal=time()
-	print("Error de test:_ ", KNN.score(X_test, Y_test))
-	return puntuacion, (tfinal - tinicial), w
+	tfinal = time()
+	print("Clas: ", puntuacion[1], " red: ", puntuacion[2], " tiempo: ", (tfinal - tinicial))
+	print("Error de test:_ ", KNN.score(x_test, y_test))

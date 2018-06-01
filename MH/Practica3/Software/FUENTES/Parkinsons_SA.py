@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-from Practica3 import ILS
+from Practica3 import SA
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
@@ -25,7 +25,7 @@ def main ():
 	fivefold=StratifiedKFold(n_splits=5)
 	particiones=fivefold.split(X,Y)
 
-	Parallel(n_jobs=num_cores)(delayed(ILS)(scl.fit_transform(X[index[0]]),Y[index[0]],scl.fit_transform(X[index[1]]), Y[index[1]], 0.5,0.3)for index in particiones )
+	Parallel(n_jobs=num_cores)(delayed(SA)(scl.fit_transform(X[index[0]]),Y[index[0]],scl.fit_transform(X[index[1]]), Y[index[1]],0.5,0.3,0.3,0.001,0.3,0.1,15000)for index in particiones )
 	"""for train_index, test_index in particiones:
 		X_train = X[train_index]
 		Y_train = Y[train_index]

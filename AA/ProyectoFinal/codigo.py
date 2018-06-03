@@ -1,10 +1,13 @@
+
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
-
+from sklearn.externals import joblib
 from imblearn.over_sampling import SMOTE
+from imblearn.pipeline import pipeline
+from sklearn import tree
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -29,7 +32,6 @@ def plot_roc_curve(model, X_test, y_test, title):
 	plt.ylabel('True Positive Rate')
 	plt.xlabel('False Positive Rate')
 	plt.show()
-
 
 def plot_confusion_matrix(cm, classes,normalize=False,title='Confusion matrix', cmap=plt.cm.Blues):
 	"""
@@ -67,7 +69,7 @@ def ajuste_modelo(modelo, tuned_parameters, X_train, y_train, X_test, y_test, ti
 
 	# Fit_intercept lo que hace es centrar los datos con la media y la varianza.
 	# Esto esta hecho ya en la linea 20
-	clf = GridSearchCV(modelo(), tuned_parameters, cv=5, scoring='roc_auc')
+	clf = GridSearchCV(modelo(), tuned_parameters, cv=5, n_jobs=5, scoring='f1')
 	clf.fit(X_train, y_train)
 
 	print("Best parameters set found on development set:")
@@ -84,11 +86,15 @@ def ajuste_modelo(modelo, tuned_parameters, X_train, y_train, X_test, y_test, ti
 	print("\n\n\n END OF TUNNING PARAMETERS!!!\n\n\n")
 
 	print("The model is trained on the full train set and with best parameters")
-	best_model = modelo(**clf.best_params_)
+	best_model = modelo(random_state=seed,**clf.best_params_)
 	best_model.fit(X_train, y_train)
 	class_names = np.unique(y_test)
 
 	print("The scores are computed with full test set")
+	y_pred_train = best_model.predict(X_train)
+
+	matrix = confusion_matrix(y_train, y_pred_train)
+	plot_confusion_matrix(matrix, class_names,title='Matriz de confusion train '+titulo)
 
 	y_true, y_pred = y_test, best_model.predict(X_test)
 	print(classification_report(y_true, y_pred))
@@ -101,7 +107,7 @@ def ajuste_modelo(modelo, tuned_parameters, X_train, y_train, X_test, y_test, ti
 
 	print("Introduzca algo por teclado: ")
 	#input()
-
+	joblib.dump(best_model, titulo+'.pkl')
 	return best_model
 
 seed = 123
@@ -115,8 +121,8 @@ y = datos[:, datos.shape[1] - 1]
 
 datos = np.delete(datos, datos.shape[1] - 1, 1)
 
-X_train, X_test, y_train, y_test = train_test_split(datos, y, test_size=0.1, random_state=seed)
-X_train, y_train = SMOTE(random_state=seed).fit_sample(X_train, y_train)
+X_train, X_test, y_train, y_test = train_test_split(datos, y,
+													 test_size=0.2, random_state=seed)
 
 CategoricasTrain = X_train[:, 2:10:1]
 CategoricasTest = X_test[:, 2:10:1]
@@ -128,9 +134,9 @@ CategoricasTest[CategoricasTest < 0] = CategoricasTest[CategoricasTest < 0] + 11
 
 labels = np.unique(datos)
 
-enc = OneHotEncoder(dtype=np.float32, sparse=False)
-CategoricasTrain = enc.fit_transform(CategoricasTrain)
-CategoricasTest = enc.transform(CategoricasTest)
+enc = OneHotEncoder(dtype=np.float32)
+CategoricasTrain = enc.fit_transform(CategoricasTrain).todense()
+CategoricasTest = enc.transform(CategoricasTest).todense()
 
 scl = StandardScaler()
 X_train = scl.fit_transform(X_train)
@@ -139,29 +145,47 @@ X_test = scl.transform(X_test)
 X_train = np.concatenate([X_train, CategoricasTrain], 1)
 X_test = np.concatenate([X_test, CategoricasTest], 1)
 
+tuned_parameters_RL=[{'Sampling__kind':['borderline1, borderline2'],'ModeloBoosting__n_estimators':[9,10,11,12,13,14], 'ModeloBoosting__learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
+#tuned_parameters_BOOSTING=[{'Sampling__kind':['borderline1, borderline2'],'ModeloBoosting__n_estimators':[9,10,11,12,13,14], 'ModeloBoosting__learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
+tuned_parameters_RF=[{'Sampling__kind':['borderline1, borderline2'],'ModeloBoosting__n_estimators':[9,10,11,12,13,14], 'ModeloBoosting__learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
+tuned_parameters_BOOSTING=[{'n_estimators':[9,10,11,12,13,14], 'learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
+
+
+X_train, y_train = SMOTE(ratio='minority', random_state=seed, kind='borderline1').fit_sample(X_train, y_train)
 ## Fin preprocesado de datos
 
 # Regresión logística
 # Set the parameters by cross-validation
-tuned_parameters_LOG = [{'penalty': ['l1'], 'C': [0.9, 0.5, 0.2, 0.15, 0.125, 0.1]}, {'penalty': ['l2'], 'C': [0.9, 0.5, 0.2, 0.15, 0.125, 0.1]}]
+tuned_parameters_LOG = [{'penalty': ['l1'], 'C': [3,2,0.9, 0.5, 0.2,]},
+						 {'penalty': ['l2'], 'C': [3,2,0.9, 0.5, 0.2]}]
 
 # Fit_intercept lo que hace es centrar los datos con la media y la varianza.
 # Esto esta hecho ya en la linea 20
-ajuste_modelo(LogisticRegression, tuned_parameters_LOG, X_train, y_train, X_test, y_test, 'Regresion Logistica')
+#ajuste_modelo(LogisticRegression, tuned_parameters_LOG, X_train, y_train, X_test, y_test, 'Regresion Logistica')
 
-tuned_parameters_MLP = [{'hidden_layer_sizes': [[1,25], [1,35]],
-                         'alpha': [0.0001, 0.001], 'activation':['relu', 'logistic']},{
-                        'hidden_layer_sizes': [[2,25], [2,35]],
-                         'alpha': [0.0001, 0.001], 'activation':['relu', 'logistic']},
-                        {'hidden_layer_sizes': [[3,25] [3,35]],
-                         'alpha': [0.0001, 0.001], 'activation':['relu', 'logistic']}]
+tuned_parameters_TREE=[{'criterion': ['gini', 'entropy']}]
+#S=ajuste_modelo(tree.DecisionTreeClassifier, tuned_parameters_TREE, X_train,y_train,X_test,y_test,'Decision Tree')
 
-ajuste_modelo(MLPClassifier,tuned_parameters_MLP, X_train, y_train, X_test, y_test)
+"""
+tuned_parameters_MLP = [{'hidden_layer_sizes': [[1,5], [1,10]],
+                         'alpha': [0.0001, 0.001], 
+						 'activation':['relu', 'logistic']},{
+                        'hidden_layer_sizes': [[2,5], [2,10]],
+                         'alpha': [0.0001, 0.001],
+						  'activation':['relu', 'logistic']},
+                        {'hidden_layer_sizes': [[3,5], [3,10]],
+                         'alpha': [0.0001, 0.001],
+						  'activation':['relu', 'logistic']}]
 
-tuned_parameters_RF=[{'n_estimators': [25,50,70,100,200]}]
-#RF=ajuste_modelo(RandomForestClassifier, tuned_parameters_RF, X_train, y_train, X_test, y_test, 'Random Forest')
+ajuste_modelo(MLPClassifier,tuned_parameters_MLP, X_train, y_train, X_test, y_test, 'RRNN')
+"""
+
+tuned_parameters_RF=[{'n_estimators': [1,2,3]}]
+#RF=ajuste_modelo(BaggingClassifier, tuned_parameters_RF, X_train, y_train, X_test, y_test, 'Random Forest')
 #a=RF.feature_importances_
+#separo los dos kernels porque el parametro degree solo se usa si se usa el kernel polinomial
+iters=10000
 
-tuned_parameters_SVC=[{'kernel': ['rbf']}]
 #S=ajuste_modelo(SVC, tuned_parameters_SVC,X_train,y_train,X_test,y_test,'SVC')
 
+S=ajuste_modelo(AdaBoostClassifier, tuned_parameters_BOOSTING,X_train,y_train,X_test,y_test,'AdaBoost')

@@ -1,5 +1,5 @@
 
-(:durative-action embarcar-pasajero
+(:durative-action board-passanger
  :parameters (?p - person ?a - aircraft ?c - city)
  :duration (= ?duration (boarding-time))
  :condition (and  (< (pasajeros ?a) (tope-pasajeros ?a))
@@ -12,7 +12,7 @@
          )
 )
 
-(:durative-action desembarcar-pasajero
+(:durative-action debark-passanger
  :parameters (?p - person ?a - aircraft ?c - city)
  :duration (= ?duration (debarking-time))
  :condition (and (in ?p ?a)

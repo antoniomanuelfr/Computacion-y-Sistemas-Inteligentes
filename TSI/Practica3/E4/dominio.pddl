@@ -58,11 +58,15 @@
 ; los siguientes ejercicios).
 
 (:derived
+  ;Calculamos el fuel que se va a consumir usando consumo*distancia y comparamos si tenemos suficiente.
+
   (hay-fuel-viaje-lento ?a - aircraft ?c1 - city ?c2 - city)
   (> (fuel ?a) (* (distance ?c1 ?c2) (slow-burn ?a)))
 )
 
 (:derived
+  ;Calculamos el fuel que se va a consumir usando consumo*distancia y comparamos si tenemos suficiente.
+
   (hay-fuel-viaje-rapido ?a - aircraft ?c1 - city ?c2 - city)
   (> (fuel ?a) (* (distance ?c1 ?c2) (fast-burn ?a)))
 )
@@ -70,20 +74,20 @@
 (:task transport-person
 	:parameters (?p - person ?c - city)
 
-	(:method Case1 ; si la persona esta en la ciudad no se hace nada
+	(:method Case1 ; si la persona est� en la ciudad no se hace nada
 		:precondition (at ?p ?c)
 
 		:tasks ()
 	)
 
-	(:method Case2 ;si no esta en la ciudad destination, pero avion y persona estan en la misma ciudad
+	(:method Case2 ;si no esta en la ciudad destino, pero avion y persona estan en la misma ciudad
 		:precondition (and (at ?p - person ?c1 - city) (at ?a - aircraft ?c1 - city))
 
 		:tasks ((embarcar)(mover-avion ?a ?c1 ?c)(desembarcar)
             )
 	)
 
-	(:method Case3 ; La persona y el avion no estan en la misma ciudad
+	(:method Case3;si no esta en la ciudad destino, avion y persona no estan en la misma ciudad
 		:precondition (and (at ?p - person ?c1 - city)
                   (at ?a - aircraft ?c2 - city)
 					        (different ?c1 - city ?c2 - city))
@@ -94,49 +98,47 @@
 
 (:task mover-avion
 	:parameters (?a - aircraft ?c1 - city ?c2 -city)
-	; este método se escogerá para usar la acción fly siempre que el avión tenga fuel para
-	; volar desde ?c1 a ?c2
-	; si no hay fuel suficiente el método no se aplicará y la descomposición de esta tarea
-	; se intentará hacer con otro método. Cuando se agotan todos los métodos posibles, la
-	; descomponsición de la tarea mover-avión "fallará".
-	; En consecuencia HTNP hará backtracking y escogerá otra posible vía para descomponer
-	; la tarea mover-avion (por ejemplo, escogiendo otra instanciación para la variable ?a)
-
-	(:method fuel-suficiente-fast
-		:precondition (and (hay-fuel-viaje-rapido ?a ?c1 ?c2) (> (fuel-limit) (total-fuel-used ?a)))
-		:tasks ((zoom ?a ?c1 ?c2))
-	)
-
-	(:method fuel-insuficiente-fast
-		:precondition (and (not (hay-fuel-viaje-rapido ?a ?c1 ?c2)) (> (fuel-limit) (total-fuel-used ?a)))
-
-		:tasks ((refuel ?a ?c1) (zoom ?a ?c1 ?c2))
-	)
-
-	(:method fuel-suficiente-slow
-		:precondition (and (hay-fuel-viaje-lento ?a ?c1 ?c2) (> (fuel-limit) (total-fuel-used ?a)))
+ ;;Hay fuel suficiente para volar de forma lenta y que no hayamos sobrepasado el limite de fuel gastado
+  (:method fuel-suficiente-viaje-lento
+		:precondition (and (hay-fuel-viaje-lento ?a ?c1 ?c2)
+                  (< (total-fuel-used ?a) (fuel-limit)))
 
 		:tasks ((fly ?a ?c1 ?c2))
 	)
 
-	(:method fuel-insuficiente-slow
-		:precondition (and (not (hay-fuel-viaje-lento ?a ?c1 ?c2)) (> (fuel-limit) (total-fuel-used ?a)))
+  (:method fuel-no-suficiente-viaje-lento
+    :precondition (and (not (hay-fuel-viaje-lento ?a ?c1 ?c2))
+                       (< (total-fuel-used ?a) (fuel-limit)))
 
-		:tasks ((refuel ?a ?c1) (fly ?a ?c1 ?c2))
+    :tasks ((refuel ?a ?c1) (fly ?a ?c1 ?c2))
+  )
+
+	(:method fuel-suficiente-viaje-rapido
+		:precondition (and (hay-fuel-viaje-rapido ?a ?c1 ?c2)
+                  (< (total-fuel-used ?a) (fuel-limit)))
+		:tasks ((zoom ?a ?c1 ?c2))
+	)
+
+	(:method fuel-no-suficiente-viaje-rapido
+		:precondition (and (not (hay-fuel-viaje-rapido ?a ?c1 ?c2))
+                       (< (total-fuel-used ?a) (fuel-limit)))
+
+		:tasks ((refuel ?a ?c1) (zoom ?a ?c1 ?c2))
 	)
 )
 
 (:task embarcar
 	:parameters ()
-	(:method recurre1
+	(:method embarca-pasajero
 		:precondition (and  (at ?p ?c)
                         (at ?a ?c)
                         (> (tope-pasajeros ?a) (pasajeros ?a))
-                        (not (destination ?p ?c)))
-		:tasks  ((embarcar-pasajero ?p ?a ?c) (embarcar)
+                        (not (destination ?p ?c))
+                        )
+		:tasks  ((board-passanger ?p ?a ?c) (embarcar)
 		)
 	)
-	(:method caso-base
+	(:method fin-recurrencia
 	:precondition():tasks()
 	)
 )
@@ -144,14 +146,14 @@
 
 (:task desembarcar
 	:parameters ()
-	(:method recurre1
+	(:method desembarca-pasajero
 		:precondition (and (in ?p ?a)
                        (at ?a ?c)
                   )
-		:tasks  ((desembarcar-pasajero ?p ?a ?c)
+		:tasks  ((debark-passanger ?p ?a ?c)
             (desembarcar))
 	)
-	(:method desembarcados
+	(:method fin-recurrencia
 	:precondition()
   :tasks())
 )

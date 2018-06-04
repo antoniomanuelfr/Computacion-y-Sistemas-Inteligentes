@@ -2,7 +2,7 @@
 (:durative-action board-passanger
  :parameters (?p - person ?a - aircraft ?c - city)
  :duration (= ?duration (boarding-time))
- :condition (and  (< (pasajeros ?a) (tope-pasajeros ?a))
+ :condition (and  (< (pasajeros ?a) (capacity ?a))
                   (at ?a ?c)
                   (at ?p ?c)
             )

@@ -36,7 +36,6 @@
             (boarding-time)
             (debarking-time)
             (fuel-limit)
-            (tope-pasajeros ?a - aircraft)
             (pasajeros ?a - aircraft)
             (destination ?p - person ?c - city)
 )
@@ -132,7 +131,7 @@
 	(:method embarca-pasajero
 		:precondition (and  (at ?p ?c)
                         (at ?a ?c)
-                        (> (tope-pasajeros ?a) (pasajeros ?a))
+                        (> (capacity ?a) (pasajeros ?a))
                         (not (destination ?p ?c))
                         )
 		:tasks  ((board-passanger ?p ?a ?c) (embarcar)

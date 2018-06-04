@@ -32,8 +32,8 @@
     (at p18 Granada)
     (at p19 Bilbao)
     (at p20 Bilbao)
-    (at a1 Almeria)
-    (at a2 Jaen)
+    (at a1 Madrid)
+    (at a2 Madrid)
     (= (fuel-limit) 15000)
 
     (= (distance Almeria Barcelona) 809)
@@ -183,10 +183,7 @@
 
     (= (fast-burn a1) 2)
     (= (fast-burn a2) 3)
-
-    (= (capacity a1) 6)
-    (= (capacity a2) 5)
-
+    
     (= (refuel-rate a1) 1)
     (= (refuel-rate a2) 1)
 
@@ -195,8 +192,8 @@
     (= (pasajeros a1) 0)
     (= (pasajeros a2) 0)
 
-    (= (tope-pasajeros a1) 15)
-    (= (tope-pasajeros a2) 10)
+    (= (capacity a1) 15)
+    (= (capacity a2) 10)
 
     (= (boarding-time) 1)
     (= (debarking-time) 1)

@@ -49,12 +49,6 @@
   (different ?x ?y) (not (igual ?x ?y))
 )
 
-; este literal derivado se utiliza para deducir, a partir de la información en el estado actual,
-; si hay fuel suficiente para que el avión ?a vuele de la ciudad ?c1 a la ?c2
-; el antecedente de este literal derivado comprueba si el fuel actual de ?a es mayor que 1.
-; En este caso es una forma de describir que no hay restricciones de fuel. Pueden introducirse una
-; restricción más copleja  si en lugar de 1 se representa una expresión más elaborada (esto es objeto de
-; los siguientes ejercicios).
 
 (:derived
   ;Calculamos el fuel que se va a consumir usando consumo*distancia y comparamos si tenemos suficiente.

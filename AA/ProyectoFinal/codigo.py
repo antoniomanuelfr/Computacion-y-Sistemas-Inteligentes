@@ -1,13 +1,10 @@
-
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
 from sklearn.externals import joblib
 from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import pipeline
-from sklearn import tree
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -69,7 +66,7 @@ def ajuste_modelo(modelo, tuned_parameters, X_train, y_train, X_test, y_test, ti
 
 	# Fit_intercept lo que hace es centrar los datos con la media y la varianza.
 	# Esto esta hecho ya en la linea 20
-	clf = GridSearchCV(modelo(), tuned_parameters, cv=5, n_jobs=5, scoring='f1')
+	clf = GridSearchCV(modelo(random_state=seed), tuned_parameters, cv=5, n_jobs=5, scoring='f1')
 	clf.fit(X_train, y_train)
 
 	print("Best parameters set found on development set:")
@@ -107,15 +104,40 @@ def ajuste_modelo(modelo, tuned_parameters, X_train, y_train, X_test, y_test, ti
 
 	print("Introduzca algo por teclado: ")
 	#input()
-	joblib.dump(best_model, titulo+'.pkl')
+	joblib.dump(best_model, titulo+'-'+tipoSmote+'.pkl')
 	return best_model
 
+def preparar_roc(model, X_test, y_test, title_model, title_graph):
+	probsmodel = model.predict_proba(X_test)
+	predsmodel = probsmodel[:, 1]
+	fprmodel, tprmodel, thresholdmodel = roc_curve(y_test, predsmodel)
+	roc_auc = auc(fprmodel, tprmodel)
+
+	# method I: plt
+	plt.title(title_graph)
+	plt.plot(fprmodel, tprmodel, label=title_model+' = %0.2f' % roc_auc)
+	plt.legend(loc='lower right')
+	plt.plot([0, 1], [0, 1], 'r--')
+	plt.xlim([0, 1])
+	plt.ylim([0, 1])
+	plt.ylabel('True Positive Rate')
+	plt.xlabel('False Positive Rate')
 seed = 123
 np.random.seed(seed)
 
 # Inicio de preprocesado de datos
+a=input("Seleccione tipo de SMOTE: \n1 -> Regular \n2 -> Borderline1 \n3 -> Borderline2\n")
+if a=='1':
+	tipoSmote='regular'
+elif a=='2':
+	tipoSmote='borderline1'
+elif a=='3':
+	tipoSmote='borderline2'
+else:
+	print("No valido.")
+	exit(1)
 
-datos = np.genfromtxt("UCI_Credit_Card.csv", dtype=np.float32, delimiter=',')
+datos = np.genfromtxt("datos/UCI_Credit_Card.csv", dtype=np.float32, delimiter=',')
 y = datos[:, datos.shape[1] - 1]
 
 
@@ -145,47 +167,25 @@ X_test = scl.transform(X_test)
 X_train = np.concatenate([X_train, CategoricasTrain], 1)
 X_test = np.concatenate([X_test, CategoricasTest], 1)
 
-tuned_parameters_RL=[{'Sampling__kind':['borderline1, borderline2'],'ModeloBoosting__n_estimators':[9,10,11,12,13,14], 'ModeloBoosting__learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
-#tuned_parameters_BOOSTING=[{'Sampling__kind':['borderline1, borderline2'],'ModeloBoosting__n_estimators':[9,10,11,12,13,14], 'ModeloBoosting__learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
-tuned_parameters_RF=[{'Sampling__kind':['borderline1, borderline2'],'ModeloBoosting__n_estimators':[9,10,11,12,13,14], 'ModeloBoosting__learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
-tuned_parameters_BOOSTING=[{'n_estimators':[9,10,11,12,13,14], 'learning_rate': [0.9, 0.65, 0.5,0.45, 0.1]}]
-
-
-X_train, y_train = SMOTE(ratio='minority', random_state=seed, kind='borderline1').fit_sample(X_train, y_train)
+X_train, y_train = SMOTE(ratio='minority', random_state=seed, kind=tipoSmote).fit_sample(X_train, y_train)
 ## Fin preprocesado de datos
 
-# Regresión logística
-# Set the parameters by cross-validation
 tuned_parameters_LOG = [{'penalty': ['l1'], 'C': [3,2,0.9, 0.5, 0.2,]},
 						 {'penalty': ['l2'], 'C': [3,2,0.9, 0.5, 0.2]}]
 
-# Fit_intercept lo que hace es centrar los datos con la media y la varianza.
-# Esto esta hecho ya en la linea 20
-#ajuste_modelo(LogisticRegression, tuned_parameters_LOG, X_train, y_train, X_test, y_test, 'Regresion Logistica')
+LOG=ajuste_modelo(LogisticRegression, tuned_parameters_LOG, X_train, y_train, X_test, y_test, 'Regresion-Logistica')
 
-tuned_parameters_TREE=[{'criterion': ['gini', 'entropy']}]
-#S=ajuste_modelo(tree.DecisionTreeClassifier, tuned_parameters_TREE, X_train,y_train,X_test,y_test,'Decision Tree')
+tuned_parameters_RF=[{'n_estimators': [10,15,19,30,35], 'max_features': ['sqrt'], 'max_depth':[10,20,30,35,40,50,60,70], 'min_samples_leaf':[80,90,100]}]
+RF=ajuste_modelo(RandomForestClassifier, tuned_parameters_RF, X_train, y_train, X_test, y_test, 'Random-Forest')
 
-"""
-tuned_parameters_MLP = [{'hidden_layer_sizes': [[1,5], [1,10]],
-                         'alpha': [0.0001, 0.001], 
-						 'activation':['relu', 'logistic']},{
-                        'hidden_layer_sizes': [[2,5], [2,10]],
-                         'alpha': [0.0001, 0.001],
-						  'activation':['relu', 'logistic']},
-                        {'hidden_layer_sizes': [[3,5], [3,10]],
-                         'alpha': [0.0001, 0.001],
-						  'activation':['relu', 'logistic']}]
+tuned_parameters_BOOSTING=[{'n_estimators':[30,40,50,60,70], 'learning_rate': [0.9,0.65,0.5,0.2]}]
+BOO=ajuste_modelo(AdaBoostClassifier, tuned_parameters_BOOSTING,X_train,y_train,X_test,y_test,'AdaBoost')
 
-ajuste_modelo(MLPClassifier,tuned_parameters_MLP, X_train, y_train, X_test, y_test, 'RRNN')
-"""
+names= ['Boosting', 'Reg. Log.','Random Forest']
 
-tuned_parameters_RF=[{'n_estimators': [1,2,3]}]
-#RF=ajuste_modelo(BaggingClassifier, tuned_parameters_RF, X_train, y_train, X_test, y_test, 'Random Forest')
-#a=RF.feature_importances_
-#separo los dos kernels porque el parametro degree solo se usa si se usa el kernel polinomial
-iters=10000
+models=[BOO,LOG,RF]
 
-#S=ajuste_modelo(SVC, tuned_parameters_SVC,X_train,y_train,X_test,y_test,'SVC')
+for i,j in zip (models,names):
+	preparar_roc(i,X_test,y_test,j, 'ROC-'+tipoSmote)
 
-S=ajuste_modelo(AdaBoostClassifier, tuned_parameters_BOOSTING,X_train,y_train,X_test,y_test,'AdaBoost')
+plt.show()

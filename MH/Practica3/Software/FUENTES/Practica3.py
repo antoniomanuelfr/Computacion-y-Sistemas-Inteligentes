@@ -107,7 +107,7 @@ def SA(X_train, y_train, x_test, y_test, alpha, nu, fi, Tfinal, sigma, pmaxacier
 	T = (nu * best_punt[0]) / -np.log(fi)
 
 	tinicial = time()
-	B = (T - Tfinal) / (M * T * Tfinal)
+	B = (T - Tfinal) / ((M/max_vecinos) * T * Tfinal)
 	while T >= Tfinal:
 		for i in range(0, max_vecinos):
 			if not indexes:
@@ -141,13 +141,12 @@ def SA(X_train, y_train, x_test, y_test, alpha, nu, fi, Tfinal, sigma, pmaxacier
 		# print("Exitos ", aciertos, "Temp: ", T, " Evaluaciones: ", tot)
 		if aciertos == 0:
 			break
-		T = T / (1 + (B * T))
-	# T=0.99 * T
+		#T = T / (1 + (B * T))
+		T=0.99 * T
 
 	tfinal = time()
-	print("Clas: ", puntuacion[1], " red: ", puntuacion[2], " tiempo: ", (tfinal - tinicial))
-	print("Error de test:_ ", KNN.score(x_test, y_test))
-
+	print("Tasa red: ", puntuacion[2], "\nEn un tiempo de: ", (tfinal - tinicial))
+	return best_w
 
 def ILS(x_train, y_train, x_test, y_test, alpha, sigma):
 	pred = alpha
@@ -164,9 +163,8 @@ def ILS(x_train, y_train, x_test, y_test, alpha, sigma):
 	puntuacion = Valoracion(x_train, y_train, w, KNN, pclas, pred)
 
 	tfinal = time()
-	print("Clas: ", puntuacion[1], " red: ", puntuacion[2], " tiempo: ", (tfinal - tinicial))
-	print("Error de test:_ ", KNN.score(x_test, y_test))
-
+	print("Porcentaje red : ", puntuacion[2], " en tiempo: ", (tfinal - tinicial))
+	return w
 
 def PickUP_parents(nparents, P, ):
 	R = []
@@ -203,13 +201,12 @@ def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
 	porcentaje_clas = alpha * 100
 	porcentaje_red = (1 - alpha) * 100
 
-	best_index = -1
-	w_index = -1
-	w_punt = 9999999
+	best= None
+	worst_punt = 9999999
 	best_punt = 0
 
 	tiempo1 = time()
-	w = np.random.uniform(low=0, high=1, size=n_caracteristicas)
+	w = np.ones(n_caracteristicas)
 	# w=np.zeros(n_caracteristicas)
 	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
 	KNN.fit(X_train, y_train)
@@ -252,7 +249,7 @@ def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
 		Psig, cont = ValorarW(X_train, y_train, w, KNN, porcentaje_clas, porcentaje_red, O)
 		del O[:]
 		total_evaluaciones += cont
-
+		worst=-1
 		P_aux = []
 		cont=0
 		for i, j in zip(P, Psig):
@@ -265,13 +262,19 @@ def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
 			if P_aux[cont].punt>best_punt:
 				best_punt=P_aux[cont].punt
 				best=P_aux[cont]
-			else if P_aux[cont].punt<worst_punt:
+			elif P_aux[cont].punt<worst_punt:
 				worst_punt=P_aux[cont].punt
-
+				worst=cont
 			cont+=1
+
+		del P
+		P_aux.pop(worst)
+		P_aux.append(best)
+		P=P_aux
 
 		if (total_evaluaciones == 15000):
 			break;
 	tiempo2 = time()
-	print("Tasa clas: ", best.clas, " Tasa red: ", best.red)
+	print("Tasa red: ", best.red)
 	print("En un tiempo de: ", tiempo2 - tiempo1)
+	return best

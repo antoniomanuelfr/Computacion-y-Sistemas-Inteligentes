@@ -27,7 +27,7 @@ def main ():
 		y_trainCV = y_train[train_index]
 		X_valCV=X_train[test_index]
 		y_valCV= y_train[test_index]
-		w=p3.ILS(X_trainCV, y_trainCV, X_valCV, y_valCV, 0.5, 0.3)
+		w=p3.SA(X_trainCV, y_trainCV, X_valCV, y_valCV, 0.5, 0.3, 0.3,10e-3,0.4,0.1,15000)
 		KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
 		KNN.fit(X_train, y_train)
 		print("Error de test:_ ", KNN.score(X_test, y_test))

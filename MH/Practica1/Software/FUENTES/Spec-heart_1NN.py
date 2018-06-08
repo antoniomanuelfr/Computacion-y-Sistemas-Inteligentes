@@ -1,52 +1,47 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+Created on Sun Apr  1 13:05:10 2018
+
+@author: antoniomanuelfr
+"""
+
+from Practica1 import Greedy
+from sklearn.model_selection import StratifiedKFold,train_test_split
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import StratifiedKFold
 import numpy as np
-from time import time
 np.random.seed(1997)
 #Datos
 def main (): 
 	X=np.loadtxt('../DATOS/spectf-heart.arff',comments='@',delimiter=',')
 	Y=X[:,X.shape[1]-1]
 	X=X[:,:-1]
-	minimo=X.min()
-	maximo=X.max()
+	X_train, X_test, y_train, y_test=train_test_split(X,Y, random_state=1)
+	scl=MinMaxScaler()
+	X_train=scl.fit_transform(X_train)
+	X_test=scl.transform(X_test)
 	
-	X=(X-minimo)/(maximo -minimo)
-	idx=np.arange(0,X.shape[0],dtype=np.int32)
-	np.random.shuffle(idx)
-	X=X[idx]
-	Y=Y[idx]
 	fivefold=StratifiedKFold(n_splits=5)
-	particiones=fivefold.split(X,Y)
+	particiones=fivefold.split(X_train,y_train)
 	list_clas=[]
 	list_red=[]
 	list_tiempos=[]
-	
+	list_w=[]
 	for train_index,test_index in particiones: 
-		time1=time()
-		X_train=X[train_index]
-		Y_train=Y[train_index]
-
-		KNN=KNeighborsClassifier(n_neighbors=1)
-		KNN.fit(X_train,Y_train)
-		Y_vecinos=KNN.kneighbors(n_neighbors=1,return_distance=False)
-		neighbors=KNN.kneighbors(n_neighbors=1,return_distance=False)
-		Y_vecinos=Y_train[neighbors]
-		tot=0
-		for (a,b)in zip(Y_train,Y_vecinos):
-			if a==b:
-				tot+=1
-		time2=time()
-		tasa_clas=tot/X_train.shape[0]
-		tasa_red=0
-		tiempo=(time2-time1)
+		X_trainCV=X_train[train_index]
+		y_trainCV=y_train[train_index]
+		tasa_clas,tasa_red,tiempo,w=Greedy(X_trainCV,y_trainCV)
+		KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski',p=2, metric_params={'w': w})
+		KNN.fit(X_train,y_train)
+		
 		list_clas.append(tasa_clas)
+		tasa_clas=KNN.score(X_test, y_test)
 		list_red.append(tasa_red)
 		list_tiempos.append(tiempo)
+		list_w.append(w)
 		
-	print ("El resultado de aplicar 1NN a spectf-heart ha sido: ",list_clas)
+	print ("El resultado de aplicar Greedy a parkinsons ha sido: ",list_clas)
 	print ("El porcentaje de reduccion es: ",list_red)
 	print ("\nEn un tiempo de: ",list_tiempos)
 	

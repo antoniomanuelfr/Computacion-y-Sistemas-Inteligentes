@@ -20,14 +20,15 @@ def main ():
 	
 	fivefold=StratifiedKFold(n_splits=5)
 	particiones=fivefold.split(X_train,y_train)
-	
+	a=input("Introduzca seleccion: \n0 -> Rand/1\n1 -> Current-to-best\n")
+
 	for train_index, test_index in particiones:
 		X_trainCV = X_train[train_index]
 		y_trainCV = y_train[train_index]
 		X_valCV=X_train[test_index]
 		y_valCV= y_train[test_index]
 		
-		best=p3.DE(X_trainCV, y_trainCV, X_valCV, y_valCV, 0.5, 0.5, 0.5)
+		best=p3.DE(X_trainCV, y_trainCV, X_valCV, y_valCV, 0.5, 0.5, 0.5,a)
 		w=best.w
 		KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
 		KNN.fit(X_train, y_train)	

@@ -5,6 +5,8 @@ from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 from time import time
 
+from sympy import bell
+
 
 class Datos():
 	def __init__(self, w, clas, red, punt):
@@ -141,8 +143,8 @@ def SA(X_train, y_train, x_test, y_test, alpha, nu, fi, Tfinal, sigma, pmaxacier
 		# print("Exitos ", aciertos, "Temp: ", T, " Evaluaciones: ", tot)
 		if aciertos == 0:
 			break
-		#T = T / (1 + (B * T))
-		T=0.99 * T
+		T = T / (1 + (B * T))
+		#T=0.99 * T
 
 	tfinal = time()
 	print("Tasa red: ", puntuacion[2], "\nEn un tiempo de: ", (tfinal - tinicial))
@@ -196,7 +198,7 @@ def ValorarW(X_train, y_train, w, KNN, porcentaje_clas, porcentaje_red, W):
 	return Psig, tot_evals
 
 
-def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
+def DE(X_train, y_train, X_test, y_test, alpha, CR, F, sel):
 	n_caracteristicas = X_train.shape[1]
 	porcentaje_clas = alpha * 100
 	porcentaje_red = (1 - alpha) * 100
@@ -207,7 +209,6 @@ def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
 
 	tiempo1 = time()
 	w = np.ones(n_caracteristicas)
-	# w=np.zeros(n_caracteristicas)
 	KNN = KNeighborsClassifier(n_neighbors=1, metric='wminkowski', p=2, metric_params={'w': w})
 	KNN.fit(X_train, y_train)
 	np.copyto(w, np.random.uniform(low=0, high=1, size=n_caracteristicas))
@@ -218,6 +219,9 @@ def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
 		puntuacion, c, r = Valoracion(X_train, y_train, w, KNN, porcentaje_clas, porcentaje_red)
 		aux = Datos(np.copy(w), clas=c, red=r, punt=puntuacion)
 		P.append(aux)
+		if best_punt<puntuacion:
+			puntuacion=best_punt
+			best=aux
 		np.copyto(w, np.random.uniform(low=0.0, high=1.0, size=X_train.shape[1]))
 		w[w < 0.2] = 0
 		del puntuacion, c, r
@@ -228,12 +232,20 @@ def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
 
 	for i in range(0, 15000):
 		for actualParent in P:
-			parents = PickUP_parents(3, P)
+			if sel=='0':
+				parents = PickUP_parents(3, P)
+			else:
+				parents = PickUP_parents(2, P)
 			gen = 0
 			crom = []
 			for parentGen in actualParent.w:
 				if np.random.uniform(low=0, high=1) < CR:
-					auxGen = parents[0].w[gen] + F * (parents[1].w[gen] - parents[2].w[gen])
+					if sel=='0':
+						auxGen = parents[0].w[gen] + F * (parents[1].w[gen] - parents[2].w[gen])
+
+					else:
+						auxGen = parentGen + (F * (best.w[gen] - parentGen)) + (F * (parents[0].w[gen] - parents[1].w[gen]))
+					
 				else:
 					auxGen = parentGen
 
@@ -272,7 +284,7 @@ def DE(X_train, y_train, X_test, y_test, alpha, CR, F):
 		P_aux.append(best)
 		P=P_aux
 
-		if (total_evaluaciones == 15000):
+		if total_evaluaciones >= 15000:
 			break;
 	tiempo2 = time()
 	print("Tasa red: ", best.red)

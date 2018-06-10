@@ -1,5 +1,5 @@
 (ComienzoJornada 8)                 ; La jornada laboral comienza a las 8h
-(FinalJornada 14)                   ; La jornada laboral termina a las 14h
+(FinalJornada 15)                   ; La jornada laboral termina a las 14h
 (ComienzoAtencion 9)                ; La atención al cliente comienza a las 9h
 (MinimoEmpleadosActivos TG 3)       ; Debe de haber al menos 3 empleados atendiendo trámites generales
 (MinimoEmpleadosActivos TE 1)       ; Debe de haber al menos 1 empleados atendiendo trámites especificos

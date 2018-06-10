@@ -1,11 +1,3 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;; CODIGO QUE SIMULA LOS DATOS DE LOS SENSORES (aserta los hechos indicados) de acuerdo ;;;;;;;;;;;;;;;
-;;;;;;;;; A los datos indicados en el fichero DatosSimulados.txt ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-
-
 (defglobal ?*nksg* = 0)  
 (defglobal ?*nksh* = 0) 
 
@@ -60,8 +52,8 @@
      (bind ?*nksh* (+ ?*nksh* 1))
      (assert (URJ22 TE ?*nksh*))   
    else 
-     (bind ?*nksg* (+ ?*nksg* 1)))
-     (assert (URJ22 TG ?*nksg*))
+     (bind ?*nksg* (+ ?*nksg* 1))
+     (assert (URJ22 TG ?*nksg*)))
 (retract ?f)
 )
 
@@ -208,7 +200,7 @@
 )
 
 (defrule rrrrrr
-(declare (salience 10000))
+(declare (salience 9999))
 ?f <- (seva ?ed4 ?h ?m ?s)
 (hora_actual ?h1)
 (minutos_actual ?m1)
@@ -218,6 +210,21 @@
 => 
 (assert (URJ12 ?ed4 ?URJ14 (totalsegundos ?h1 ?m1 ?s1)))
 (retract ?f)
+)
+
+(defrule rrrrrr2
+(declare (salience 10000))
+(seva ?ed4 ?h ?m ?s)
+(hora_actual ?h1)
+(minutos_actual ?m1)
+(segundos_actual ?s1)
+(test (<= (totalsegundos ?h ?m ?s) (totalsegundos ?h1 ?m1 ?s1)))
+(UUh0II ER4 ?ed4 ?URJ14)
+(URJ6 ?x ?URJ14)
+(Asignado ?ed4 ?tipotramite ?n) 
+(test (eq ?x (str-cat "usuario_" ?tipotramite ?n)))
+=> 
+(assert (URJ20 ?x ?URJ14))
 )
 
 (defrule u8956
@@ -287,7 +294,7 @@
 (URJ6 ?x ?URJ5)
 =>
 (assert (Sensor_presencia ?URJ5))
-(printout t "-----------------> " ?*hora* ":" ?*minutos* ":" ?*segundos* " SENSOR PRESENCIA " ?URJ5 crlf)
+(printout t "-----------------> " ?*hora* ":" ?*minutos* ":" ?*segundos* "  SENSOR PRESENCIA " ?URJ5 crlf)
 )
 
 (defrule sa32p

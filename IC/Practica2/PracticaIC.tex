@@ -82,4 +82,15 @@
 		Finalmente tengo una regla que captura el hecho \textit{Consulta ?empl} y el hecho \textit{EstadoEmpleado} e imprime por pantalla el estado actual del empleado. \\
 		Por ultimo he adaptado algunas reglas para que usen estos hechos y así tener menos hechos de control.
 	\end{itemize}
+	\section{Ejercicio4}
+	Para apagar las luces de las oficinas, he considerado que si un trabajador está en el edificio (alomejor ha salido al servicio o ha salido a hablar con algún compañero) voy a dejar la luz de
+	su oficina encendida. Solo se va a apagar la luz una vez que el empleado se va a descansar o se va de la oficina, en resumen, cuando fiche una vez que ya haya fichado.\\
+	Para encender la luz de una habitación he considerado que si se enciende el sensor de la puerta de la habitacion (y en el caso de los aseos que se encienda el sensor de presencia) y la luz está apagada
+	la enciendo. \\
+	En cuanto al pasillo, la luz se va a encender cuando se active el sensor de la puerta del pasillo y se va a apagar si el sensor de presencia esta apagado, si el sensor de la puerta esta apagado y si tras 10 segundos desde que se encendió el sensor de la puerta que provocó que se encendiese la luz.
+	Así lo que consigo es que si ha entrado alguien puedo dejar la luz encendida un tiempo para que no se apague y así en el caso de que en ese intervalo de tiempo llegue alguien, no haya que encender la luz de nuevo.\\
+	Si alguien entra en el pasillo en esos 10 segundos, la luz sigue encendida y justo cuando salga del pasillo la luz se apaga.\\
+	Comento que intenté usar un sistema algo más reactivo, pero no funcionaba nada bien (siempre apagaba las luces en algunos casos donde había gente dentro de la habitación)
+
+
 \end{document}

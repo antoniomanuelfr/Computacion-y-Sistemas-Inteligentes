@@ -394,13 +394,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (defrule ComprobarTotalTramites
-    ?a <- (TramitesEmpleado ?empl ?totalTramites)
+    (declare (salience 5))
+    (TramitesEmpleado ?empl ?totalTramites)
     (Tarea ?empl ?tipotramite)
     (MinimoTramitesPorDia ?tipotramite ?minimo)
     (fin)
     (test (< ?totalTramites ?minimo))
     =>
     (printout t "El empleado " ?empl " ha atendido menos de " ?minimo " tramites. " crlf)
+
     )
 
   (defrule ResultadoEmpleados

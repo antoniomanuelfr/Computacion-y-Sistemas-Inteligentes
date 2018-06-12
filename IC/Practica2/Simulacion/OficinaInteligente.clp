@@ -160,9 +160,6 @@
   ;;;;;;respuestas ante los hechos (Solicitud ?tipotramite) y (Disponible ?empl);;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-
   (defrule EncolarUsuario
     ?g <- (Solicitud ?tipotramite)
     ?f <- (Usuarios ?tipotramite ?n)
@@ -175,8 +172,7 @@
           (NoComprobado ?tipotramite (+ ?n 1) 0)
     )
     (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
-    (retract ?f ?g)
-  )
+    (retract ?f ?g))
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1B ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -198,8 +194,7 @@
             (EstadoEmpleado ?empl 3)
             )
     (printout t "Usuaro " ?tipotramite ?a ", por favor pase a " ?ofic crlf)
-    (retract ?f ?g ?q)
-  )
+    (retract ?f ?g ?q))
 
   (defrule RegistrarCaso
     (declare (salience 10))
@@ -218,8 +213,7 @@
             (TramitesEmpleado ?empl (+ ?totalTramites 1)))
     (retract ?f ?g ?v ?z ?q)
     (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
-    (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)
-  )
+    (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf))
 
   (defrule PulsaDisponible
     (declare (salience 9))
@@ -229,9 +223,7 @@
     =>
     (printout t "El empleado " ?empl " ahora esta disponible." crlf )
     (assert(EstadoEmpleado ?empl 2))
-    (retract ?a)
-
-  )
+    (retract ?a))
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1C ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -250,8 +242,7 @@
     (printout t "Lo siento pero por hoy no podremos atender mas " ?texto crlf)
     (bind ?a (- ?n ?atendidos))
     (printout t "Hay ya  " ?a " personas esperando y se cierra a las " ?h "h. No nos dara tiempo a atenderle." crlf)
-    (retract ?g)
-  )
+    (retract ?g))
 
 
 ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -411,60 +402,59 @@
     (retract ?a)
     )
 
-
 ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;; EJ4 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defrule LuzPasillo
-  (or (Sensor_puerta Pasillo) (Sensor_presencia Pasillo))
-  ?a <- (Luz Pasillo OFF)
-  ?b <- (NumeroPersonas Pasillo ?t)
-  (HoraActualizada ?hora)
-  =>
-  (printout t "Encendemos la luz de: " Pasillo crlf)
-  (retract ?a ?b)
-  (assert (Luz Pasillo ON)
-          (NumeroPersonas Pasillo (+ ?t 1))
-          (HoraPuertaPasillo ?hora)))
-
-(defrule ApagarLuzPasillo
-  ?a<-(Luz Pasillo ON)
-  (HoraActualizada ?hora)
-  (not (Sensor_puerta Pasillo))
-  (not (Sensor_presencia Pasillo))
-  ?b <- (HoraPuertaPasillo ?horaP)
-  (test (< 10 (- ?hora ?horaP)))
-  =>
-  (assert
-    (Luz Pasillo OFF))
-  (retract ?a ?b)
-  (printout t "Apagamos la luz del pasillo" crlf))
-
-(defrule LuzHab
-  (Sensor_puerta ?hab)
-  ?a <- (Luz ?hab OFF)
-  ?b <- (NumeroPersonas ?hab ?t)
-  (HoraActualizada ?hora)
-  (test (neq ?hab Pasillo))
-  =>
-  (printout t "Encendemos la luz de: " ?hab crlf)
-  (retract ?a ?b)
-  (assert (Luz ?hab ON)
-          (NumeroPersonas ?hab (+ ?t 1)))
-  )
-
-(defrule ApagarLuzHab
-  (declare (salience 10))
-    (Ficha ?empl)
-    (Empleado ?empl ?hab)
-    (test (neq ?empl E1))
-    (test (neq ?empl E2))
-    ?a <- (Luz ?hab ON)
-    ?b <- (NumeroPersonas ?hab ?t)
-    (and (test (neq ?hab Pasillo)) (test (neq ?hab Gerencia)))
+  (defrule LuzPasillo
+    (or (Sensor_puerta Pasillo) (Sensor_presencia Pasillo))
+    ?a <- (Luz Pasillo OFF)
+    ?b <- (NumeroPersonas Pasillo ?t)
+    (HoraActualizada ?hora)
     =>
-    (printout t "Apagamos la luz de: " ?hab  crlf)
-    (retract ?a)
-     (assert (Luz ?hab OFF)
-             (NumeroPersonas ?hab 0))
+    (printout t "Encendemos la luz de: " Pasillo crlf)
+    (retract ?a ?b)
+    (assert (Luz Pasillo ON)
+            (NumeroPersonas Pasillo (+ ?t 1))
+            (HoraPuertaPasillo ?hora)))
+
+  (defrule ApagarLuzPasillo
+    ?a<-(Luz Pasillo ON)
+    (HoraActualizada ?hora)
+    (not (Sensor_puerta Pasillo))
+    (not (Sensor_presencia Pasillo))
+    ?b <- (HoraPuertaPasillo ?horaP)
+    (test (< 10 (- ?hora ?horaP)))
+    =>
+    (assert
+      (Luz Pasillo OFF))
+    (retract ?a ?b)
+    (printout t "Apagamos la luz del pasillo" crlf))
+
+  (defrule LuzHab
+    (Sensor_puerta ?hab)
+    ?a <- (Luz ?hab OFF)
+    ?b <- (NumeroPersonas ?hab ?t)
+    (HoraActualizada ?hora)
+    (test (neq ?hab Pasillo))
+    =>
+    (printout t "Encendemos la luz de: " ?hab crlf)
+    (retract ?a ?b)
+    (assert (Luz ?hab ON)
+            (NumeroPersonas ?hab (+ ?t 1)))
     )
+
+  (defrule ApagarLuzHab
+    (declare (salience 10))
+      (Ficha ?empl)
+      (Empleado ?empl ?hab)
+      (test (neq ?empl E1))
+      (test (neq ?empl E2))
+      ?a <- (Luz ?hab ON)
+      ?b <- (NumeroPersonas ?hab ?t)
+      (and (test (neq ?hab Pasillo)) (test (neq ?hab Gerencia)))
+      =>
+      (printout t "Apagamos la luz de: " ?hab  crlf)
+      (retract ?a)
+       (assert (Luz ?hab OFF)
+               (NumeroPersonas ?hab 0))
+      )

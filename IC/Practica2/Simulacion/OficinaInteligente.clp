@@ -161,75 +161,74 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-  ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;; 1A ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
   (defrule EncolarUsuario
-  ?g <- (Solicitud ?tipotramite)
-  ?f <- (Usuarios ?tipotramite ?n)
+    ?g <- (Solicitud ?tipotramite)
+    ?f <- (Usuarios ?tipotramite ?n)
 
-  (HoraActualizada ?t)
-  =>
+    (HoraActualizada ?t)
+    =>
 
-  (assert (Usuario ?tipotramite (+ ?n 1))
+    (assert (Usuario ?tipotramite (+ ?n 1))
           (Usuarios ?tipotramite (+ ?n 1))
           (TiempoInicialUsuario ?tipotramite (+ ?n 1) (momento))
           (NoComprobado ?tipotramite (+ ?n 1) 0)
-  )
-  (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
-  (retract ?f ?g)
+    )
+    (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
+    (retract ?f ?g)
   )
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1B ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (defrule AsignarEmpleado
-  ?g <- (Disponible ?empl)
-  (Tarea ?empl ?tipotramite)
-  (Empleado ?empl ?ofic)
-  ?f <- (UltimoUsuarioAtendido ?tipotramite ?atendidos)
-  (Usuarios ?tipotramite ?total)
-  ?q<-(EstadoEmpleado ?empl ?estado)
-  (HoraActualizada ?t)
-  (test (< ?atendidos ?total))
-  =>
-  (bind ?a (+ ?atendidos 1))
-  (assert (Asignado ?empl ?tipotramite ?a)
-          (UltimoUsuarioAtendido ?tipotramite ?a)
-          (TiempoInicialTramite ?tipotramite ?a ?t)
-          (EstadoEmpleado ?empl 3)
-          )
-  (printout t "Usuaro " ?tipotramite ?a ", por favor pase a " ?ofic crlf)
-  (retract ?f ?g ?q)
+    ?g <- (Disponible ?empl)
+    (Tarea ?empl ?tipotramite)
+    (Empleado ?empl ?ofic)
+    ?f <- (UltimoUsuarioAtendido ?tipotramite ?atendidos)
+    (Usuarios ?tipotramite ?total)
+    ?q<-(EstadoEmpleado ?empl ?estado)
+    (HoraActualizada ?t)
+    (test (< ?atendidos ?total))
+    =>
+    (bind ?a (+ ?atendidos 1))
+    (assert (Asignado ?empl ?tipotramite ?a)
+            (UltimoUsuarioAtendido ?tipotramite ?a)
+            (TiempoInicialTramite ?tipotramite ?a ?t)
+            (EstadoEmpleado ?empl 3)
+            )
+    (printout t "Usuaro " ?tipotramite ?a ", por favor pase a " ?ofic crlf)
+    (retract ?f ?g ?q)
   )
 
   (defrule RegistrarCaso
-  (declare (salience 10))
-  (Disponible ?empl)
-  ?f <- (Asignado ?empl ?tipotramite ?n)
-  ?g <- (TiempoInicialTramite ?tipotramite ?n ?tinicialTramite)
-  ?v <- (TiempoInicialUsuario ?tipotramite ?n ?tinicialCola)
-  ?z <- (NoComprobado ?tipotramite ?n ?)
-  ?q <- (TramitesEmpleado ?empl ?totalTramites)
-  (HoraActualizada ?t)
-  =>
-  (bind ?tTramite (- ?t ?tinicialTramite))
-  (bind ?tEspera (- ?tinicialTramite ?tinicialCola))
+    (declare (salience 10))
+    (Disponible ?empl)
+    ?f <- (Asignado ?empl ?tipotramite ?n)
+    ?g <- (TiempoInicialTramite ?tipotramite ?n ?tinicialTramite)
+    ?v <- (TiempoInicialUsuario ?tipotramite ?n ?tinicialCola)
+    ?z <- (NoComprobado ?tipotramite ?n ?)
+    ?q <- (TramitesEmpleado ?empl ?totalTramites)
+    (HoraActualizada ?t)
+    =>
+    (bind ?tTramite (- ?t ?tinicialTramite))
+    (bind ?tEspera (- ?tinicialTramite ?tinicialCola))
 
-    (assert (Tramitado ?empl ?tipotramite ?n)
-            (TramitesEmpleado ?empl (+ ?totalTramites 1)))
-    (retract ?f ?g ?v ?z ?q)
-    (printout t "El empleado " ?empl " ahora esta disponible." crlf )
-    (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
-    (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)
+      (assert (Tramitado ?empl ?tipotramite ?n)
+              (TramitesEmpleado ?empl (+ ?totalTramites 1)))
+      (retract ?f ?g ?v ?z ?q)
+      (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
+      (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)
   )
+
   (defrule PulsaDisponible
     (declare (salience 9))
     (Disponible ?empl)
     ?a<-(EstadoEmpleado ?empl ?estado)
     (test (neq ?estado 2))
     =>
+    (printout t "El empleado " ?empl " ahora esta disponible." crlf )
     (assert(EstadoEmpleado ?empl 2))
     (retract ?a)
 
@@ -289,12 +288,7 @@
     (EmpleadosFichados ?tipotramite (+ ?totalFichados 1))
     )
     (printout t "Ha fichado el empleado: " ?empl crlf)
-    (retract
-      ?b
-      ?a
-      ?c
-      )
-
+    (retract ?b ?a ?c)
     )
 
   (defrule ComienzaTrabajar
@@ -327,9 +321,7 @@
         (printout t "El empleado " ?empl " se va a descansar." crlf)
 
     )
-    (retract ?a ?b ?c
-      ?y
-      ))
+    (retract ?a ?b ?c ?y))
 
 
   (defrule Libres

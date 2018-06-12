@@ -54,7 +54,7 @@
   )
 
   (deffacts Luces
-    (Luz Recepcion OFF)    ;;;;  Receptión es una habitación
+    (Luz Recepcion ON)    ;;;;  Receptión es una habitación
     (Luz Pasillo OFF)
     (Luz Oficina1 OFF)
     (Luz Oficina2 OFF)
@@ -72,11 +72,6 @@
    (deffacts Codificacion
    (Code TG "Tramites Generales")
    (Code TE "Tramites Especiales")
-   (Code 0 "No fichado")
-   (Code 1 "Fichado")
-   (Code 2 "Disponible")
-   (Code 3 "Atendiendo")
-   (Code 4 "Descansando")
    )
   (deffacts Tareas
   (Tarea G1 TG)                   ;;;;; El empleado G1 atiende Trámites Generales
@@ -293,6 +288,7 @@
     (ComienzoJornada ?horaJornada)
     (TiempoMaximoRetraso ?tmax)
     (HoraActualizada ?hora)
+    ?e<-(ComprobacionMinEmpleados ?tipotramite ?)
     ?b <- (EstadoEmpleado ?empl ?gs)
     ?c <- (EmpleadosFichados ?tipotramite ?totalFichados)
     (test (= ?gs 0))
@@ -303,9 +299,10 @@
     (assert (HoraFicha ?empl ?hora)
     (EstadoEmpleado ?empl 1)
     (EmpleadosFichados ?tipotramite (+ ?totalFichados 1))
-    )
+    (ComprobacionMinEmpleados ?tipotramite 0))
+    
     (printout t "Ha fichado el empleado: " ?empl crlf)
-    (retract ?b ?a ?c)
+    (retract ?b ?a ?c ?e)
     )
 
   (defrule VuelveDescanso
@@ -365,7 +362,7 @@
     (retract ?a ?b ?c ?y))
 
   (defrule Libres
-    (declare (salience -1))
+    (declare (salience 1))
     (HoraActualizada ?t)
     (EmpleadosFichados ?tipotramite ?tot)
     (MinimoEmpleadosActivos ?tipotramite ?min)

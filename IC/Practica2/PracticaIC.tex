@@ -55,6 +55,7 @@
 	Para la parte de guardar los datos lo que he hecho ha sido en la regla RegistrarCaso he añadido que capture tanto el hecho con la hora de inicio del tramite como la hora en la que empezó a estar en cola. \\
 	Una vez hecho esto he calculado el tiempo de tramite como: \textit{(- (HoraActualizada) tiempoInicioTramite)} y el tiempo de espera en cola como: \textit{(- tiempoInicialTramite tiempoinicialCola}.
 	Ambos datos para todos los usuarios se han guardado en los ficheros datosE.txt (datos espera) y datosT.txt (datos tiempo trámite).
+	\\Una vez los datos estan en el fichero, he realizado un script en Python llamado Informe.py que leera los datos generados y realizará el informe.
 	\pagebreak
 	\section{Ejercicio 3}
 	\begin{itemize}
@@ -81,6 +82,7 @@
 		Cada vez que el empleado cambia de situación actualizo el campo según lo que vaya a hacer.
 		Finalmente tengo una regla que captura el hecho \textit{Consulta ?empl} y el hecho \textit{EstadoEmpleado} e imprime por pantalla el estado actual del empleado. \\
 		Por ultimo he adaptado algunas reglas para que usen estos hechos y así tener menos hechos de control.
+		\\Para el informe de este apartado, este se va a generar cuando introduzcamos el hecho fin, se van a imprimir por pantalla y se van a guardar en el archivo "DatosEmpleados.txt".
 	\end{itemize}
 	\section{Ejercicio4}
 	Para apagar las luces de las oficinas, he considerado que si un trabajador está en el edificio (alomejor ha salido al servicio o ha salido a hablar con algún compañero) voy a dejar la luz de

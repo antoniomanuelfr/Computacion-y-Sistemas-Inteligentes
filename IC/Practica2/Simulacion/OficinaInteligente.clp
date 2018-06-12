@@ -120,6 +120,14 @@
   (TramitesEmpleado E1 0)
   (TramitesEmpleado E2 0)
 
+  (TiempoTramitesEmpleado G1 0)
+  (TiempoTramitesEmpleado G2 0)
+  (TiempoTramitesEmpleado G3 0)
+  (TiempoTramitesEmpleado G4 0)
+  (TiempoTramitesEmpleado G5 0)
+  (TiempoTramitesEmpleado E1 0)
+  (TiempoTramitesEmpleado E2 0)
+
   (ComprobacionMinEmpleados TG 0)
   (ComprobacionMinEmpleados TE 0)
 
@@ -150,6 +158,7 @@
   (load-facts Constantes.txt)
   (open "DatosT.txt" datosT "a")
   (open "DatosE.txt" datosE "a")
+  (open "DatosEmpleados.txt" datosEmpl "a")
 
 
   )
@@ -203,15 +212,18 @@
     ?g <- (TiempoInicialTramite ?tipotramite ?n ?tinicialTramite)
     ?v <- (TiempoInicialUsuario ?tipotramite ?n ?tinicialCola)
     ?z <- (NoComprobado ?tipotramite ?n ?)
+    ?c <- (TiempoTramitesEmpleado ?empl ?tiempoTotalTramite)
     ?q <- (TramitesEmpleado ?empl ?totalTramites)
     (HoraActualizada ?t)
     =>
     (bind ?tTramite (- ?t ?tinicialTramite))
     (bind ?tEspera (- ?tinicialTramite ?tinicialCola))
-
+    (bind ?tiempoTramite (- ?t ?tinicialTramite))
     (assert (Tramitado ?empl ?tipotramite ?n)
-            (TramitesEmpleado ?empl (+ ?totalTramites 1)))
-    (retract ?f ?g ?v ?z ?q)
+            (TramitesEmpleado ?empl (+ ?totalTramites 1))
+            (TiempoTramitesEmpleado ?empl (+ ?tiempoTotalTramite ?tiempoTramite))
+            )
+    (retract ?f ?g ?v ?z ?q ?c)
     (printout datosT "@Usuario: " ?tipotramite ?n " \\Tiempo: " crlf ?tTramite crlf)
     (printout datosE "@Usuario: " ?tipotramite ?n " \\Tiempo: " crlf ?tEspera crlf))
 
@@ -382,13 +394,34 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   (defrule ComprobarTotalTramites
-    ?a <- (TramitesEmpleado ?empl ?total)
+    ?a <- (TramitesEmpleado ?empl ?totalTramites)
     (Tarea ?empl ?tipotramite)
     (MinimoTramitesPorDia ?tipotramite ?minimo)
     (fin)
-    (test (< ?total ?minimo))
+    (test (< ?totalTramites ?minimo))
     =>
     (printout t "El empleado " ?empl " ha atendido menos de " ?minimo " tramites. " crlf)
+    )
+
+  (defrule ResultadoEmpleados
+    ?a <- (TramitesEmpleado ?empl ?totalTramites)
+    ?b <- (TiempoTramitesEmpleado ?empl ?totalTiempo)
+    (fin)
+    =>
+    (if (neq ?totalTramites 0)then
+      (printout t "El empleado " ?empl " ha atendido " ?totalTramites crlf)
+      (printout t "El empleado " ?empl " ha atendido durante: " ?totalTiempo crlf)
+      (printout t "El empleado " ?empl " ha tardado en media: " (/ ?totalTiempo ?totalTramites ) crlf)
+
+      (printout datosEmpl "El empleado " ?empl " ha atendido " ?totalTramites crlf)
+      (printout datosEmpl "El empleado " ?empl " ha atendido durante: " ?totalTiempo crlf)
+      (printout datosEmpl "El empleado " ?empl " ha tardado en media: " (/ ?totalTiempo ?totalTramites ) crlf)
+    else
+      (printout t "El empleado " ?empl " no ha realizado ningun tramite. "crlf )
+      (printout datosEmpl "El empleado " ?empl " no ha realizado ningun tramite. "crlf )
+
+    )
+    (retract ?a ?b)
     )
 
   (defrule Consulta

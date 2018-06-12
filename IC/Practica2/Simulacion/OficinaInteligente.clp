@@ -166,13 +166,12 @@
   (defrule EncolarUsuario
     ?g <- (Solicitud ?tipotramite)
     ?f <- (Usuarios ?tipotramite ?n)
-
     (HoraActualizada ?t)
     =>
 
     (assert (Usuario ?tipotramite (+ ?n 1))
           (Usuarios ?tipotramite (+ ?n 1))
-          (TiempoInicialUsuario ?tipotramite (+ ?n 1) (momento))
+          (TiempoInicialUsuario ?tipotramite (+ ?n 1) ?t)
           (NoComprobado ?tipotramite (+ ?n 1) 0)
     )
     (printout t "Su turno es " ?tipotramite " " (+ ?n 1)  crlf)
@@ -215,11 +214,11 @@
     (bind ?tTramite (- ?t ?tinicialTramite))
     (bind ?tEspera (- ?tinicialTramite ?tinicialCola))
 
-      (assert (Tramitado ?empl ?tipotramite ?n)
-              (TramitesEmpleado ?empl (+ ?totalTramites 1)))
-      (retract ?f ?g ?v ?z ?q)
-      (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
-      (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)
+    (assert (Tramitado ?empl ?tipotramite ?n)
+            (TramitesEmpleado ?empl (+ ?totalTramites 1)))
+    (retract ?f ?g ?v ?z ?q)
+    (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
+    (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf)
   )
 
   (defrule PulsaDisponible
@@ -236,7 +235,6 @@
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1C ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
   (defrule NoposibleEncolarUsuario
@@ -463,7 +461,7 @@
     (test (neq ?empl E2))
     ?a <- (Luz ?hab ON)
     ?b <- (NumeroPersonas ?hab ?t)
-    (test (neq ?hab Pasillo))
+    (and (test (neq ?hab Pasillo)) (test (neq ?hab Gerencia)))
     =>
     (printout t "Apagamos la luz de: " ?hab  crlf)
     (retract ?a)

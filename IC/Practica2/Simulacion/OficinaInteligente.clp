@@ -224,13 +224,13 @@
 
   (defrule PulsaDisponible
     (declare (salience 9))
-    (Disponible ?empl)
+    ?b<-(Disponible ?empl)
     ?a<-(EstadoEmpleado ?empl ?estado)
     (test (neq ?estado 2))
     =>
     (printout t "El empleado " ?empl " ahora esta disponible." crlf )
     (assert(EstadoEmpleado ?empl 2))
-    (retract ?a))
+    (retract ?b ?a))
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1C ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -288,21 +288,22 @@
     (ComienzoJornada ?horaJornada)
     (TiempoMaximoRetraso ?tmax)
     (HoraActualizada ?hora)
-    ?e<-(ComprobacionMinEmpleados ?tipotramite ?)
+    ;?e<-(ComprobacionMinEmpleados ?tipotramite ?)
     ?b <- (EstadoEmpleado ?empl ?gs)
     ?c <- (EmpleadosFichados ?tipotramite ?totalFichados)
     (test (= ?gs 0))
     =>
-    (if (< ?tmax (- ?hora (totalsegundos ?horaJornada 0 0))) then
+    (if (< (totalsegundos 0 ?tmax 0) (- ?hora (totalsegundos ?horaJornada 0 0))) then
       (printout t "El empleado " ?empl " llega tarde. "crlf)
     )
     (assert (HoraFicha ?empl ?hora)
     (EstadoEmpleado ?empl 1)
     (EmpleadosFichados ?tipotramite (+ ?totalFichados 1))
-    (ComprobacionMinEmpleados ?tipotramite 0))
-    
+    ;(ComprobacionMinEmpleados ?tipotramite 0))
+    )
+
     (printout t "Ha fichado el empleado: " ?empl crlf)
-    (retract ?b ?a ?c ?e)
+    (retract ?b ?a ?c)
     )
 
   (defrule VuelveDescanso
@@ -342,7 +343,7 @@
     (declare (salience 5))
     ?b <-(Ficha ?empl)
     (HoraActualizada ?hora)
-    ?c<-(ComprobacionMinEmpleados ?tipotramite ?)
+    ;?c<-(ComprobacionMinEmpleados ?tipotramite ?)
     (FinalJornada ?horaFin)
     (Tarea ?empl ?tipotramite)
     ?y <- (EstadoEmpleado ?empl ?estado)
@@ -359,7 +360,7 @@
         (printout t "El empleado " ?empl " se va a descansar." crlf)
 
     )
-    (retract ?a ?b ?c ?y))
+    (retract ?a ?b  ?y))
 
   (defrule Libres
     (declare (salience 1))

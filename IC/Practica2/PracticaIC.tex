@@ -58,13 +58,13 @@
 	\pagebreak
 	\section{Ejercicio 3}
 	\begin{itemize}
-		\item \textbf{Empleado empieza a trabajar con un retraso mayor al máximo}\\
-		Esta regla funciona casi igual que la del apartado 4 del ejercicio anterior.
-		\\Cuando ficha un empleado se guarda en un hecho la hora en la que ficho, se captura con una regla con el hecho \textit{(HoraActualizada ?n)} para que se ejecute en background. Pero esta vez no tengo un hecho de control. Para que no entre en un bucle he decidido que una vez que la regla se ejecute ponerle un tiempo negativo y así hacer que no se dispare la regla.
-		Esto no lo he hecho antes porque necesitaba guardar la hora.
+		\item \textbf{Empleado llega a la oficina tarde}\\
+		Para este apartado he modificado la regla de fichar al inicio de la jornada y compruebo la hora actual y obtengo el tiempo máximo de retraso.\\
+		Una vez hecho esto, resto la hora actual y la hora de comienzo de jornada y en el caso de que la diferencia sea mayor que ese tiempo maximo, se imprime el mensaje.
 		\item \textbf{Empleado lleva mas de un tiempo máximo de descanso}\\
-		Este apartado sigue siendo parecido al anterior.
-		\\Cuando un empleado le da al botón de descansar se guarda la hora en la que le dio al botón y con el hecho \textit{(HoraActualizada ?n)} hago que la regla se dispare en background restando ?n a la hora que se había guardado. En el caso de que esta sea mayor que el tiempo máximo se notifica.
+		Para resolver este apartado, he creado la regla \textit{EmpleadoSeVa}. En esta regla se captura el hecho de ficha cuando el estado del empleado es \textit{No fichado}.
+		Si la hora en segundos en la que ficha es menor que la hora en segundos de la hora de cierre, significa que el empleado se va a descansar mientras que si no es así, el empleado se va de la oficina. Cuando se va a descansar se guarda la hora en la que fichó.
+		\\Una vez hecho esto, cuando el estado del empleado es \textit{Descansando}, y este ficha, la regla captura la hora en la que fichó y la hora actual y en el caso de que la resta entre hora actual y hora en la que ficho sea mayor que el tiempo máximo de descanso, se imprime el mensaje.
 		\item \textbf{Ha gestionado un número mínimo de trámites}\\
 		Cuando se hace un \textit{assert} del hecho \textit{(fin)} se dispara esta regla.\\
 		Cada vez que un empleado tramita un trámite, tiene un contador asociado que se incrementa.

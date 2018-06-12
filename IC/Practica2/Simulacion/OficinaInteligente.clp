@@ -259,6 +259,19 @@
 ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;; EJ2 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (defrule FichaDirector
+    ?a<-(Ficha Director)
+    ?b<-(Luz Gerencia ?estado)
+    =>
+    (if (eq ?estado ON)then
+      (assert (Luz Gerencia OFF ))
+      (retract ?b ?a)
+      (printout t "Apagamos la luz de: "Gerencia crlf)
+      (printout t "El director se va de la oficina." crlf)
+    else
+      (printout t "Ha fichado: " Director crlf)
+      (retract ?a)
+    ))
 
   (defrule ComprobarTiempo
     ?e <-(TiempoInicialUsuario ?tipotramite ?n ?tiempo)
@@ -275,20 +288,48 @@
     (retract ?v))
 
   (defrule Fichar
-    (declare (salience 10))
+    (declare (salience 20))
     ?a<-(Ficha ?empl)
     (Tarea ?empl ?tipotramite)
+    (ComienzoJornada ?horaJornada)
+    (TiempoMaximoRetraso ?tmax)
     (HoraActualizada ?hora)
     ?b <- (EstadoEmpleado ?empl ?gs)
     ?c <- (EmpleadosFichados ?tipotramite ?totalFichados)
     (test (= ?gs 0))
     =>
+    (if (< ?tmax (- ?hora (totalsegundos ?horaJornada 0 0))) then
+      (printout t "El empleado " ?empl " llega tarde. "crlf)
+    )
     (assert (HoraFicha ?empl ?hora)
     (EstadoEmpleado ?empl 1)
     (EmpleadosFichados ?tipotramite (+ ?totalFichados 1))
     )
     (printout t "Ha fichado el empleado: " ?empl crlf)
     (retract ?b ?a ?c)
+    )
+
+  (defrule VuelveDescanso
+    (declare (salience 5))
+    ?a<-(Ficha ?empl)
+    (Tarea ?empl ?tipotramite)
+    (HoraActualizada ?hora)
+    ?b <- (EstadoEmpleado ?empl ?gs)
+    ?c <- (EmpleadosFichados ?tipotramite ?totalFichados)
+    ?d <- (HoraDescanso ?empleado ?horaDescnso)
+    (TiempoMaximoDescanso ?tmax)
+    (test (= ?gs 4))
+    =>
+    (if (> (- ?hora ?horaDescnso) (totalsegundos 0 ?tmax 0))then
+      (printout t "El empleado " ?empl " ha superado el tiempo maximo de descanso." crlf)
+    else
+      (printout t "El empleado " ?empl " no ha superado el tiempo maximo de descanso." crlf)
+    )
+    (assert (HoraFicha ?empl ?hora)
+    (EstadoEmpleado ?empl 1)
+    (EmpleadosFichados ?tipotramite (+ ?totalFichados 1)))
+    (printout t "Ha fichado el empleado: " ?empl crlf)
+    (retract ?b ?a ?c ?d)
     )
 
   (defrule ComienzaTrabajar
@@ -302,6 +343,7 @@
     )
 
   (defrule EmpleadoSeVa
+    (declare (salience 5))
     ?b <-(Ficha ?empl)
     (HoraActualizada ?hora)
     ?c<-(ComprobacionMinEmpleados ?tipotramite ?)
@@ -317,12 +359,11 @@
         (assert(EstadoEmpleado ?empl 0))
         (printout t "El empleado " ?empl " se va" crlf)
     else
-        (assert (EstadoEmpleado ?empl 4))
+        (assert (EstadoEmpleado ?empl 4) (HoraDescanso ?empl ?hora))
         (printout t "El empleado " ?empl " se va a descansar." crlf)
 
     )
     (retract ?a ?b ?c ?y))
-
 
   (defrule Libres
     (declare (salience -1))
@@ -343,41 +384,15 @@
       (TiempoInicialTramite ?tipotramite ?n ?t)
       (MaximoTiempoGestion ?tipotramite ?tmax)
       (test (> (- ?hora ?t) (* ?tmax 60)))
-      ;(not (Comprobado ?tipotramite ?n))
+      (not (Comprobado ?tipotramite ?n))
       =>
       (assert (Comprobado ?tipotramite ?n))
       (printout t "El tramite " ?tipotramite ?n " ha excedido el tiempo maximo" crlf)
     )
 
-
 ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;; EJ3 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  (defrule TiempoRetrasoExcedido
-      ?a <- (HoraFicha ?empleado ?t)
-      (MaximoTiempoRetraso ?tipotramite ?tmax)
-      (HoraActualizada ?hora)
-      (ComienzoJornada ?HoraComienzo)
-      (test (> ?t 0))
-      (test (> (- ?HoraComienzo ?t) (* ?tmax 60)))
-      =>
-      (printout t "El empleado " ?empleado " ha excedido el tiempo maximo de retraso" crlf)
-      (assert (HoraFicha ?empleado -1))
-      (retract ?a)
-    )
-
-  (defrule ComprobarTiempoDescanso
-      ?a <- (HoraDescanso ?empleado ?t)
-      (TiempoMaximoDescanso ?tmax)
-      (HoraActualizada ?hora)
-      (test (> ?t 0))
-      (test (> (- ?hora ?t) (* ?tmax 60)))
-      =>
-      (printout t "El empleado " ?empleado " ha excedido el tiempo maximo de descanso." crlf)
-      (assert (HoraDescanso ?empleado -1))
-      (retract ?a)
-    )
 
   (defrule ComprobarTotalTramites
     ?a <- (TramitesEmpleado ?empl ?total)
@@ -403,7 +418,7 @@
 ;;;;;;;;;;;;;;;;;;;;; EJ4 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defrule LuzPasillo
-  (Sensor_puerta Pasillo)
+  (or (Sensor_puerta Pasillo) (Sensor_presencia Pasillo))
   ?a <- (Luz Pasillo OFF)
   ?b <- (NumeroPersonas Pasillo ?t)
   (HoraActualizada ?hora)
@@ -441,18 +456,17 @@
   )
 
 (defrule ApagarLuzHab
-    (declare (salience 10))
+  (declare (salience 10))
     (Ficha ?empl)
-    (Empleados ?empl ?hab)
+    (Empleado ?empl ?hab)
     (test (neq ?empl E1))
     (test (neq ?empl E2))
-
     ?a <- (Luz ?hab ON)
     ?b <- (NumeroPersonas ?hab ?t)
     (test (neq ?hab Pasillo))
     =>
-    (printout t "Apagamos la luz de:" ?hab  crlf)
-    (retract ?a ?b)
-    (assert (Luz ?hab OFF)
-            (NumeroPersonas ?hab 0))
+    (printout t "Apagamos la luz de: " ?hab  crlf)
+    (retract ?a)
+     (assert (Luz ?hab OFF)
+             (NumeroPersonas ?hab 0))
     )

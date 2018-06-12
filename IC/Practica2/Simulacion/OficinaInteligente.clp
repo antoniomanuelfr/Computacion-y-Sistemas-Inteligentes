@@ -212,8 +212,8 @@
     (assert (Tramitado ?empl ?tipotramite ?n)
             (TramitesEmpleado ?empl (+ ?totalTramites 1)))
     (retract ?f ?g ?v ?z ?q)
-    (printout datosT "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tTramite crlf)
-    (printout datosE "Usuario: " ?tipotramite ?n " \\Tiempo: " ?tEspera crlf))
+    (printout datosT "@Usuario: " ?tipotramite ?n " \\Tiempo: " crlf ?tTramite crlf)
+    (printout datosE "@Usuario: " ?tipotramite ?n " \\Tiempo: " crlf ?tEspera crlf))
 
   (defrule PulsaDisponible
     (declare (salience 9))
@@ -227,7 +227,6 @@
   ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;; 1C ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
   (defrule NoposibleEncolarUsuario
     (declare (salience 20))
@@ -243,7 +242,6 @@
     (bind ?a (- ?n ?atendidos))
     (printout t "Hay ya  " ?a " personas esperando y se cierra a las " ?h "h. No nos dara tiempo a atenderle." crlf)
     (retract ?g))
-
 
 ;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;; EJ2 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

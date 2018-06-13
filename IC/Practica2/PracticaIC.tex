@@ -48,9 +48,8 @@
 	\begin{itemize}
 		\item \textbf{Menos de N empleados TG}\\
 		En este ejercicio nos pide que si hay menos de N empleados atendiendo TG. Esto quiere decir que el sistema avise cuando haya menos de N empleados fichados de un tipo. \\
-		Para hacer esto lo que he hecho ha sido crear una regla para que cuando fiche se añade un nuevo hecho. He creado una regla que captura el hecho de fichado y el hecho de que el
-		trabajador está libre. Esta regla lo que hace es incrementa un contador. En el caso de que se vaya he creado otra regla que disminuye este contador. También he creado otra regla para que se capture este hecho y el valor del mínimo en el fichero de constantes. Una vez hecho esto en el caso de que el mínimo sea menor que el valor de la constante
-		se notifica.
+		Para realizar esto, he definido la regla libres, que captura la hora actualizada, el minimo de empleados y el hecho \textit{ComprobacionMinEmpleados}. Este hecho se retracta en esta regla mientras que se aserta
+		cada vez que un empleado ficha. Así conseguimos que cada vez que un empleado fiche (ya sea para irse, descansar o empezar a trabajar) se dispare la regla y se comunique si hay menos del minimo o si hay suficientes.
 		\item \textbf{No hay empleados TE}\\
 		Este ejercicio es lo mismo que el anterior si cambiamos TG por una variable. Lo que he hecho ha sido modificar el fichero de constantes.
 		\item \textbf{Usuario que lleva más de un tiempo máximo de espera}\\

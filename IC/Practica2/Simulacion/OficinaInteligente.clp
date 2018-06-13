@@ -123,8 +123,8 @@
   (TiempoTramitesEmpleado E1 0)
   (TiempoTramitesEmpleado E2 0)
 
-  (ComprobacionMinEmpleados TG 0)
-  (ComprobacionMinEmpleados TE 0)
+  (ComprobacionMinEmpleados TG)
+  (ComprobacionMinEmpleados TE)
 
   )
 
@@ -288,7 +288,6 @@
     (ComienzoJornada ?horaJornada)
     (TiempoMaximoRetraso ?tmax)
     (HoraActualizada ?hora)
-    ;?e<-(ComprobacionMinEmpleados ?tipotramite ?)
     ?b <- (EstadoEmpleado ?empl ?gs)
     ?c <- (EmpleadosFichados ?tipotramite ?totalFichados)
     (test (= ?gs 0))
@@ -299,7 +298,7 @@
     (assert (HoraFicha ?empl ?hora)
     (EstadoEmpleado ?empl 1)
     (EmpleadosFichados ?tipotramite (+ ?totalFichados 1))
-    ;(ComprobacionMinEmpleados ?tipotramite 0))
+    (ComprobacionMinEmpleados ?tipotramite)
     )
 
     (printout t "Ha fichado el empleado: " ?empl crlf)
@@ -324,7 +323,9 @@
     )
     (assert (HoraFicha ?empl ?hora)
     (EstadoEmpleado ?empl 1)
-    (EmpleadosFichados ?tipotramite (+ ?totalFichados 1)))
+    (EmpleadosFichados ?tipotramite (+ ?totalFichados 1))
+    (ComprobacionMinEmpleados ?tipotramite)
+    )
     (printout t "Ha fichado el empleado: " ?empl crlf)
     (retract ?b ?a ?c ?d)
     )
@@ -343,7 +344,6 @@
     (declare (salience 5))
     ?b <-(Ficha ?empl)
     (HoraActualizada ?hora)
-    ;?c<-(ComprobacionMinEmpleados ?tipotramite ?)
     (FinalJornada ?horaFin)
     (Tarea ?empl ?tipotramite)
     ?y <- (EstadoEmpleado ?empl ?estado)
@@ -351,13 +351,16 @@
 
     =>
     (assert (EmpleadosFichados ?tipotramite (- ?totalFichados 1))
-            (ComprobacionMinEmpleados ?tipotramite 0))
+            (ComprobacionMinEmpleados ?tipotramite))
     (if (>= ?hora (totalsegundos ?horaFin 0 0)) then
         (assert(EstadoEmpleado ?empl 0))
-        (printout t "El empleado " ?empl " se va" crlf)
+        (printout t "El empleado ha fichado tras el fin de jornada. El empleado " ?empl " se va" crlf)
     else
-        (assert (EstadoEmpleado ?empl 4) (HoraDescanso ?empl ?hora))
-        (printout t "El empleado " ?empl " se va a descansar." crlf)
+        (assert (EstadoEmpleado ?empl 4)
+                (HoraDescanso ?empl ?hora)
+                (ComprobacionMinEmpleados ?tipotramite)
+                )
+        (printout t "El empleado " ?empl "  ha fichado antes del fin de jornada, se va a descansar." crlf)
 
     )
     (retract ?a ?b  ?y))
@@ -367,15 +370,15 @@
     (HoraActualizada ?t)
     (EmpleadosFichados ?tipotramite ?tot)
     (MinimoEmpleadosActivos ?tipotramite ?min)
-    ?a <- (ComprobacionMinEmpleados ?tipotramite ?val)
-    (test (> ?min ?tot))
-    (test (= ?val 0))
+    ?a <- (ComprobacionMinEmpleados ?tipotramite)
     =>
-    (retract ?a)
-    (assert (ComprobacionMinEmpleados ?tipotramite 1))
+    (if (> ?min ?tot) then
     (printout t "Hay menos de " ?min " trabajadores atendiento " ?tipotramite crlf)
+    else
+    (printout t "Hay suficientes trabajadores atendiento " ?tipotramite crlf)
     )
-
+    (retract ?a)
+  )
   (defrule TiempoTramiteExcedido
       (HoraActualizada ?hora)
       (TiempoInicialTramite ?tipotramite ?n ?t)

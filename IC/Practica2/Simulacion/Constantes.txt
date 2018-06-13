@@ -2,7 +2,7 @@
 (FinalJornada 15)                   ; La jornada laboral termina a las 14h
 (ComienzoAtencion 9)                ; La atención al cliente comienza a las 9h
 (MinimoEmpleadosActivos TG 3)       ; Debe de haber al menos 3 empleados atendiendo trámites generales
-(MinimoEmpleadosActivos TE 1)       ; Debe de haber al menos 1 empleados atendiendo trámites especificos
+(MinimoEmpleadosActivos TE 0)       ; Debe de haber al menos 1 empleados atendiendo trámites especificos
 (MaximoEsperaParaSerAtendido TG 30) ; Un usuario de trámites generales debe esperar para ser atendido menos de 30 minutos
 (MaximoEsperaParaSerAtendido TE 20) ; Un usuario de trámites especificos debe esperar para ser atendido menos de 20 minutos
 (MaximoTiempoGestion TG 10)         ; Un trámite general debe gestionarse en menos de 10 minutos

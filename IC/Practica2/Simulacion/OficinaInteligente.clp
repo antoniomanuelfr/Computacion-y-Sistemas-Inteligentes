@@ -301,7 +301,7 @@
     (ComprobacionMinEmpleados ?tipotramite)
     )
 
-    (printout t "Ha fichado el empleado: " ?empl crlf)
+    (printout t "Ha llegado a la oficina el empleado: " ?empl crlf)
     (retract ?b ?a ?c)
     )
 
@@ -326,7 +326,7 @@
     (EmpleadosFichados ?tipotramite (+ ?totalFichados 1))
     (ComprobacionMinEmpleados ?tipotramite)
     )
-    (printout t "Ha fichado el empleado: " ?empl crlf)
+    (printout t "Ha fichado el empleado: " ?empl " para volver del descanso" crlf)
     (retract ?b ?a ?c ?d)
     )
 
@@ -337,7 +337,7 @@
     =>
     (assert (EstadoEmpleado ?empl 2))
     (retract ?y)
-    (printout t "El empleado " ?empl " comienza a trabajar." crlf)
+    (printout t "El empleado " ?empl " a pulsado disponible tras el primer ficha,  comienza a trabajar." crlf)
     )
 
   (defrule EmpleadoSeVa
@@ -492,3 +492,19 @@
        (assert (Luz ?hab OFF)
                (NumeroPersonas ?hab 0))
       )
+
+  (defrule Final
+    (declare (salience 10))
+    (HoraActualizada ?t)
+    (FinalJornada ?final)
+    (not (fin))
+    (Ficha Director)
+    (test (>= ?t (totalsegundos ?final 0 0)))
+    =>
+    (assert
+      (fin)
+    )
+    (printout t "Es el fin de la jornada" crlf)
+    (printout t "Ejecute el script de python para ver los resultados del informe 1" crlf)
+
+    )

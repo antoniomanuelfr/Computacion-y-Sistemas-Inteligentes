@@ -5,8 +5,6 @@ from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 from time import time
 
-from sympy import bell
-
 
 class Datos():
 	def __init__(self, w, clas, red, punt):
